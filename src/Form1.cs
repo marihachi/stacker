@@ -133,8 +133,8 @@ namespace Stacker
 
 			Ag.ProgramTransitioned += (s, ev) =>
 			{
-				agProgramLabel.Text = Ag.NowProgram.Title;
-				agPersonalityLabel.Text = Ag.NowProgram.Personality;
+				agProgramLabel.Text = Ag.NowProgram?.Title ?? "未取得";
+				agPersonalityLabel.Text = Ag.NowProgram?.Personality ?? "未取得";
 			};
 
 			Ag.ReservationTransitioned += (s, ev) =>

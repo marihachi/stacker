@@ -71,12 +71,12 @@ namespace Stacker
 				agProgramListView.Items.Add(listViewItem);
 			}
 
-			agReservationListView.Items.Clear();
+			agTimeReservationListView.Items.Clear();
 			foreach (var reservation in Ag.ReservationList)
 			{
 				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
 				listViewItem.Tag = reservation;
-				agReservationListView.Items.Add(listViewItem);
+				agTimeReservationListView.Items.Add(listViewItem);
 			}
 
 			agProgramLabel.Text = Ag.NowProgram.Title;
@@ -90,10 +90,10 @@ namespace Stacker
 			try
 			{
 				Ag.ReservationList.Add(reservation);
-				
+
 				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
 				listViewItem.Tag = reservation;
-				agReservationListView.Items.Add(listViewItem);
+				agTimeReservationListView.Items.Add(listViewItem);
 
 				Debug.WriteLine($"{agProgramListView.SelectedIndices[0]}: {Culture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)reservation.StartTime.Days)}{reservation.StartTime.ToString(@"hh\:mm")} - {Culture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)reservation.EndTime.Days)}{reservation.EndTime.ToString(@"hh\:mm")} ({reservation.Name}) を予約しました");
 			}
@@ -131,12 +131,14 @@ namespace Stacker
 			await UpdateProgramsAsync();
 			UpdateForm();
 
-			Ag.ProgramTransitioned += (s, ev) => {
+			Ag.ProgramTransitioned += (s, ev) =>
+			{
 				agProgramLabel.Text = Ag.NowProgram.Title;
 				agPersonalityLabel.Text = Ag.NowProgram.Personality;
 			};
 
-			Ag.ReservationTransitioned += (s, ev) => {
+			Ag.ReservationTransitioned += (s, ev) =>
+			{
 				if (ev.Type == AgManager.ReservationTransitionEventArgs.ReservationTransitionType.Begin)
 				{
 					Ag.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{ev.Reservation.Name}", false);

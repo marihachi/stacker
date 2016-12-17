@@ -38,7 +38,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.agProgramLabel = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.agReservationListView = new System.Windows.Forms.ListView();
+			this.agTimeReservationListView = new System.Windows.Forms.ListView();
 			this.startTimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.endTimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.nameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -66,6 +66,11 @@
 			this.versionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.agKeyWordReservationListView = new System.Windows.Forms.ListView();
+			this.keyWordHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.typeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.label3 = new System.Windows.Forms.Label();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.toolStripContainer2.ContentPanel.SuspendLayout();
@@ -78,6 +83,7 @@
 			this.toolStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -136,12 +142,11 @@
 			// 
 			// tabPage4
 			// 
+			this.tabPage4.Controls.Add(this.tableLayoutPanel1);
 			this.tabPage4.Controls.Add(this.agPersonalityLabel);
 			this.tabPage4.Controls.Add(this.label2);
 			this.tabPage4.Controls.Add(this.label1);
 			this.tabPage4.Controls.Add(this.agProgramLabel);
-			this.tabPage4.Controls.Add(this.label5);
-			this.tabPage4.Controls.Add(this.agReservationListView);
 			this.tabPage4.Controls.Add(this.label4);
 			this.tabPage4.Controls.Add(this.agLengthUpDown);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
@@ -195,30 +200,30 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(6, 87);
+			this.label5.Location = new System.Drawing.Point(3, 0);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(55, 12);
 			this.label5.TabIndex = 11;
-			this.label5.Text = "予約設定:";
+			this.label5.Text = "時間予約:";
 			// 
-			// agReservationListView
+			// agTimeReservationListView
 			// 
-			this.agReservationListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.agTimeReservationListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.agReservationListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			this.agTimeReservationListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.startTimeHeader,
             this.endTimeHeader,
             this.nameHeader});
-			this.agReservationListView.FullRowSelect = true;
-			this.agReservationListView.GridLines = true;
-			this.agReservationListView.Location = new System.Drawing.Point(6, 102);
-			this.agReservationListView.MultiSelect = false;
-			this.agReservationListView.Name = "agReservationListView";
-			this.agReservationListView.Size = new System.Drawing.Size(570, 222);
-			this.agReservationListView.TabIndex = 10;
-			this.agReservationListView.UseCompatibleStateImageBehavior = false;
-			this.agReservationListView.View = System.Windows.Forms.View.Details;
+			this.agTimeReservationListView.FullRowSelect = true;
+			this.agTimeReservationListView.GridLines = true;
+			this.agTimeReservationListView.Location = new System.Drawing.Point(3, 15);
+			this.agTimeReservationListView.MultiSelect = false;
+			this.agTimeReservationListView.Name = "agTimeReservationListView";
+			this.agTimeReservationListView.Size = new System.Drawing.Size(279, 226);
+			this.agTimeReservationListView.TabIndex = 10;
+			this.agTimeReservationListView.UseCompatibleStateImageBehavior = false;
+			this.agTimeReservationListView.View = System.Windows.Forms.View.Details;
 			// 
 			// startTimeHeader
 			// 
@@ -459,6 +464,62 @@
 			this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 18);
 			this.toolStripStatusLabel1.Text = "準備完了";
 			// 
+			// agKeyWordReservationListView
+			// 
+			this.agKeyWordReservationListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.agKeyWordReservationListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.typeHeader,
+            this.keyWordHeader});
+			this.agKeyWordReservationListView.FullRowSelect = true;
+			this.agKeyWordReservationListView.GridLines = true;
+			this.agKeyWordReservationListView.Location = new System.Drawing.Point(288, 15);
+			this.agKeyWordReservationListView.MultiSelect = false;
+			this.agKeyWordReservationListView.Name = "agKeyWordReservationListView";
+			this.agKeyWordReservationListView.Size = new System.Drawing.Size(279, 226);
+			this.agKeyWordReservationListView.TabIndex = 16;
+			this.agKeyWordReservationListView.UseCompatibleStateImageBehavior = false;
+			this.agKeyWordReservationListView.View = System.Windows.Forms.View.Details;
+			// 
+			// keyWordHeader
+			// 
+			this.keyWordHeader.Text = "キーワード";
+			this.keyWordHeader.Width = 300;
+			// 
+			// typeHeader
+			// 
+			this.typeHeader.Text = "タイプ";
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(288, 0);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(79, 12);
+			this.label3.TabIndex = 17;
+			this.label3.Text = "キーワード予約:";
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel1.ColumnCount = 2;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.Controls.Add(this.label5, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.agKeyWordReservationListView, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.label3, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.agTimeReservationListView, 0, 1);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 80);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(570, 244);
+			this.tableLayoutPanel1.TabIndex = 18;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -490,6 +551,8 @@
 			this.menuStrip1.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -514,7 +577,7 @@
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton agStartRecordButton;
 		private System.Windows.Forms.ToolStripButton agRecordStopButton;
-		private System.Windows.Forms.ListView agReservationListView;
+		private System.Windows.Forms.ListView agTimeReservationListView;
 		private System.Windows.Forms.ColumnHeader nameHeader;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -534,6 +597,11 @@
 		private System.Windows.Forms.ColumnHeader startTimeHeader;
 		private System.Windows.Forms.ColumnHeader endTimeHeader;
 		private System.Windows.Forms.ColumnHeader hasVideoHeader;
+		private System.Windows.Forms.ListView agKeyWordReservationListView;
+		private System.Windows.Forms.ColumnHeader keyWordHeader;
+		private System.Windows.Forms.ColumnHeader typeHeader;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 	}
 }
 

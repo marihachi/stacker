@@ -38,11 +38,12 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
 			this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+			this.button2 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(197, 152);
+			this.button1.Location = new System.Drawing.Point(166, 152);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 0;
@@ -64,7 +65,7 @@
 			// 
 			this.textBox1.Location = new System.Drawing.Point(12, 24);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(260, 19);
+			this.textBox1.Size = new System.Drawing.Size(310, 19);
 			this.textBox1.TabIndex = 2;
 			// 
 			// comboBox2
@@ -78,7 +79,7 @@
             "木",
             "金",
             "土"});
-			this.comboBox2.Location = new System.Drawing.Point(146, 73);
+			this.comboBox2.Location = new System.Drawing.Point(166, 73);
 			this.comboBox2.Name = "comboBox2";
 			this.comboBox2.Size = new System.Drawing.Size(40, 20);
 			this.comboBox2.TabIndex = 6;
@@ -111,7 +112,7 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(144, 58);
+			this.label4.Location = new System.Drawing.Point(164, 58);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(55, 12);
 			this.label4.TabIndex = 11;
@@ -143,7 +144,7 @@
 			// 
 			this.dateTimePicker2.CustomFormat = "HH:mm";
 			this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dateTimePicker2.Location = new System.Drawing.Point(192, 74);
+			this.dateTimePicker2.Location = new System.Drawing.Point(212, 74);
 			this.dateTimePicker2.MaxDate = new System.DateTime(1900, 1, 2, 0, 0, 0, 0);
 			this.dateTimePicker2.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
 			this.dateTimePicker2.Name = "dateTimePicker2";
@@ -152,11 +153,22 @@
 			this.dateTimePicker2.TabIndex = 15;
 			this.dateTimePicker2.Value = new System.DateTime(1900, 1, 1, 15, 40, 0, 0);
 			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(247, 152);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(75, 23);
+			this.button2.TabIndex = 16;
+			this.button2.Text = "キャンセル";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.button2_Click);
+			// 
 			// AgTimeReservationSettingDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 187);
+			this.ClientSize = new System.Drawing.Size(334, 187);
+			this.Controls.Add(this.button2);
 			this.Controls.Add(this.dateTimePicker2);
 			this.Controls.Add(this.dateTimePicker1);
 			this.Controls.Add(this.label5);
@@ -188,5 +200,6 @@
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.DateTimePicker dateTimePicker1;
 		private System.Windows.Forms.DateTimePicker dateTimePicker2;
+		private System.Windows.Forms.Button button2;
 	}
 }

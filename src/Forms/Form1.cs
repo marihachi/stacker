@@ -171,25 +171,14 @@ namespace Stacker.Forms
 			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
 			var reservation = new AgTimeReservation(program.Title, program.StartTime, program.EndTime, true);
 
-			var dialog = new AgTimeReservationSettingDialog(reservation);
+			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
 			{
-				try
-				{
-					Ag.ReservationList.Add(dialog.Reservation);
-
-					var listViewItem = new ListViewItem(new string[] { FormatTime(dialog.Reservation.StartTime), FormatTime(dialog.Reservation.EndTime), dialog.Reservation.Name });
-					listViewItem.Tag = dialog.Reservation;
-					agTimeReservationListView.Items.Add(listViewItem);
-
-					// Debug.WriteLine($"{agProgramListView.SelectedIndices[0]}: ({dialog.Reservation.Name}) を予約しました");
-				}
-				catch (InvalidOperationException)
-				{
-					MessageBox.Show("他の予約の時間と重複しています。", "予約失敗");
-				}
+				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
+				listViewItem.Tag = reservation;
+				agTimeReservationListView.Items.Add(listViewItem);
 			}
 		}
 

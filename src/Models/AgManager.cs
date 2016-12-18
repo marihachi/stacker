@@ -96,9 +96,11 @@ namespace Stacker.Models
 
 		public void StartRecord(string filename, bool isRealtimeRecord)
 		{
+			var tempFilename = isRealtimeRecord ? "temp_realtime" : "temp_reservation";
+
 			CreateOutputDirectory();
 			var process = ConsoleExecuter.StartOnConsole(
-				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{(isRealtimeRecord ? "temp_realtime" : "temp_reservation")}.mp3");
+				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{tempFilename}.mp3");
 
 			if (isRealtimeRecord)
 			{

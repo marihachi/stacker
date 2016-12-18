@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stacker.Model
+namespace Stacker.Models
 {
 	/// <summary>
 	/// A&Gの番組を表します

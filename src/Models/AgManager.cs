@@ -1,4 +1,4 @@
-﻿using Stacker.Utility;
+﻿using Stacker.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace Stacker.Model
+namespace Stacker.Models
 {
 	public class AgManager : IDisposable
 	{

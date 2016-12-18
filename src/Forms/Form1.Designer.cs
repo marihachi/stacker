@@ -1,4 +1,4 @@
-﻿namespace Stacker
+﻿namespace Stacker.Forms
 {
 	partial class Form1
 	{

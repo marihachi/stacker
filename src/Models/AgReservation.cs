@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stacker.Model
+namespace Stacker.Models
 {
 	/// <summary>
 	/// A&Gの予約情報を表します

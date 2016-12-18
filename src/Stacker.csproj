@@ -57,31 +57,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorDialog.cs">
+    <Compile Include="Forms\ErrorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ErrorDialog.Designer.cs">
+    <Compile Include="Forms\ErrorDialog.Designer.cs">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\AgManager.cs" />
-    <Compile Include="Model\AgProgram.cs" />
-    <Compile Include="Model\AgReservation.cs" />
-    <Compile Include="Utility\ValidateableList.cs" />
-    <Compile Include="Utility\ConsoleAppExecuter.cs" />
+    <Compile Include="Models\AgManager.cs" />
+    <Compile Include="Models\AgProgram.cs" />
+    <Compile Include="Models\AgReservation.cs" />
+    <Compile Include="Utilities\ValidateableList.cs" />
+    <Compile Include="Utilities\ConsoleAppExecuter.cs" />
     <Compile Include="DynamicJson.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\HtmlUtility.cs" />
-    <EmbeddedResource Include="ErrorDialog.resx">
+    <Compile Include="Utilities\HtmlUtility.cs" />
+    <EmbeddedResource Include="Forms\ErrorDialog.resx">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

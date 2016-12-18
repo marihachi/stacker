@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace Stacker.Utility
+namespace Stacker.Utilities
 {
 	public static class HtmlUtility
 	{

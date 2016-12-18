@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Stacker
+namespace Stacker.Forms
 {
 	public partial class ErrorDialog : Form
 	{

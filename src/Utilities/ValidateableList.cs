@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Stacker.Utility
+namespace Stacker.Utilities
 {
 	public class ValidateableList<T> : IList<T>
 	{

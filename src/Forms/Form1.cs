@@ -1,4 +1,4 @@
-﻿using Stacker.Model;
+﻿using Stacker.Models;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Stacker
+namespace Stacker.Forms
 {
 	public partial class Form1 : Form
 	{

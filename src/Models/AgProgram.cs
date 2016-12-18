@@ -7,11 +7,11 @@ namespace Stacker.Models
 	/// </summary>
 	public class AgProgram
 	{
-		public AgProgram(string title, TimeSpan time, TimeSpan length, string personality, bool hasVideo)
+		public AgProgram(string title, TimeSpan startTime, TimeSpan endTime, string personality, bool hasVideo)
 		{
 			Title = title;
-			Time = time;
-			Length = length;
+			StartTime = startTime;
+			EndTime = endTime;
 			Personality = personality;
 			HasVideo = hasVideo;
 		}
@@ -24,12 +24,12 @@ namespace Stacker.Models
 		/// <summary>
 		/// 開始時間を取得します
 		/// </summary>
-		public TimeSpan Time { get; set; }
+		public TimeSpan StartTime { get; set; }
 
 		/// <summary>
-		/// 長さを取得します
+		/// 終了時間を取得します
 		/// </summary>
-		public TimeSpan Length { get; set; }
+		public TimeSpan EndTime { get; set; }
 
 		/// <summary>
 		/// パーソナリティを取得します
@@ -51,7 +51,10 @@ namespace Stacker.Models
 				var now = DateTime.Now;
 				var nowTimeSpan = new TimeSpan((int)now.DayOfWeek, now.Hour, now.Minute, now.Second);
 
-				return nowTimeSpan >= Time && nowTimeSpan <= Time + Length;
+				if (StartTime > EndTime)
+					return nowTimeSpan >= StartTime && nowTimeSpan <= TimeSpan.FromMinutes(23 * 60 + 59) || nowTimeSpan >= TimeSpan.FromMinutes(0) && nowTimeSpan <= EndTime; // 日を跨いだときの範囲
+				else
+					return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime; // 通常の範囲
 			}
 		}
 
@@ -73,8 +76,8 @@ namespace Stacker.Models
 			var c = (AgProgram)obj;
 			return
 				Title == c.Title &&
-				Time == c.Time &&
-				Length == c.Length &&
+				StartTime == c.StartTime &&
+				EndTime == c.EndTime &&
 				Personality == c.Personality;
 		}
 
@@ -82,8 +85,8 @@ namespace Stacker.Models
 		{
 			return
 				Title.GetHashCode() ^
-				Time.GetHashCode() ^
-				Length.GetHashCode() ^
+				StartTime.GetHashCode() ^
+				EndTime.GetHashCode() ^
 				Personality.GetHashCode();
 		}
 	}

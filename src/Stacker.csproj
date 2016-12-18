@@ -63,21 +63,21 @@
     <Compile Include="Forms\ErrorDialog.Designer.cs">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\KeyWordReservationSettingDialog.cs">
+    <Compile Include="Forms\AgKeyWordReservationSettingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\KeyWordReservationSettingDialog.Designer.cs">
-      <DependentUpon>KeyWordReservationSettingDialog.cs</DependentUpon>
+    <Compile Include="Forms\AgKeyWordReservationSettingDialog.Designer.cs">
+      <DependentUpon>AgKeyWordReservationSettingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TimeReservationSettingDialog.cs">
+    <Compile Include="Forms\AgTimeReservationSettingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TimeReservationSettingDialog.Designer.cs">
-      <DependentUpon>TimeReservationSettingDialog.cs</DependentUpon>
+    <Compile Include="Forms\AgTimeReservationSettingDialog.Designer.cs">
+      <DependentUpon>AgTimeReservationSettingDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AgManager.cs" />
     <Compile Include="Models\AgProgram.cs" />
-    <Compile Include="Models\AgReservation.cs" />
+    <Compile Include="Models\AgTimeReservation.cs" />
     <Compile Include="Utilities\ValidateableList.cs" />
     <Compile Include="Utilities\ConsoleAppExecuter.cs" />
     <Compile Include="DynamicJson.cs" />
@@ -95,6 +95,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AgKeyWordReservationSettingDialog.resx">
+      <DependentUpon>AgKeyWordReservationSettingDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AgTimeReservationSettingDialog.resx">
+      <DependentUpon>AgTimeReservationSettingDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

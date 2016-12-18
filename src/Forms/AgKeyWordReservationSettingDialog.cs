@@ -10,11 +10,17 @@ using System.Windows.Forms;
 
 namespace Stacker.Forms
 {
-	public partial class KeyWordReservationSettingDialog : Form
+	public partial class AgKeyWordReservationSettingDialog : Form
 	{
-		public KeyWordReservationSettingDialog()
+		public AgKeyWordReservationSettingDialog()
 		{
 			InitializeComponent();
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
+			Close();
 		}
 	}
 }

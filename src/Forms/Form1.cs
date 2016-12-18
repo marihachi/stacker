@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Stacker.Models.AgManager.ReservationTransitionEventArgs;
 
 namespace Stacker.Forms
 {
@@ -56,7 +57,7 @@ namespace Stacker.Forms
 
 		private string FormatTime(TimeSpan time)
 		{
-			return $"{Culture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)time.Days)} {time.Hours:00}:{time.Minutes:00}";
+			return $"{Culture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)time.Days)}{time.Hours:00}:{time.Minutes:00}";
 		}
 
 		private void UpdateForm()
@@ -66,7 +67,7 @@ namespace Stacker.Forms
 			agProgramListView.Items.Clear();
 			foreach (var program in Ag.ProgramList)
 			{
-				var listViewItem = new ListViewItem(new string[] { FormatTime(program.Time), program.Title, program.Personality, program.HasVideo ? "有" : "無" });
+				var listViewItem = new ListViewItem(new string[] { $"{FormatTime(program.StartTime)} - {FormatTime(program.EndTime)}", program.Title, program.Personality, program.HasVideo ? "有" : "無" });
 				listViewItem.Tag = program;
 				agProgramListView.Items.Add(listViewItem);
 			}
@@ -83,24 +84,6 @@ namespace Stacker.Forms
 			agPersonalityLabel.Text = Ag.NowProgram.Personality;
 
 			Status("準備完了");
-		}
-
-		public void AddReservation(AgReservation reservation)
-		{
-			try
-			{
-				Ag.ReservationList.Add(reservation);
-
-				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
-				listViewItem.Tag = reservation;
-				agTimeReservationListView.Items.Add(listViewItem);
-
-				Debug.WriteLine($"{agProgramListView.SelectedIndices[0]}: {Culture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)reservation.StartTime.Days)}{reservation.StartTime.ToString(@"hh\:mm")} - {Culture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)reservation.EndTime.Days)}{reservation.EndTime.ToString(@"hh\:mm")} ({reservation.Name}) を予約しました");
-			}
-			catch (InvalidOperationException)
-			{
-				MessageBox.Show("他の予約の時間と重複しています。", "予約失敗");
-			}
 		}
 
 		#region EventHandlers
@@ -125,8 +108,15 @@ namespace Stacker.Forms
 
 			Ag = new AgManager();
 
-			Ag.RecordStarted += (s, ev) => { Status($"「{ev.Filename}」の録音が開始されました"); };
-			Ag.RecordStopped += (s, ev) => { Status($"「{ev.Filename}」の録音が完了しました"); };
+			Ag.RecordStarted += (s, ev) =>
+			{
+				Status($"「{ev.Filename}」の録音が開始されました");
+			};
+
+			Ag.RecordStopped += (s, ev) =>
+			{
+				Status($"「{ev.Filename}」の録音が完了しました");
+			};
 
 			await UpdateProgramsAsync();
 			UpdateForm();
@@ -139,13 +129,13 @@ namespace Stacker.Forms
 
 			Ag.ReservationTransitioned += (s, ev) =>
 			{
-				if (ev.Type == AgManager.ReservationTransitionEventArgs.ReservationTransitionType.Begin)
+				if (ev.Type == ReservationTransitionType.Begin)
 				{
-					Ag.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{ev.Reservation.Name}", false);
+					Status($"時間予約「{ev.Reservation.Name}」が開始されました");
 				}
-				else
+				if (ev.Type == ReservationTransitionType.End)
 				{
-					Ag.StopRecord(false);
+					Status($"時間予約「{ev.Reservation.Name}」が完了しました");
 				}
 			};
 
@@ -175,12 +165,31 @@ namespace Stacker.Forms
 
 		private void agProgramListView_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Left)
-			{
-				var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+			if (e.Button != MouseButtons.Left)
+				return;
 
-				var reservation = new AgReservation(program.Title, program.Time, program.Time + program.Length, true);
-				AddReservation(reservation);
+			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+			var reservation = new AgTimeReservation(program.Title, program.StartTime, program.EndTime, true);
+
+			var dialog = new AgTimeReservationSettingDialog(reservation);
+			dialog.ShowDialog();
+
+			if (dialog.DialogResult == DialogResult.OK)
+			{
+				try
+				{
+					Ag.ReservationList.Add(dialog.Reservation);
+
+					var listViewItem = new ListViewItem(new string[] { FormatTime(dialog.Reservation.StartTime), FormatTime(dialog.Reservation.EndTime), dialog.Reservation.Name });
+					listViewItem.Tag = dialog.Reservation;
+					agTimeReservationListView.Items.Add(listViewItem);
+
+					// Debug.WriteLine($"{agProgramListView.SelectedIndices[0]}: ({dialog.Reservation.Name}) を予約しました");
+				}
+				catch (InvalidOperationException)
+				{
+					MessageBox.Show("他の予約の時間と重複しています。", "予約失敗");
+				}
 			}
 		}
 

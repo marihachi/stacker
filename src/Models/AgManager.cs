@@ -17,7 +17,7 @@ namespace Stacker.Models
 		public AgManager()
 		{
 			AgProgram lastCheckProgram = null;
-			AgReservation lastCheckReservation = null;
+			AgTimeReservation lastCheckReservation = null;
 			SecTimer = new Timer { Interval = 1000, Enabled = true };
 			SecTimer.Tick += (s, ev) =>
 			{
@@ -27,32 +27,36 @@ namespace Stacker.Models
 
 					OnProgramTransitioned();
 				}
-				
+
 				var nowReservation = ReservationList.Find(i => i.IsInRange);
 
 				if (lastCheckReservation == null && nowReservation != null)
 				{
-					Debug.WriteLine("開始");
+					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{nowReservation.Name}", false);
 					OnReservationTransitioned(ReservationTransitionEventArgs.ReservationTransitionType.Begin, nowReservation);
 					lastCheckReservation = nowReservation;
+
+					Debug.WriteLine("AgManager: 時間予約を開始しました");
 				}
 
 				if (lastCheckReservation != null && (nowReservation == null || !lastCheckReservation.IsInRange))
 				{
-					Debug.WriteLine("終了");
+					StopRecord(false);
 					OnReservationTransitioned(ReservationTransitionEventArgs.ReservationTransitionType.End, lastCheckReservation);
 					lastCheckReservation = null;
+
+					Debug.WriteLine("AgManager: 時間予約を終了しました");
 				}
 			};
 
 			ProgramList = new ValidateableList<AgProgram>(i => i != null);
-			ReservationList = new ValidateableList<AgReservation>(i =>
+			ReservationList = new ValidateableList<AgTimeReservation>(i =>
 			{
 				if (i == null)
 					return false;
 
 				// 予約時間の重複がないかどうか
-				foreach(var reservation in ReservationList)
+				foreach (var reservation in ReservationList)
 				{
 					if (i.StartTime >= reservation.StartTime && i.StartTime < reservation.EndTime || i.EndTime > reservation.StartTime && i.EndTime <= reservation.EndTime)
 						return false;
@@ -66,7 +70,7 @@ namespace Stacker.Models
 
 		public ValidateableList<AgProgram> ProgramList { get; private set; }
 
-		public ValidateableList<AgReservation> ReservationList { get; private set; }
+		public ValidateableList<AgTimeReservation> ReservationList { get; private set; }
 
 		private Timer SecTimer { get; set; }
 		private Process ReservationConsoleProcess { get; set; }
@@ -150,7 +154,7 @@ namespace Stacker.Models
 
 		public class ReservationTransitionEventArgs : EventArgs
 		{
-			public ReservationTransitionEventArgs(ReservationTransitionType type, AgReservation reservation)
+			public ReservationTransitionEventArgs(ReservationTransitionType type, AgTimeReservation reservation)
 			{
 				Type = type;
 				Reservation = reservation;
@@ -158,7 +162,7 @@ namespace Stacker.Models
 
 			public ReservationTransitionType Type { get; set; }
 
-			public AgReservation Reservation { get; set; }
+			public AgTimeReservation Reservation { get; set; }
 
 			public enum ReservationTransitionType
 			{
@@ -186,7 +190,7 @@ namespace Stacker.Models
 		}
 
 		public event EventHandler<ReservationTransitionEventArgs> ReservationTransitioned;
-		public void OnReservationTransitioned(ReservationTransitionEventArgs.ReservationTransitionType type, AgReservation reservation)
+		public void OnReservationTransitioned(ReservationTransitionEventArgs.ReservationTransitionType type, AgTimeReservation reservation)
 		{
 			ReservationTransitioned?.Invoke(this, new ReservationTransitionEventArgs(type, reservation));
 		}
@@ -220,13 +224,13 @@ namespace Stacker.Models
 					var hasVideo = (from cls in classes where cls.Value == "time" select cls.Parent).First()
 						.Element("span")?.Elements("img")?.Attributes("src").ToList().Exists(att => att.Value == "http://cdn-agqr.joqr.jp/schedule/img/icon_m.gif") ?? false;
 
-					programsWeek[weekIndex].Add(new AgProgram(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, lengthMin, personality, hasVideo));
+					programsWeek[weekIndex].Add(new AgProgram(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, time + lengthMin, personality, hasVideo));
 				}
 			}
 
 			// 曜日毎の番組リストを日数に換算して統合
 			var res = new List<AgProgram>();
-			foreach(var programs in programsWeek)
+			foreach (var programs in programsWeek)
 			{
 				var weekDayIndex = programsWeek.IndexOf(programs);
 
@@ -235,18 +239,23 @@ namespace Stacker.Models
 					// -- 日曜日から始まるようにする --
 
 					// 曜日番号をそれぞれ +1 する
-					program.Time = program.Time.Add(TimeSpan.FromDays(weekDayIndex + 1));
+					program.StartTime = program.StartTime.Add(TimeSpan.FromDays(weekDayIndex + 1));
 
 					// 曜日番号が7以上なら7日分減らす
-					if (program.Time.Days >= 7)
-						program.Time = program.Time.Subtract(TimeSpan.FromDays(7)); 
+					if (program.StartTime.Days >= 7)
+						program.StartTime = program.StartTime.Subtract(TimeSpan.FromDays(7));
+
+					program.EndTime = program.EndTime.Add(TimeSpan.FromDays(weekDayIndex + 1));
+
+					if (program.EndTime.Days >= 7)
+						program.EndTime = program.EndTime.Subtract(TimeSpan.FromDays(7));
 
 					res.Add(program);
 				}
 			}
 
 			// 時間順でソート
-			res.Sort((x, y) => (int)(x.Time.TotalMinutes - y.Time.TotalMinutes));
+			res.Sort((x, y) => (int)(x.StartTime.TotalMinutes - y.StartTime.TotalMinutes));
 
 			return res;
 		}

@@ -3,11 +3,19 @@
 namespace Stacker.Models
 {
 	/// <summary>
-	/// A&Gの予約情報を表します
+	/// A&Gの時間ベース予約情報を表します
 	/// </summary>
-	public class AgReservation
+	public class AgTimeReservation : ICloneable
 	{
-		public AgReservation(string name, TimeSpan startTime, TimeSpan endTime, bool isEveryWeek)
+		private AgTimeReservation(AgTimeReservation timeReservation)
+		{
+			Name = timeReservation.Name;
+			StartTime = timeReservation.StartTime;
+			EndTime = timeReservation.EndTime;
+			IsEveryWeek = timeReservation.IsEveryWeek;
+		}
+
+		public AgTimeReservation(string name, TimeSpan startTime, TimeSpan endTime, bool isEveryWeek)
 		{
 			Name = name;
 			StartTime = startTime;
@@ -45,8 +53,16 @@ namespace Stacker.Models
 				var now = DateTime.Now;
 				var nowTimeSpan = new TimeSpan((int)now.DayOfWeek, now.Hour, now.Minute, now.Second);
 
-				return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime;
+				if (StartTime > EndTime)
+					return nowTimeSpan >= StartTime && nowTimeSpan <= TimeSpan.FromMinutes(23 * 60 + 59) || nowTimeSpan >= TimeSpan.FromMinutes(0) && nowTimeSpan <= EndTime; // 日を跨いだときの範囲
+				else
+					return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime; // 通常の範囲
 			}
+		}
+
+		public object Clone()
+		{
+			return new AgTimeReservation(this);
 		}
 	}
 }

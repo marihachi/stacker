@@ -98,12 +98,16 @@ namespace Stacker.Forms
 			{
 				// await DownloadAndExtractFileAsync("https://rtmpdump.mplayerhq.hu/download/rtmpdump-2.4-git-010913-windows.zip", "rtmpdump.exe");
 				MessageBox.Show("rtmpdump.exeが見つかりません", "エラー");
+				Close();
+				return;
 			}
 
 			if (!File.Exists("ffmpeg.exe"))
 			{
 				// await DownloadAndExtractFileAsync("https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-latest-win32-static.zip", "ffmpeg-latest-win32-static/bin/ffmpeg.exe", "ffmpeg.exe");
 				MessageBox.Show("ffmpeg.exeが見つかりません", "エラー");
+				Close();
+				return;
 			}
 
 			Ag = new AgManager();

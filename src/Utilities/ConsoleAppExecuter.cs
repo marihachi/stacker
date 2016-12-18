@@ -32,7 +32,7 @@ namespace Stacker.Utilities
 			var p = new Process();
 			p.StartInfo.FileName = "cmd.exe";
 			p.StartInfo.Arguments = $"/C {command}";
-			p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+			p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 			p.Start();
 
 			if (TimeoutMillisec == 0)
@@ -53,7 +53,7 @@ namespace Stacker.Utilities
 			var p = new Process();
 			p.StartInfo.FileName = "cmd.exe";
 			p.StartInfo.Arguments = $"/C {command}";
-			p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+			p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 			p.Start();
 
 			return p;
@@ -93,7 +93,7 @@ namespace Stacker.Utilities
 			var p = new Process();
 			p.StartInfo.FileName = filename;
 			p.StartInfo.Arguments = arguments;
-			p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+			p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 			p.Start();
 
 			if (TimeoutMillisec == 0)

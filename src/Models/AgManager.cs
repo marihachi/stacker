@@ -1,4 +1,6 @@
-﻿using Stacker.Utilities;
+﻿using Stacker.Models.Enums;
+using Stacker.Models.EventArgses;
+using Stacker.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,7 +35,7 @@ namespace Stacker.Models
 				if (lastCheckReservation == null && nowReservation != null)
 				{
 					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{nowReservation.Name}", false);
-					OnReservationTransitioned(ReservationTransitionEventArgs.ReservationTransitionType.Begin, nowReservation);
+					OnReservationTransitioned(ReservationTransitionType.Begin, nowReservation);
 					lastCheckReservation = nowReservation;
 
 					Debug.WriteLine("AgManager: 時間予約を開始しました");
@@ -42,7 +44,7 @@ namespace Stacker.Models
 				if (lastCheckReservation != null && (nowReservation == null || !lastCheckReservation.IsInRange))
 				{
 					StopRecord(false);
-					OnReservationTransitioned(ReservationTransitionEventArgs.ReservationTransitionType.End, lastCheckReservation);
+					OnReservationTransitioned(ReservationTransitionType.End, lastCheckReservation);
 					lastCheckReservation = null;
 
 					Debug.WriteLine("AgManager: 時間予約を終了しました");
@@ -139,38 +141,6 @@ namespace Stacker.Models
 			}
 		}
 
-		public class RecordEventArgs : EventArgs
-		{
-			public RecordEventArgs(bool isRealtimeRecord, string filename)
-			{
-				IsRealtimeRecord = IsRealtimeRecord;
-				Filename = filename;
-			}
-
-			public bool IsRealtimeRecord { get; set; }
-
-			public string Filename { get; set; }
-		}
-
-		public class ReservationTransitionEventArgs : EventArgs
-		{
-			public ReservationTransitionEventArgs(ReservationTransitionType type, AgTimeReservation reservation)
-			{
-				Type = type;
-				Reservation = reservation;
-			}
-
-			public ReservationTransitionType Type { get; set; }
-
-			public AgTimeReservation Reservation { get; set; }
-
-			public enum ReservationTransitionType
-			{
-				Begin,
-				End
-			}
-		}
-
 		public event EventHandler<RecordEventArgs> RecordStarted;
 		public void OnRecordStarted(bool isRealtimeRecord)
 		{
@@ -190,7 +160,7 @@ namespace Stacker.Models
 		}
 
 		public event EventHandler<ReservationTransitionEventArgs> ReservationTransitioned;
-		public void OnReservationTransitioned(ReservationTransitionEventArgs.ReservationTransitionType type, AgTimeReservation reservation)
+		public void OnReservationTransitioned(ReservationTransitionType type, AgTimeReservation reservation)
 		{
 			ReservationTransitioned?.Invoke(this, new ReservationTransitionEventArgs(type, reservation));
 		}
@@ -224,7 +194,7 @@ namespace Stacker.Models
 					var hasVideo = (from cls in classes where cls.Value == "time" select cls.Parent).First()
 						.Element("span")?.Elements("img")?.Attributes("src").ToList().Exists(att => att.Value == "http://cdn-agqr.joqr.jp/schedule/img/icon_m.gif") ?? false;
 
-					programsWeek[weekIndex].Add(new AgProgram(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, time + lengthMin, personality, hasVideo));
+					programsWeek[weekIndex].Add(new AgProgram(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, time + lengthMin, personality, AgProgramBroadcastType.First, hasVideo)); // TODO: BroadcastType
 				}
 			}
 

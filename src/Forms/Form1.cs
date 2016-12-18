@@ -1,4 +1,5 @@
 ﻿using Stacker.Models;
+using Stacker.Models.Enums;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -8,7 +9,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Stacker.Models.AgManager.ReservationTransitionEventArgs;
 
 namespace Stacker.Forms
 {
@@ -172,18 +172,7 @@ namespace Stacker.Forms
 			if (e.Button != MouseButtons.Left)
 				return;
 
-			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
-			var reservation = new AgTimeReservation(program.Title, program.StartTime, program.EndTime, true);
-
-			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
-			dialog.ShowDialog();
-
-			if (dialog.DialogResult == DialogResult.OK)
-			{
-				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
-				listViewItem.Tag = reservation;
-				agTimeReservationListView.Items.Add(listViewItem);
-			}
+			agTimeReservationMenuItem_Click(this, null);
 		}
 
 		private void versionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -202,5 +191,26 @@ namespace Stacker.Forms
 			Process.Start(".\\library\\ag");
 		}
 		#endregion eventHandlers
+
+		private void programListMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			e.Cancel = agProgramListView.SelectedItems.Count == 0;
+		}
+
+		private void agTimeReservationMenuItem_Click(object sender, EventArgs e)
+		{
+			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+			var reservation = new AgTimeReservation(program.Title, program.StartTime, program.EndTime, true);
+
+			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
+			dialog.ShowDialog();
+
+			if (dialog.DialogResult == DialogResult.OK)
+			{
+				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
+				listViewItem.Tag = reservation;
+				agTimeReservationListView.Items.Add(listViewItem);
+			}
+		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stacker.Models.Enums;
+using System;
 
 namespace Stacker.Models
 {
@@ -7,12 +8,13 @@ namespace Stacker.Models
 	/// </summary>
 	public class AgProgram
 	{
-		public AgProgram(string title, TimeSpan startTime, TimeSpan endTime, string personality, bool hasVideo)
+		public AgProgram(string title, TimeSpan startTime, TimeSpan endTime, string personality, AgProgramBroadcastType broadcastType, bool hasVideo)
 		{
 			Title = title;
 			StartTime = startTime;
 			EndTime = endTime;
 			Personality = personality;
+			BroadcastType = broadcastType;
 			HasVideo = hasVideo;
 		}
 
@@ -35,6 +37,11 @@ namespace Stacker.Models
 		/// パーソナリティを取得します
 		/// </summary>
 		public string Personality { get; set; }
+
+		/// <summary>
+		/// 放送の種類を取得します
+		/// </summary>
+		public AgProgramBroadcastType BroadcastType { get; set; }
 
 		/// <summary>
 		/// 動画として配信されるかどうかを示す値を取得します

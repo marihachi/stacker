@@ -193,6 +193,10 @@ namespace Stacker.Forms
 			UpdateForm();
 		}
 
+		private void button1_Click(object sender, EventArgs e)
+		{
+			Process.Start(".\\library\\ag");
+		}
 		#endregion eventHandlers
 	}
 }

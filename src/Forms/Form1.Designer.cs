@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "キーワード予約は未実装です"}, -1);
 			this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -47,12 +47,15 @@
 			this.startTimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.endTimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.nameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.TimeReservationListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.agAddTimeReservationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.agEditTimeReservationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.agDeleteTimeReservationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.agPersonalityLabel = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.agProgramLabel = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.agLengthUpDown = new System.Windows.Forms.NumericUpDown();
 			this.tabPage9 = new System.Windows.Forms.TabPage();
 			this.agProgramListView = new System.Windows.Forms.ListView();
 			this.timeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -76,6 +79,9 @@
 			this.tabPage7 = new System.Windows.Forms.TabPage();
 			this.label7 = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.録音RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.リアルタイム録音ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.agEnableVideoRealtimeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateDisplayMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.agUpdateProgramListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +97,7 @@
 			this.tabControl2.SuspendLayout();
 			this.tabPage4.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.agLengthUpDown)).BeginInit();
+			this.TimeReservationListMenu.SuspendLayout();
 			this.tabPage9.SuspendLayout();
 			this.programListMenu.SuspendLayout();
 			this.tabPage8.SuspendLayout();
@@ -163,8 +169,6 @@
 			this.tabPage4.Controls.Add(this.label2);
 			this.tabPage4.Controls.Add(this.label1);
 			this.tabPage4.Controls.Add(this.agProgramLabel);
-			this.tabPage4.Controls.Add(this.label4);
-			this.tabPage4.Controls.Add(this.agLengthUpDown);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
@@ -185,12 +189,12 @@
 			this.tableLayoutPanel1.Controls.Add(this.agKeyWordReservationListView, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.label3, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.agTimeReservationListView, 0, 1);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 80);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 34);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(570, 244);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(582, 296);
 			this.tableLayoutPanel1.TabIndex = 18;
 			// 
 			// label5
@@ -213,11 +217,11 @@
 			this.agKeyWordReservationListView.FullRowSelect = true;
 			this.agKeyWordReservationListView.GridLines = true;
 			this.agKeyWordReservationListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4});
-			this.agKeyWordReservationListView.Location = new System.Drawing.Point(288, 15);
+            listViewItem1});
+			this.agKeyWordReservationListView.Location = new System.Drawing.Point(294, 15);
 			this.agKeyWordReservationListView.MultiSelect = false;
 			this.agKeyWordReservationListView.Name = "agKeyWordReservationListView";
-			this.agKeyWordReservationListView.Size = new System.Drawing.Size(279, 226);
+			this.agKeyWordReservationListView.Size = new System.Drawing.Size(285, 278);
 			this.agKeyWordReservationListView.TabIndex = 16;
 			this.agKeyWordReservationListView.UseCompatibleStateImageBehavior = false;
 			this.agKeyWordReservationListView.View = System.Windows.Forms.View.Details;
@@ -234,7 +238,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(288, 0);
+			this.label3.Location = new System.Drawing.Point(294, 0);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(79, 12);
 			this.label3.TabIndex = 17;
@@ -249,15 +253,17 @@
             this.startTimeHeader,
             this.endTimeHeader,
             this.nameHeader});
+			this.agTimeReservationListView.ContextMenuStrip = this.TimeReservationListMenu;
 			this.agTimeReservationListView.FullRowSelect = true;
 			this.agTimeReservationListView.GridLines = true;
 			this.agTimeReservationListView.Location = new System.Drawing.Point(3, 15);
 			this.agTimeReservationListView.MultiSelect = false;
 			this.agTimeReservationListView.Name = "agTimeReservationListView";
-			this.agTimeReservationListView.Size = new System.Drawing.Size(279, 226);
+			this.agTimeReservationListView.Size = new System.Drawing.Size(285, 278);
 			this.agTimeReservationListView.TabIndex = 10;
 			this.agTimeReservationListView.UseCompatibleStateImageBehavior = false;
 			this.agTimeReservationListView.View = System.Windows.Forms.View.Details;
+			this.agTimeReservationListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.agTimeReservationListView_MouseDoubleClick);
 			// 
 			// startTimeHeader
 			// 
@@ -272,21 +278,59 @@
 			this.nameHeader.Text = "予約名";
 			this.nameHeader.Width = 300;
 			// 
+			// TimeReservationListMenu
+			// 
+			this.TimeReservationListMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.agAddTimeReservationMenuItem,
+            this.agEditTimeReservationMenuItem,
+            this.toolStripSeparator3,
+            this.agDeleteTimeReservationMenuItem});
+			this.TimeReservationListMenu.Name = "TimeReservationListMenu";
+			this.TimeReservationListMenu.Size = new System.Drawing.Size(121, 76);
+			this.TimeReservationListMenu.Opening += new System.ComponentModel.CancelEventHandler(this.TimeReservationListMenu_Opening);
+			// 
+			// agAddTimeReservationMenuItem
+			// 
+			this.agAddTimeReservationMenuItem.Enabled = false;
+			this.agAddTimeReservationMenuItem.Name = "agAddTimeReservationMenuItem";
+			this.agAddTimeReservationMenuItem.Size = new System.Drawing.Size(120, 22);
+			this.agAddTimeReservationMenuItem.Text = "追加(&A)";
+			// 
+			// agEditTimeReservationMenuItem
+			// 
+			this.agEditTimeReservationMenuItem.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.agEditTimeReservationMenuItem.Name = "agEditTimeReservationMenuItem";
+			this.agEditTimeReservationMenuItem.Size = new System.Drawing.Size(120, 22);
+			this.agEditTimeReservationMenuItem.Text = "編集(&E)";
+			this.agEditTimeReservationMenuItem.Click += new System.EventHandler(this.agEditTimeReservationMenuItem_Click);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(117, 6);
+			// 
+			// agDeleteTimeReservationMenuItem
+			// 
+			this.agDeleteTimeReservationMenuItem.Name = "agDeleteTimeReservationMenuItem";
+			this.agDeleteTimeReservationMenuItem.Size = new System.Drawing.Size(120, 22);
+			this.agDeleteTimeReservationMenuItem.Text = "削除(&D)";
+			this.agDeleteTimeReservationMenuItem.Click += new System.EventHandler(this.agDeleteTimeReservationMenuItem_Click);
+			// 
 			// agPersonalityLabel
 			// 
-			this.agPersonalityLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.agPersonalityLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.agPersonalityLabel.AutoEllipsis = true;
-			this.agPersonalityLabel.Location = new System.Drawing.Point(81, 31);
+			this.agPersonalityLabel.Location = new System.Drawing.Point(420, 9);
 			this.agPersonalityLabel.Name = "agPersonalityLabel";
-			this.agPersonalityLabel.Size = new System.Drawing.Size(495, 12);
+			this.agPersonalityLabel.Size = new System.Drawing.Size(156, 12);
 			this.agPersonalityLabel.TabIndex = 15;
 			this.agPersonalityLabel.Text = "未取得";
 			// 
 			// label2
 			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(6, 31);
+			this.label2.Location = new System.Drawing.Point(345, 9);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(69, 12);
 			this.label2.TabIndex = 14;
@@ -295,7 +339,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(44, 9);
+			this.label1.Location = new System.Drawing.Point(6, 9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(31, 12);
 			this.label1.TabIndex = 13;
@@ -306,42 +350,11 @@
 			this.agProgramLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.agProgramLabel.AutoEllipsis = true;
-			this.agProgramLabel.Location = new System.Drawing.Point(81, 9);
+			this.agProgramLabel.Location = new System.Drawing.Point(43, 9);
 			this.agProgramLabel.Name = "agProgramLabel";
-			this.agProgramLabel.Size = new System.Drawing.Size(495, 12);
+			this.agProgramLabel.Size = new System.Drawing.Size(296, 12);
 			this.agProgramLabel.TabIndex = 12;
 			this.agProgramLabel.Text = "未取得";
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(67, 59);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(17, 12);
-			this.label4.TabIndex = 8;
-			this.label4.Text = "分";
-			// 
-			// agLengthUpDown
-			// 
-			this.agLengthUpDown.Location = new System.Drawing.Point(6, 55);
-			this.agLengthUpDown.Maximum = new decimal(new int[] {
-            600,
-            0,
-            0,
-            0});
-			this.agLengthUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.agLengthUpDown.Name = "agLengthUpDown";
-			this.agLengthUpDown.Size = new System.Drawing.Size(58, 19);
-			this.agLengthUpDown.TabIndex = 7;
-			this.agLengthUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
 			// 
 			// tabPage9
 			// 
@@ -477,7 +490,7 @@
 			this.agStartRecordButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.agStartRecordButton.Name = "agStartRecordButton";
 			this.agStartRecordButton.Size = new System.Drawing.Size(23, 22);
-			this.agStartRecordButton.Text = "録音開始";
+			this.agStartRecordButton.Text = "リアルタイム録音開始";
 			this.agStartRecordButton.Click += new System.EventHandler(this.agStartRecordButton_Click);
 			// 
 			// agRecordStopButton
@@ -487,7 +500,7 @@
 			this.agRecordStopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.agRecordStopButton.Name = "agRecordStopButton";
 			this.agRecordStopButton.Size = new System.Drawing.Size(23, 22);
-			this.agRecordStopButton.Text = "録音停止";
+			this.agRecordStopButton.Text = "リアルタイム録音停止";
 			this.agRecordStopButton.Click += new System.EventHandler(this.agStopRecordButton_Click);
 			// 
 			// toolStripSeparator1
@@ -502,7 +515,7 @@
 			this.agRecordSpecifiedTimeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.agRecordSpecifiedTimeButton.Name = "agRecordSpecifiedTimeButton";
 			this.agRecordSpecifiedTimeButton.Size = new System.Drawing.Size(23, 22);
-			this.agRecordSpecifiedTimeButton.Text = "長さを指定して録音";
+			this.agRecordSpecifiedTimeButton.Text = "リアルタイム録音開始(タイマー)";
 			this.agRecordSpecifiedTimeButton.Click += new System.EventHandler(this.agRecordSpecifiedTimeButton_Click);
 			// 
 			// tabPage6
@@ -546,6 +559,7 @@
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.録音RToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.helpToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -553,6 +567,29 @@
 			this.menuStrip1.Size = new System.Drawing.Size(604, 26);
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// 録音RToolStripMenuItem
+			// 
+			this.録音RToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.リアルタイム録音ToolStripMenuItem});
+			this.録音RToolStripMenuItem.Name = "録音RToolStripMenuItem";
+			this.録音RToolStripMenuItem.Size = new System.Drawing.Size(62, 22);
+			this.録音RToolStripMenuItem.Text = "録音(&R)";
+			// 
+			// リアルタイム録音ToolStripMenuItem
+			// 
+			this.リアルタイム録音ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.agEnableVideoRealtimeMenuItem});
+			this.リアルタイム録音ToolStripMenuItem.Name = "リアルタイム録音ToolStripMenuItem";
+			this.リアルタイム録音ToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+			this.リアルタイム録音ToolStripMenuItem.Text = "リアルタイム録音";
+			// 
+			// agEnableVideoRealtimeMenuItem
+			// 
+			this.agEnableVideoRealtimeMenuItem.CheckOnClick = true;
+			this.agEnableVideoRealtimeMenuItem.Name = "agEnableVideoRealtimeMenuItem";
+			this.agEnableVideoRealtimeMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.agEnableVideoRealtimeMenuItem.Text = "動画モード";
 			// 
 			// viewToolStripMenuItem
 			// 
@@ -635,7 +672,7 @@
 			this.tabPage4.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.agLengthUpDown)).EndInit();
+			this.TimeReservationListMenu.ResumeLayout(false);
 			this.tabPage9.ResumeLayout(false);
 			this.programListMenu.ResumeLayout(false);
 			this.tabPage8.ResumeLayout(false);
@@ -666,8 +703,6 @@
 		private System.Windows.Forms.TabPage tabPage6;
 		private System.Windows.Forms.TabPage tabPage7;
 		private System.Windows.Forms.TabPage tabPage8;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.NumericUpDown agLengthUpDown;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripContainer toolStripContainer2;
@@ -707,6 +742,14 @@
 		private System.Windows.Forms.ToolStripMenuItem agTimeReservationMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem 番組ページ表示ToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip TimeReservationListMenu;
+		private System.Windows.Forms.ToolStripMenuItem agEditTimeReservationMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripMenuItem agDeleteTimeReservationMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 録音RToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem リアルタイム録音ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem agEnableVideoRealtimeMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem agAddTimeReservationMenuItem;
 	}
 }
 

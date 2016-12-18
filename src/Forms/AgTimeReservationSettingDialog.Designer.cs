@@ -54,7 +54,6 @@
 			// checkBox1
 			// 
 			this.checkBox1.AutoSize = true;
-			this.checkBox1.Enabled = false;
 			this.checkBox1.Location = new System.Drawing.Point(12, 116);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(137, 16);
@@ -180,6 +179,9 @@
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.checkBox1);
 			this.Controls.Add(this.button1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "AgTimeReservationSettingDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "時間予約の設定";

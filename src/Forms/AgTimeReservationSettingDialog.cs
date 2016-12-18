@@ -6,15 +6,20 @@ namespace Stacker.Forms
 {
 	public partial class AgTimeReservationSettingDialog : Form
 	{
-		public AgTimeReservationSettingDialog(AgTimeReservation reservation, AgManager ag)
+		public AgTimeReservationSettingDialog(AgTimeReservation reservation, AgManager ag, bool isEdit)
 		{
 			InitializeComponent();
-			Ag = ag;
+
 			Reservation = reservation;
+			Ag = ag;
+			IsEdit = isEdit;
 		}
 
-		private AgManager Ag { get; set; }
 		public AgTimeReservation Reservation { get; set; }
+
+		private AgManager Ag { get; set; }
+
+		public bool IsEdit { get; set; }
 
 		private void AgTimeReservationSettingDialog_Load(object sender, EventArgs e)
 		{
@@ -23,7 +28,7 @@ namespace Stacker.Forms
 			dateTimePicker2.Value = new DateTime(1900, 1, 1, Reservation.EndTime.Hours, Reservation.EndTime.Minutes, 0);
 			comboBox1.SelectedIndex = Reservation.StartTime.Days;
 			comboBox2.SelectedIndex = Reservation.EndTime.Days;
-			checkBox1.Checked = false; // Reservation.IsRecordVideo
+			checkBox1.Checked = Reservation.IsRecordVideo;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -31,11 +36,12 @@ namespace Stacker.Forms
 			Reservation.Name = textBox1.Text;
 			Reservation.StartTime = new TimeSpan(dateTimePicker1.Value.Hour, dateTimePicker1.Value.Minute, 0).Add(TimeSpan.FromDays(comboBox1.SelectedIndex));
 			Reservation.EndTime = new TimeSpan(dateTimePicker2.Value.Hour, dateTimePicker2.Value.Minute, 0).Add(TimeSpan.FromDays(comboBox2.SelectedIndex));
-			// Reservation.IsRecordVideo = checkBox1.Checked;
+			Reservation.IsRecordVideo = checkBox1.Checked;
 
 			try
 			{
-				Ag.ReservationList.Add(Reservation);
+				if (!IsEdit)
+					Ag.ReservationList.Add(Reservation);
 
 				DialogResult = DialogResult.OK;
 				Close();

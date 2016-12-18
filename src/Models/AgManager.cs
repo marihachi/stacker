@@ -30,21 +30,21 @@ namespace Stacker.Models
 					OnProgramTransitioned();
 				}
 
-				var nowReservation = ReservationList.Find(i => i.IsInRange);
+				var nowReservation = ReservationList.Find(i => i.NeedStartRecording);
 
 				if (lastCheckReservation == null && nowReservation != null)
 				{
-					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{nowReservation.Name}", false);
-					OnReservationTransitioned(ReservationTransitionType.Begin, nowReservation);
+					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{nowReservation.Name}", nowReservation.IsRecordVideo, false);
+					OnReservationStarted(nowReservation);
 					lastCheckReservation = nowReservation;
 
 					Debug.WriteLine("AgManager: 時間予約を開始しました");
 				}
 
-				if (lastCheckReservation != null && (nowReservation == null || !lastCheckReservation.IsInRange))
+				if (lastCheckReservation != null && (nowReservation == null || !lastCheckReservation.NeedStartRecording))
 				{
 					StopRecord(false);
-					OnReservationTransitioned(ReservationTransitionType.End, lastCheckReservation);
+					OnReservationStoped(lastCheckReservation);
 					lastCheckReservation = null;
 
 					Debug.WriteLine("AgManager: 時間予約を終了しました");
@@ -79,6 +79,8 @@ namespace Stacker.Models
 		private Process RealtimeConsoleProcess { get; set; }
 		private string RealtimeFilename { get; set; }
 		private string ReservationFilename { get; set; }
+		private bool ReservationIsVideo { get; set; }
+		private bool RealtimeIsVideo { get; set; }
 
 		public bool IsRealtimeRecording => RealtimeConsoleProcess != null;
 
@@ -93,30 +95,32 @@ namespace Stacker.Models
 				Directory.CreateDirectory(dir);
 		}
 
-		public void RecordSpecifiedTime(int specifiedTimeSec, string filename, bool isRealtimeRecord)
+		public void RecordSpecifiedTime(int specifiedTimeSec, string filename, bool isVideo, bool isRealtimeRecord)
 		{
-			StartRecord(filename, isRealtimeRecord);
+			StartRecord(filename, isVideo, isRealtimeRecord);
 			Task.Delay(TimeSpan.FromSeconds(specifiedTimeSec)).Wait();
 			StopRecord(isRealtimeRecord);
 		}
 
-		public void StartRecord(string filename, bool isRealtimeRecord)
+		public void StartRecord(string filename, bool isVideo, bool isRealtimeRecord)
 		{
 			var tempFilename = isRealtimeRecord ? "temp_realtime" : "temp_reservation";
 
 			CreateOutputDirectory();
 			var process = ConsoleExecuter.StartOnConsole(
-				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{tempFilename}.mp3");
+				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{tempFilename}.{(isVideo ? "mp4" : "mp3")}");
 
 			if (isRealtimeRecord)
 			{
 				RealtimeFilename = filename;
 				RealtimeConsoleProcess = process;
+				RealtimeIsVideo = isVideo;
 			}
 			else
 			{
 				ReservationFilename = filename;
 				ReservationConsoleProcess = process;
+				ReservationIsVideo = isVideo;
 			}
 
 			OnRecordStarted(isRealtimeRecord);
@@ -127,7 +131,7 @@ namespace Stacker.Models
 			if (isRealtimeRecord && RealtimeConsoleProcess != null)
 			{
 				ConsoleExecuter.StopConsole(RealtimeConsoleProcess);
-				File.Move("./library/ag/temp_realtime.mp3", $"./library/ag/{Regex.Replace(RealtimeFilename, @"[\/:*?""<>|]+", i => " ")}.mp3");
+				File.Move($"./library/ag/temp_realtime.{(RealtimeIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(RealtimeFilename, @"[\/:*?""<>|]+", i => " ")}.{(RealtimeIsVideo ? "mp4" : "mp3")}");
 				OnRecordStopped(true);
 				RealtimeConsoleProcess = null;
 			}
@@ -135,7 +139,7 @@ namespace Stacker.Models
 			if (!isRealtimeRecord && ReservationConsoleProcess != null)
 			{
 				ConsoleExecuter.StopConsole(ReservationConsoleProcess);
-				File.Move("./library/ag/temp_reservation.mp3", $"./library/ag/{Regex.Replace(ReservationFilename, @"[\/:*?""<>|]+", i => " ")}.mp3");
+				File.Move($"./library/ag/temp_reservation.{(ReservationIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(ReservationFilename, @"[\/:*?""<>|]+", i => " ")}.{(ReservationIsVideo ? "mp4" : "mp3")}");
 				OnRecordStopped(false);
 				ReservationConsoleProcess = null;
 			}
@@ -153,16 +157,22 @@ namespace Stacker.Models
 			RecordStopped?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
 		}
 
+		public event EventHandler<EventArgs<AgTimeReservation>> ReservationStarted;
+		public void OnReservationStarted(AgTimeReservation reservation)
+		{
+			ReservationStarted?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+		}
+
+		public event EventHandler<EventArgs<AgTimeReservation>> ReservationStoped;
+		public void OnReservationStoped(AgTimeReservation reservation)
+		{
+			ReservationStoped?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+		}
+
 		public event EventHandler ProgramTransitioned;
 		public void OnProgramTransitioned()
 		{
 			ProgramTransitioned?.Invoke(this, new EventArgs());
-		}
-
-		public event EventHandler<ReservationTransitionEventArgs> ReservationTransitioned;
-		public void OnReservationTransitioned(ReservationTransitionType type, AgTimeReservation reservation)
-		{
-			ReservationTransitioned?.Invoke(this, new ReservationTransitionEventArgs(type, reservation));
 		}
 
 		private IList<AgProgram> AnalyzeProgramList()

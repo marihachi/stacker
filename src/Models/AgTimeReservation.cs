@@ -2,31 +2,36 @@
 
 namespace Stacker.Models
 {
-	/// <summary>
-	/// A&Gの時間ベース予約情報を表します
-	/// </summary>
-	public class AgTimeReservation : ICloneable
+	public abstract class AgReservation
 	{
-		private AgTimeReservation(AgTimeReservation timeReservation)
-		{
-			Name = timeReservation.Name;
-			StartTime = timeReservation.StartTime;
-			EndTime = timeReservation.EndTime;
-			IsEveryWeek = timeReservation.IsEveryWeek;
-		}
-
-		public AgTimeReservation(string name, TimeSpan startTime, TimeSpan endTime, bool isEveryWeek)
+		public AgReservation(string name, bool isRecordVideo)
 		{
 			Name = name;
-			StartTime = startTime;
-			EndTime = endTime;
-			IsEveryWeek = isEveryWeek;
+			IsRecordVideo = isRecordVideo;
 		}
 
 		/// <summary>
 		/// 名前を取得または設定します
 		/// </summary>
 		public string Name { get; set; }
+
+		public bool IsRecordVideo { get; set; }
+
+		public abstract bool NeedStartRecording { get; }
+	}
+
+	/// <summary>
+	/// A&Gの時間ベース予約情報を表します
+	/// </summary>
+	public class AgTimeReservation : AgReservation
+	{
+		public AgTimeReservation(string name, bool isRecordVideo, TimeSpan startTime, TimeSpan endTime, bool isEveryWeek)
+			: base(name, isRecordVideo)
+		{
+			StartTime = startTime;
+			EndTime = endTime;
+			IsEveryWeek = isEveryWeek;
+		}
 
 		/// <summary>
 		/// 開始時刻を取得または設定します
@@ -44,9 +49,9 @@ namespace Stacker.Models
 		public bool IsEveryWeek { get; set; }
 
 		/// <summary>
-		/// 現在予約する必要のある範囲に含まれているかどうか
+		/// 予約のレコードを開始する必要があるかどうか
 		/// </summary>
-		public bool IsInRange
+		public override bool NeedStartRecording
 		{
 			get
 			{
@@ -58,11 +63,6 @@ namespace Stacker.Models
 				else
 					return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime; // 通常の範囲
 			}
-		}
-
-		public object Clone()
-		{
-			return new AgTimeReservation(this);
 		}
 	}
 }

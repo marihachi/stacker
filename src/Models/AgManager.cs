@@ -57,14 +57,7 @@ namespace Stacker.Models
 				if (i == null)
 					return false;
 
-				// 予約時間の重複がないかどうか
-				foreach (var reservation in ReservationList)
-				{
-					if (i.StartTime >= reservation.StartTime && i.StartTime < reservation.EndTime || i.EndTime > reservation.StartTime && i.EndTime <= reservation.EndTime)
-						return false;
-				}
-
-				return true;
+				return !IsDuplicateReservation(i.Name, i.StartTime, i.EndTime, i);
 			});
 		}
 
@@ -87,6 +80,30 @@ namespace Stacker.Models
 		public bool IsReservationRecording => ReservationConsoleProcess != null;
 
 		public AgProgram NowProgram => ProgramList.Find(p => p.IsOnAir);
+
+		/// <summary>
+		/// 他の予約と予約名の重複があるかどうか
+		/// </summary>
+		public bool IsDuplicateNameReservation(string name, AgTimeReservation target)
+		{
+			return (from r in ReservationList where r.Name == name && !ReferenceEquals(r, target) select r).Count() != 0;
+		}
+
+		/// <summary>
+		/// 他の予約と時間の重複があるかどうか
+		/// </summary>
+		public bool IsDuplicateTimeReservation(TimeSpan start, TimeSpan end, AgTimeReservation target)
+		{
+			return (from r in ReservationList where r.StartTime < end && r.EndTime > start && !ReferenceEquals(r, target) select r).Count() != 0;
+		}
+
+		/// <summary>
+		/// 他の予約と何らかの重複があるかどうか
+		/// </summary>
+		public bool IsDuplicateReservation(string name, TimeSpan start, TimeSpan end, AgTimeReservation target)
+		{
+			return IsDuplicateTimeReservation(start, end, target) || IsDuplicateNameReservation(name, target);
+		}
 
 		private void CreateOutputDirectory()
 		{
@@ -198,13 +215,33 @@ namespace Stacker.Models
 					weekTimeSum[weekIndex] = time + lengthMin;
 
 					var classes = td.Elements("div").Attributes("class");
+					var titleElement = (from cls in classes where cls.Value == "title-p" select cls.Parent).First();
 
-					var title = (from cls in classes where cls.Value == "title-p" select cls.Parent.Value).First();
+					var title = titleElement.Value;
+					var url = titleElement.Element("a")?.Attribute("href").Value;
 					var personality = (from cls in classes where cls.Value == "rp" select cls.Parent.Value).First();
 					var hasVideo = (from cls in classes where cls.Value == "time" select cls.Parent).First()
 						.Element("span")?.Elements("img")?.Attributes("src").ToList().Exists(att => att.Value == "http://cdn-agqr.joqr.jp/schedule/img/icon_m.gif") ?? false;
 
-					programsWeek[weekIndex].Add(new AgProgram(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, time + lengthMin, personality, AgProgramBroadcastType.First, hasVideo)); // TODO: BroadcastType
+					var broadcastTypeStr = td.Attribute("class").Value;
+					AgProgramBroadcastType broadcastType;
+					switch (broadcastTypeStr)
+					{
+						case "bg-f":
+							broadcastType = AgProgramBroadcastType.First;
+							break;
+						case "bg-l":
+							broadcastType = AgProgramBroadcastType.Live;
+							break;
+						case "bg-repeat":
+							broadcastType = AgProgramBroadcastType.Repeat;
+							break;
+						default:
+							broadcastType = AgProgramBroadcastType.First;
+							break;
+					}
+
+					programsWeek[weekIndex].Add(new AgProgram(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, time + lengthMin, personality, broadcastType, hasVideo, url != null ? new Uri(url) : null));
 				}
 			}
 

@@ -6,20 +6,17 @@ namespace Stacker.Forms
 {
 	public partial class AgTimeReservationSettingDialog : Form
 	{
-		public AgTimeReservationSettingDialog(AgTimeReservation reservation, AgManager ag, bool isEdit)
+		public AgTimeReservationSettingDialog(AgTimeReservation reservation, AgManager ag)
 		{
 			InitializeComponent();
 
 			Reservation = reservation;
 			Ag = ag;
-			IsEdit = isEdit;
 		}
 
 		public AgTimeReservation Reservation { get; set; }
 
 		private AgManager Ag { get; set; }
-
-		public bool IsEdit { get; set; }
 
 		private void AgTimeReservationSettingDialog_Load(object sender, EventArgs e)
 		{
@@ -33,23 +30,34 @@ namespace Stacker.Forms
 
 		private void button1_Click(object sender, EventArgs e)
 		{
+			var startTime = new TimeSpan(dateTimePicker1.Value.Hour, dateTimePicker1.Value.Minute, 0).Add(TimeSpan.FromDays(comboBox1.SelectedIndex));
+			var endTime = new TimeSpan(dateTimePicker2.Value.Hour, dateTimePicker2.Value.Minute, 0).Add(TimeSpan.FromDays(comboBox2.SelectedIndex));
+
+			if (endTime == startTime)
+			{
+				MessageBox.Show("開始/終了時間を同じ値にすることはできません", "エラー");
+				return;
+			}
+
+			if (Ag.IsDuplicateTimeReservation(startTime, endTime, Reservation))
+			{
+				MessageBox.Show("他の予約と時間が重複しています。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			if (Ag.IsDuplicateNameReservation(textBox1.Text, Reservation))
+			{
+				MessageBox.Show("他の予約と予約名が重複しています。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
 			Reservation.Name = textBox1.Text;
-			Reservation.StartTime = new TimeSpan(dateTimePicker1.Value.Hour, dateTimePicker1.Value.Minute, 0).Add(TimeSpan.FromDays(comboBox1.SelectedIndex));
-			Reservation.EndTime = new TimeSpan(dateTimePicker2.Value.Hour, dateTimePicker2.Value.Minute, 0).Add(TimeSpan.FromDays(comboBox2.SelectedIndex));
 			Reservation.IsRecordVideo = checkBox1.Checked;
+			Reservation.StartTime = startTime;
+			Reservation.EndTime = endTime;
 
-			try
-			{
-				if (!IsEdit)
-					Ag.ReservationList.Add(Reservation);
-
-				DialogResult = DialogResult.OK;
-				Close();
-			}
-			catch (InvalidOperationException)
-			{
-				MessageBox.Show("他の予約の時間と重複しています。", "予約失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
+			DialogResult = DialogResult.OK;
+			Close();
 		}
 
 		private void button2_Click(object sender, EventArgs e)

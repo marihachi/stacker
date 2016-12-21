@@ -138,7 +138,7 @@
 			this.dateTimePicker1.ShowUpDown = true;
 			this.dateTimePicker1.Size = new System.Drawing.Size(60, 19);
 			this.dateTimePicker1.TabIndex = 13;
-			this.dateTimePicker1.Value = new System.DateTime(1900, 1, 1, 15, 40, 0, 0);
+			this.dateTimePicker1.Value = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
 			// 
 			// dateTimePicker2
 			// 
@@ -151,7 +151,7 @@
 			this.dateTimePicker2.ShowUpDown = true;
 			this.dateTimePicker2.Size = new System.Drawing.Size(60, 19);
 			this.dateTimePicker2.TabIndex = 15;
-			this.dateTimePicker2.Value = new System.DateTime(1900, 1, 1, 15, 40, 0, 0);
+			this.dateTimePicker2.Value = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
 			// 
 			// button2
 			// 

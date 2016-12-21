@@ -8,7 +8,7 @@ namespace Stacker.Models
 	/// </summary>
 	public class AgProgram
 	{
-		public AgProgram(string title, TimeSpan startTime, TimeSpan endTime, string personality, AgProgramBroadcastType broadcastType, bool hasVideo)
+		public AgProgram(string title, TimeSpan startTime, TimeSpan endTime, string personality, AgProgramBroadcastType broadcastType, bool hasVideo, Uri url = null)
 		{
 			Title = title;
 			StartTime = startTime;
@@ -16,6 +16,7 @@ namespace Stacker.Models
 			Personality = personality;
 			BroadcastType = broadcastType;
 			HasVideo = hasVideo;
+			Url = url;
 		}
 
 		/// <summary>
@@ -47,6 +48,11 @@ namespace Stacker.Models
 		/// 動画として配信されるかどうかを示す値を取得します
 		/// </summary>
 		public bool HasVideo { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public Uri Url { get; set; }
 
 		/// <summary>
 		/// この番組が放送中かどうかを示す値を取得します

@@ -1,6 +1,7 @@
 ﻿using Stacker.Models;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -66,7 +67,36 @@ namespace Stacker.Forms
 			agProgramListView.Items.Clear();
 			foreach (var program in Ag.ProgramList)
 			{
-				var listViewItem = new ListViewItem(new string[] { $"{FormatTime(program.StartTime)} - {FormatTime(program.EndTime)}", program.Title, program.Personality, program.HasVideo ? "有" : "無" });
+				var broadcastType = "";
+				Color backColor;
+				Color foreColor;
+				if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.First)
+				{
+					broadcastType = "初回放送";
+					backColor = Color.FromArgb(255, 200, 200);
+					foreColor = Color.Black;
+				}
+				else if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.Repeat)
+				{
+					broadcastType = "リピート放送";
+					backColor = Color.FromArgb(230, 230, 230);
+					foreColor = Color.Black;
+				}
+				else if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.Live)
+				{
+					broadcastType = "生放送";
+					backColor = Color.FromArgb(164, 255, 187);
+					foreColor = Color.Black;
+				}
+				else
+				{
+					backColor = Color.White;
+					foreColor = Color.Black;
+				}
+
+				var listViewItem = new ListViewItem(new string[] { $"{FormatTime(program.StartTime)} - {FormatTime(program.EndTime)}", program.Title, program.Personality, broadcastType, program.HasVideo ? "有" : "無" });
+				listViewItem.BackColor = backColor;
+				listViewItem.ForeColor = foreColor;
 				listViewItem.Tag = program;
 				agProgramListView.Items.Add(listViewItem);
 			}
@@ -79,13 +109,18 @@ namespace Stacker.Forms
 				agTimeReservationListView.Items.Add(listViewItem);
 			}
 
-			agProgramLabel.Text = Ag.NowProgram.Title;
-			agPersonalityLabel.Text = Ag.NowProgram.Personality;
+			agProgramLabel.Text = $"番組: {Ag.NowProgram?.Title ?? "未取得"}";
+			agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
+
 
 			Status("準備完了");
 		}
 
 		#region EventHandlers
+
+		//
+		// general
+		//
 
 		private async void Form1_Load(object sender, EventArgs e)
 		{
@@ -126,8 +161,8 @@ namespace Stacker.Forms
 
 			Ag.ProgramTransitioned += (s, ev) =>
 			{
-				agProgramLabel.Text = Ag.NowProgram?.Title ?? "未取得";
-				agPersonalityLabel.Text = Ag.NowProgram?.Personality ?? "未取得";
+				agProgramLabel.Text = $"番組: {Ag.NowProgram?.Title ?? "未取得"}";
+				agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
 			};
 
 			Ag.ReservationStarted += (s, ev) =>
@@ -143,9 +178,43 @@ namespace Stacker.Forms
 			Status("準備完了");
 		}
 
+		private void button1_Click(object sender, EventArgs e)
+		{
+			Process.Start(".\\library\\ag");
+		}
+
+		//
+		// main menu view
+		//
+
+		private async void agUpdateProgramListMenuItem_Click(object sender, EventArgs e)
+		{
+			await UpdateProgramsAsync();
+			UpdateForm();
+		}
+
+		private void updateDisplayMenuItem_Click(object sender, EventArgs e)
+		{
+			UpdateForm();
+		}
+
+		//
+		// main menu help
+		//
+
+		private void versionMainMenuItem_Click(object sender, EventArgs e)
+		{
+			var asmInfo = Assembly.GetExecutingAssembly().GetName();
+			MessageBox.Show($"ver.{asmInfo.Version.ToString(3)}", $"{asmInfo.Name}のバージョン情報");
+		}
+
+		//
+		// ag toolbar
+		//
+
 		private void agStartRecordButton_Click(object sender, EventArgs e)
 		{
-			Ag.StartRecord($"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMenuItem.Checked, true);
+			Ag.StartRecord($"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked, true);
 		}
 
 		private void agStopRecordButton_Click(object sender, EventArgs e)
@@ -159,13 +228,52 @@ namespace Stacker.Forms
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
-				Task.Run(() => Ag.RecordSpecifiedTime((int)(60 * dialog.Length), $"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMenuItem.Checked, true));
+				Task.Run(() => Ag.RecordSpecifiedTime((int)(60 * dialog.Length), $"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked, true));
 		}
 
-		private async void agUpdateProgramListMenuItem_Click(object sender, EventArgs e)
+		//
+		// agProgramListView
+		//
+
+		private void agProgramListViewMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			await UpdateProgramsAsync();
-			UpdateForm();
+			if (e.Cancel = agProgramListView.SelectedItems.Count == 0)
+				return;
+
+			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+
+			agDisplayProgramPageProgramListViewMenuItem.Enabled = program.Url != null;
+		}
+
+		private void agTimeReservateProgramListViewMenuItem_Click(object sender, EventArgs e)
+		{
+			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+			var reservation = new AgTimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime, true);
+
+			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
+			dialog.ShowDialog();
+
+			if (dialog.DialogResult == DialogResult.OK)
+			{
+				try
+				{
+					Ag.ReservationList.Add(reservation);
+				}
+				catch (InvalidOperationException ex)
+				{
+					throw new ApplicationException("予約の追加に失敗しました。", ex);
+				}
+				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
+				listViewItem.Tag = reservation;
+				agTimeReservationListView.Items.Add(listViewItem);
+			}
+		}
+
+		private void agDisplayProgramPageProgramListViewMenuItem_Click(object sender, EventArgs e)
+		{
+			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+
+			Process.Start(program.Url.ToString());
 		}
 
 		private void agProgramListView_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -173,61 +281,52 @@ namespace Stacker.Forms
 			if (e.Button != MouseButtons.Left)
 				return;
 
-			agTimeReservationMenuItem_Click(this, null);
+			agTimeReservateProgramListViewMenuItem_Click(this, null);
 		}
 
-		private void versionToolStripMenuItem_Click(object sender, EventArgs e)
+		//
+		// agTimeReservationListViewMenu
+		//
+
+		private void agTimeReservationListViewMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			var asmInfo = Assembly.GetExecutingAssembly().GetName();
-			MessageBox.Show($"ver.{asmInfo.Version.ToString(3)}", $"{asmInfo.Name}のバージョン情報");
+			var isSelected = agTimeReservationListView.SelectedItems.Count != 0;
+
+			agEditTimeReservationListMenuItem.Enabled = isSelected;
+			toolStripSeparator3.Enabled = isSelected;
+			agDeleteTimeReservationListMenuItem.Enabled = isSelected;
+
+			agAddTimeReservationListMenuItem.Enabled = !isSelected;
 		}
 
-		private void updateDisplayMenuItem_Click(object sender, EventArgs e)
+		private void agAddTimeReservationListMenuItem_Click(object sender, EventArgs e)
 		{
-			UpdateForm();
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			Process.Start(".\\library\\ag");
-		}
-		#endregion eventHandlers
-
-		private void programListMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			e.Cancel = agProgramListView.SelectedItems.Count == 0;
-		}
-
-		private void agTimeReservationMenuItem_Click(object sender, EventArgs e)
-		{
-			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
-			var reservation = new AgTimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime, true);
-
-			var dialog = new AgTimeReservationSettingDialog(reservation, Ag, false);
+			var dialog = new AgTimeReservationSettingDialog(new AgTimeReservation("無題", false, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(30), true), Ag);
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
 			{
-				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
-				listViewItem.Tag = reservation;
-				agTimeReservationListView.Items.Add(listViewItem);
+				try
+				{
+					Ag.ReservationList.Add(dialog.Reservation);
+				}
+				catch (InvalidOperationException ex)
+				{
+					throw new ApplicationException("予約の追加に失敗しました。", ex);
+				}
+
+				var item = new ListViewItem(new string[] { FormatTime(dialog.Reservation.StartTime), FormatTime(dialog.Reservation.EndTime), dialog.Reservation.Name });
+				item.Tag = dialog.Reservation;
+				agTimeReservationListView.Items.Add(item);
 			}
 		}
 
-		private void agTimeReservationListView_MouseDoubleClick(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left)
-				return;
-
-			agEditTimeReservationMenuItem_Click(this, null);
-		}
-
-		private void agEditTimeReservationMenuItem_Click(object sender, EventArgs e)
+		private void agEditTimeReservationListMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agTimeReservationListView.SelectedItems[0];
 			var reservation = (AgTimeReservation)listViewItem.Tag;
 
-			var dialog = new AgTimeReservationSettingDialog(reservation, Ag, true);
+			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
@@ -239,7 +338,7 @@ namespace Stacker.Forms
 			}
 		}
 
-		private void agDeleteTimeReservationMenuItem_Click(object sender, EventArgs e)
+		private void agDeleteTimeReservationListMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agTimeReservationListView.SelectedItems[0];
 			var reservation = (AgTimeReservation)listViewItem.Tag;
@@ -251,15 +350,14 @@ namespace Stacker.Forms
 			Ag.ReservationList.Remove(reservation);
 		}
 
-		private void TimeReservationListMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		private void agTimeReservationListView_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			var isSelected = agTimeReservationListView.SelectedItems.Count != 0;
+			if (e.Button != MouseButtons.Left)
+				return;
 
-			agEditTimeReservationMenuItem.Visible = isSelected;
-			toolStripSeparator3.Visible = isSelected;
-			agDeleteTimeReservationMenuItem.Visible = isSelected;
-
-			agAddTimeReservationMenuItem.Visible = !isSelected;
+			agEditTimeReservationListMenuItem_Click(this, null);
 		}
+
+		#endregion eventHandlers
 	}
 }

@@ -147,6 +147,7 @@ namespace Stacker.Models
 			var tempFilename = isRealtimeRecord ? "temp_realtime" : "temp_reservation";
 
 			CreateOutputDirectory();
+
 			var process = ConsoleExecuter.StartOnConsole(
 				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{tempFilename}.{(isVideo ? "mp4" : "mp3")}");
 
@@ -168,20 +169,25 @@ namespace Stacker.Models
 
 		public void StopRecord(bool isRealtimeRecord)
 		{
-			if (isRealtimeRecord && RealtimeConsoleProcess != null)
+			if (isRealtimeRecord)
 			{
-				ConsoleExecuter.StopConsole(RealtimeConsoleProcess);
-				File.Move($"./library/ag/temp_realtime.{(RealtimeIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(RealtimeFilename, @"[\/:*?""<>|]+", i => " ")}.{(RealtimeIsVideo ? "mp4" : "mp3")}");
-				OnRecordStopped(true);
-				RealtimeConsoleProcess = null;
+				if (RealtimeConsoleProcess != null)
+				{
+					ConsoleExecuter.StopConsole(RealtimeConsoleProcess);
+					File.Move($"./library/ag/temp_realtime.{(RealtimeIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(RealtimeFilename, @"[\/:*?""<>|]+", i => " ")}.{(RealtimeIsVideo ? "mp4" : "mp3")}");
+					OnRecordStopped(true);
+					RealtimeConsoleProcess = null;
+				}
 			}
-
-			if (!isRealtimeRecord && ReservationConsoleProcess != null)
+			else
 			{
-				ConsoleExecuter.StopConsole(ReservationConsoleProcess);
-				File.Move($"./library/ag/temp_reservation.{(ReservationIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(ReservationFilename, @"[\/:*?""<>|]+", i => " ")}.{(ReservationIsVideo ? "mp4" : "mp3")}");
-				OnRecordStopped(false);
-				ReservationConsoleProcess = null;
+				if (ReservationConsoleProcess != null)
+				{
+					ConsoleExecuter.StopConsole(ReservationConsoleProcess);
+					File.Move($"./library/ag/temp_reservation.{(ReservationIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(ReservationFilename, @"[\/:*?""<>|]+", i => " ")}.{(ReservationIsVideo ? "mp4" : "mp3")}");
+					OnRecordStopped(false);
+					ReservationConsoleProcess = null;
+				}
 			}
 		}
 

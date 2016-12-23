@@ -54,10 +54,11 @@ namespace Stacker.Models
 				var now = DateTime.Now;
 				var nowTimeSpan = new TimeSpan((int)now.DayOfWeek, now.Hour, now.Minute, now.Second);
 
+				// 日を跨いだときの範囲を適用する必要がある
 				if (StartTime > EndTime)
-					return nowTimeSpan >= StartTime && nowTimeSpan <= TimeSpan.FromMinutes(23 * 60 + 59) || nowTimeSpan >= TimeSpan.FromMinutes(0) && nowTimeSpan <= EndTime; // 日を跨いだときの範囲
+					return nowTimeSpan >= StartTime && nowTimeSpan <= TimeSpan.FromMinutes(23 * 60 + 59) || nowTimeSpan >= TimeSpan.FromMinutes(0) && nowTimeSpan <= EndTime;
 				else
-					return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime; // 通常の範囲
+					return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime;
 			}
 		}
 	}

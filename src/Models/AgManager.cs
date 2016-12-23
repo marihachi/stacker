@@ -30,7 +30,7 @@ namespace Stacker.Models
 					OnProgramTransitioned();
 				}
 
-				var nowReservation = ReservationList.Find(i => i.NeedStartRecording);
+				var nowReservation = ReservationList.Find(i => i.NeedRecording);
 
 				if (lastCheckReservation == null && nowReservation != null)
 				{
@@ -41,7 +41,7 @@ namespace Stacker.Models
 					Debug.WriteLine("AgManager: 時間予約を開始しました");
 				}
 
-				if (lastCheckReservation != null && (nowReservation == null || !lastCheckReservation.NeedStartRecording))
+				if (lastCheckReservation != null && (nowReservation == null || !lastCheckReservation.NeedRecording))
 				{
 					StopRecord(false);
 					OnReservationStoped(lastCheckReservation);

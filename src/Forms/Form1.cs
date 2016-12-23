@@ -341,7 +341,7 @@ namespace Stacker.Forms
 			var listViewItem = agTimeReservationListView.SelectedItems[0];
 			var reservation = (AgTimeReservation)listViewItem.Tag;
 
-			if (reservation.NeedStartRecording)
+			if (reservation.NeedRecording)
 				Ag.StopRecord(false);
 
 			agTimeReservationListView.Items.Remove(listViewItem);

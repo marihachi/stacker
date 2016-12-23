@@ -84,6 +84,7 @@
     <Compile Include="Models\AgManager.cs" />
     <Compile Include="Models\AgProgram.cs" />
     <Compile Include="Models\AgReservation.cs" />
+    <Compile Include="Models\Enums\AgKeywordReservationConditionType.cs" />
     <Compile Include="Models\Enums\AgProgramBroadcastType.cs" />
     <Compile Include="Models\EventArgses\RecordEventArgs.cs" />
     <Compile Include="Models\EventArgses\EventArgsT.cs" />

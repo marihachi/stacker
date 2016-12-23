@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Stacker.Models.Enums;
+using System;
+using System.Text.RegularExpressions;
 
 namespace Stacker.Models
 {
@@ -17,7 +19,7 @@ namespace Stacker.Models
 
 		public bool IsRecordVideo { get; set; }
 
-		public abstract bool NeedStartRecording { get; }
+		public abstract bool NeedRecording { get; }
 	}
 
 	/// <summary>
@@ -43,9 +45,9 @@ namespace Stacker.Models
 		public TimeSpan EndTime { get; set; }
 
 		/// <summary>
-		/// 予約のレコードを開始する必要があるかどうか
+		/// 現在レコードを開始する必要があるかどうか
 		/// </summary>
-		public override bool NeedStartRecording
+		public override bool NeedRecording
 		{
 			get
 			{
@@ -60,14 +62,40 @@ namespace Stacker.Models
 		}
 	}
 
+	/// <summary>
+	/// A&Gのキーワードベース予約情報を表します
+	/// </summary>
 	public class AgKeywordReservation : AgReservation
 	{
-		public AgKeywordReservation(string name, bool isRecordVideo)
+		public AgKeywordReservation(string name, bool isRecordVideo, AgManager manager)
 			: base(name, isRecordVideo)
 		{
-
+			Manager = manager;
 		}
 
-		public override bool NeedStartRecording { get; }
+		private AgManager Manager { get; set; }
+
+		/// <summary>
+		/// 条件の種類
+		/// </summary>
+		public AgKeywordReservationConditionType ConditionType { get; set; }
+
+		/// <summary>
+		/// キーワード
+		/// </summary>
+		public string Keyword { get; set; }
+
+		/// <summary>
+		/// 現在レコードを開始する必要があるかどうか
+		/// </summary>
+		public override bool NeedRecording
+		{
+			get
+			{
+				return
+					(ConditionType == AgKeywordReservationConditionType.Inclued) == Regex.IsMatch(Manager.NowProgram.Title, Keyword) ||
+					(ConditionType == AgKeywordReservationConditionType.Inclued) == Regex.IsMatch(Manager.NowProgram.Personality, Keyword);
+			}
+		}
 	}
 }

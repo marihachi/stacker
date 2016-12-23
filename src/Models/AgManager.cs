@@ -19,7 +19,7 @@ namespace Stacker.Models
 		public AgManager()
 		{
 			AgProgram lastCheckProgram = null;
-			AgTimeReservation lastCheckReservation = null;
+			AgTimeReservation targetReservation = null;
 			SecTimer = new Timer { Interval = 1000, Enabled = true };
 			SecTimer.Tick += (s, ev) =>
 			{
@@ -30,24 +30,44 @@ namespace Stacker.Models
 					OnProgramTransitioned();
 				}
 
-				var nowReservation = ReservationList.Find(i => i.NeedRecording);
+				var nowTimeReservation = ReservationList.Find(i => i.NeedRecording);
 
-				if (lastCheckReservation == null && nowReservation != null)
+				// 予約中じゃない
+				if (targetReservation == null)
 				{
-					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{nowReservation.Name}", nowReservation.IsRecordVideo, false);
-					OnReservationStarted(nowReservation);
-					lastCheckReservation = nowReservation;
+					// 時間予約を開始する必要がある
+					if (nowTimeReservation != null)
+					{
+						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{nowTimeReservation.Name}", nowTimeReservation.IsRecordVideo, false);
+						OnReservationStarted(nowTimeReservation);
+						targetReservation = nowTimeReservation;
 
-					Debug.WriteLine("AgManager: 時間予約を開始しました");
+						Debug.WriteLine("AgManager: 時間予約を開始しました");
+					}
+					// キーワード予約を開始する必要がある
+					else if (false)
+					{
+						// TODO
+						Debug.WriteLine("AgManager: キーワード予約を開始しました");
+					}
 				}
-
-				if (lastCheckReservation != null && (nowReservation == null || !lastCheckReservation.NeedRecording))
+				else
 				{
-					StopRecord(false);
-					OnReservationStoped(lastCheckReservation);
-					lastCheckReservation = null;
+					// 時間予約を終了する必要がある
+					if (nowTimeReservation == null || !targetReservation.NeedRecording)
+					{
+						StopRecord(false);
+						OnReservationStoped(targetReservation);
+						targetReservation = null;
 
-					Debug.WriteLine("AgManager: 時間予約を終了しました");
+						Debug.WriteLine("AgManager: 時間予約を終了しました");
+					}
+					// キーワード予約を開始する必要がある
+					else if (false)
+					{
+						// TODO
+						Debug.WriteLine("AgManager: キーワード予約を終了しました");
+					}
 				}
 			};
 

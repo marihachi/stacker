@@ -72,16 +72,6 @@ namespace Stacker.Models
 			}
 		}
 
-		public static bool operator ==(AgProgram c1, AgProgram c2)
-		{
-			return c1?.Equals(c2) ?? false;
-		}
-
-		public static bool operator !=(AgProgram c1, AgProgram c2)
-		{
-			return !(c1 == c2);
-		}
-
 		public override bool Equals(object obj)
 		{
 			if (obj == null || GetType() != obj.GetType())

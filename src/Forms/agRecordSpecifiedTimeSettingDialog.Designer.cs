@@ -38,7 +38,7 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(36, 77);
+			this.button1.Location = new System.Drawing.Point(36, 62);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 0;
@@ -48,7 +48,7 @@
 			// 
 			// button2
 			// 
-			this.button2.Location = new System.Drawing.Point(117, 77);
+			this.button2.Location = new System.Drawing.Point(117, 62);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 1;
@@ -59,7 +59,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(111, 39);
+			this.label2.Location = new System.Drawing.Point(111, 28);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(17, 12);
 			this.label2.TabIndex = 10;
@@ -67,7 +67,7 @@
 			// 
 			// agLengthUpDown
 			// 
-			this.agLengthUpDown.Location = new System.Drawing.Point(12, 35);
+			this.agLengthUpDown.Location = new System.Drawing.Point(12, 24);
 			this.agLengthUpDown.Maximum = new decimal(new int[] {
             600,
             0,
@@ -90,7 +90,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 20);
+			this.label1.Location = new System.Drawing.Point(12, 9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(61, 12);
 			this.label1.TabIndex = 11;
@@ -100,7 +100,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(204, 112);
+			this.ClientSize = new System.Drawing.Size(204, 97);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.agLengthUpDown);
@@ -110,6 +110,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "agRecordSpecifiedTimeSettingDialog";
+			this.ShowInTaskbar = false;
 			this.Text = "録音の長さの設定";
 			this.Load += new System.EventHandler(this.agRecordSpecifiedTimeSettingDialog_Load);
 			((System.ComponentModel.ISupportInitialize)(this.agLengthUpDown)).EndInit();

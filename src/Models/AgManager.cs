@@ -20,7 +20,7 @@ namespace Stacker.Models
 		{
 			AgProgram lastCheckProgram = null;
 			AgTimeReservation targetTimeReservation = null;
-			AgKeywordReservation targetKeywordReservation = null;
+			AgProgram targetProgramKeywordReservation = null;
 
 			SecTimer = new Timer { Interval = 1000, Enabled = true };
 			SecTimer.Tick += (s, ev) =>
@@ -32,7 +32,6 @@ namespace Stacker.Models
 				}
 
 				var needRecordingTimeReservation = TimeReservationList.Find(i => i.NeedRecording);
-				var needRecordingKeywordReservation = KeywordReservationList.Find(i => i.NeedRecording);
 
 				// 時間予約されている and 時間予約を完了する必要がある
 				if (targetTimeReservation != null && !targetTimeReservation.NeedRecording)
@@ -44,13 +43,13 @@ namespace Stacker.Models
 					Debug.WriteLine("AgManager: 時間予約を終了しました");
 				}
 
-				// キーワード予約されている and (キーワード予約を完了する必要がある or (時間予約を開始する必要がある and 時間予約されてない))
-				if (targetKeywordReservation != null && (!targetKeywordReservation.NeedRecording || (needRecordingTimeReservation != null && targetTimeReservation == null)))
+				// キーワード予約されている and (キーワード予約を完了する必要がある or 番組が遷移されている or (時間予約を開始する必要がある and 時間予約されてない))
+				if (targetProgramKeywordReservation != null && (!NeedKeywordRecording || targetProgramKeywordReservation != NowProgram) || (needRecordingTimeReservation != null && targetTimeReservation == null))
 				{
 					// キーワード予約終了
 					StopRecord(false);
-					OnKeywordReservationStoped(targetKeywordReservation);
-					targetKeywordReservation = null;
+					OnKeywordReservationStoped(targetProgramKeywordReservation);
+					targetProgramKeywordReservation = null;
 					Debug.WriteLine("AgManager: キーワード予約を終了しました");
 				}
 
@@ -68,12 +67,12 @@ namespace Stacker.Models
 					}
 
 					// キーワード予約を開始する必要がある and キーワード予約されてない
-					if (needRecordingKeywordReservation != null && targetKeywordReservation == null)
+					if (NeedKeywordRecording && targetProgramKeywordReservation == null)
 					{
 						// キーワード予約開始
-						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingKeywordReservation.Name}", needRecordingKeywordReservation.IsRecordVideo, false); // TODO: 仮
-						OnKeywordReservationStarted(targetKeywordReservation);
-						targetKeywordReservation = needRecordingKeywordReservation;
+						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{NowProgram.Title}", NowProgram.HasVideo, false);
+						OnKeywordReservationStarted(targetProgramKeywordReservation);
+						targetProgramKeywordReservation = NowProgram;
 						Debug.WriteLine("AgManager: キーワード予約を開始しました");
 					}
 				}
@@ -87,7 +86,13 @@ namespace Stacker.Models
 
 				return !IsDuplicateReservation(i.Name, i.StartTime, i.EndTime, i);
 			});
-			KeywordReservationList = new ValidateableList<AgKeywordReservation>(i => i != null);
+			KeywordReservationList = new ValidateableList<AgKeywordReservation>(i =>
+			{
+				if (i == null || i.Keyword == "")
+					return false;
+
+				return true;
+			});
 		}
 
 		public Uri ProgramListUrl { get; set; } = new Uri("http://www.agqr.jp/timetable/streaming.html");
@@ -110,6 +115,27 @@ namespace Stacker.Models
 		public bool IsReservationRecording => ReservationConsoleProcess != null;
 
 		public AgProgram NowProgram => ProgramList.Find(p => p.IsOnAir);
+
+		/// <summary>
+		/// 現在キーワード予約を開始する必要があるかどうか
+		/// </summary>
+		public bool NeedKeywordRecording
+		{
+			get
+			{
+				var isInclude =
+					(from i in KeywordReservationList
+					 where i.ConditionType == AgKeywordReservationConditionType.Inclued && (Regex.IsMatch(NowProgram.Title, i.Keyword) || Regex.IsMatch(NowProgram.Personality, i.Keyword))
+					 select i).Count() != 0;
+
+				var isExclude =
+					(from i in KeywordReservationList
+					 where i.ConditionType == AgKeywordReservationConditionType.Exclude && (Regex.IsMatch(NowProgram.Title, i.Keyword) || Regex.IsMatch(NowProgram.Personality, i.Keyword))
+					 select i).Count() != 0;
+
+				return isInclude && !isExclude;
+			}
+		}
 
 		/// <summary>
 		/// 他の予約と予約名の重複があるかどうか
@@ -225,16 +251,16 @@ namespace Stacker.Models
 			TimeReservationStoped?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
 		}
 
-		public event EventHandler<EventArgs<AgKeywordReservation>> KeywordReservationStarted;
-		public void OnKeywordReservationStarted(AgKeywordReservation reservation)
+		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStarted;
+		public void OnKeywordReservationStarted(AgProgram program)
 		{
-			KeywordReservationStarted?.Invoke(this, new EventArgs<AgKeywordReservation>(reservation));
+			KeywordReservationStarted?.Invoke(this, new EventArgs<AgProgram>(program));
 		}
 
-		public event EventHandler<EventArgs<AgKeywordReservation>> KeywordReservationStoped;
-		public void OnKeywordReservationStoped(AgKeywordReservation reservation)
+		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStoped;
+		public void OnKeywordReservationStoped(AgProgram program)
 		{
-			KeywordReservationStoped?.Invoke(this, new EventArgs<AgKeywordReservation>(reservation));
+			KeywordReservationStoped?.Invoke(this, new EventArgs<AgProgram>(program));
 		}
 
 		public event EventHandler ProgramTransitioned;

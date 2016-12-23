@@ -183,6 +183,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AgTimeReservationSettingDialog";
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "時間予約の設定";
 			this.Load += new System.EventHandler(this.AgTimeReservationSettingDialog_Load);

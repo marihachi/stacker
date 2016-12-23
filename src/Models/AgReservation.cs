@@ -1,15 +1,30 @@
 ﻿using Stacker.Models.Enums;
 using System;
-using System.Text.RegularExpressions;
 
 namespace Stacker.Models
 {
 	public abstract class AgReservation
 	{
-		public AgReservation(string name, bool isRecordVideo)
+		public AgReservation(AgManager manager)
+		{
+			Manager = manager;
+		}
+
+		public AgManager Manager { get; set; }
+	}
+
+	/// <summary>
+	/// A&Gの時間ベース予約情報を表します
+	/// </summary>
+	public class AgTimeReservation : AgReservation
+	{
+		public AgTimeReservation(string name, bool isRecordVideo, TimeSpan startTime, TimeSpan endTime, AgManager manager)
+			: base(manager)
 		{
 			Name = name;
 			IsRecordVideo = isRecordVideo;
+			StartTime = startTime;
+			EndTime = endTime;
 		}
 
 		/// <summary>
@@ -18,21 +33,6 @@ namespace Stacker.Models
 		public string Name { get; set; }
 
 		public bool IsRecordVideo { get; set; }
-
-		public abstract bool NeedRecording { get; }
-	}
-
-	/// <summary>
-	/// A&Gの時間ベース予約情報を表します
-	/// </summary>
-	public class AgTimeReservation : AgReservation
-	{
-		public AgTimeReservation(string name, bool isRecordVideo, TimeSpan startTime, TimeSpan endTime)
-			: base(name, isRecordVideo)
-		{
-			StartTime = startTime;
-			EndTime = endTime;
-		}
 
 		/// <summary>
 		/// 開始時刻を取得または設定します
@@ -47,7 +47,7 @@ namespace Stacker.Models
 		/// <summary>
 		/// 現在レコードを開始する必要があるかどうか
 		/// </summary>
-		public override bool NeedRecording
+		public bool NeedRecording
 		{
 			get
 			{
@@ -68,13 +68,12 @@ namespace Stacker.Models
 	/// </summary>
 	public class AgKeywordReservation : AgReservation
 	{
-		public AgKeywordReservation(string name, bool isRecordVideo, AgManager manager)
-			: base(name, isRecordVideo)
+		public AgKeywordReservation(AgKeywordReservationConditionType conditionType, string keyword, AgManager manager)
+			: base(manager)
 		{
-			Manager = manager;
+			ConditionType = conditionType;
+			Keyword = keyword;
 		}
-
-		private AgManager Manager { get; set; }
 
 		/// <summary>
 		/// 条件の種類
@@ -85,18 +84,5 @@ namespace Stacker.Models
 		/// キーワード
 		/// </summary>
 		public string Keyword { get; set; }
-
-		/// <summary>
-		/// 現在レコードを開始する必要があるかどうか
-		/// </summary>
-		public override bool NeedRecording
-		{
-			get
-			{
-				return
-					(ConditionType == AgKeywordReservationConditionType.Inclued) == Regex.IsMatch(Manager.NowProgram.Title, Keyword) ||
-					(ConditionType == AgKeywordReservationConditionType.Inclued) == Regex.IsMatch(Manager.NowProgram.Personality, Keyword);
-			}
-		}
 	}
 }

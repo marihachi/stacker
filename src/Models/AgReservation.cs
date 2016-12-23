@@ -59,4 +59,15 @@ namespace Stacker.Models
 			}
 		}
 	}
+
+	public class AgKeywordReservation : AgReservation
+	{
+		public AgKeywordReservation(string name, bool isRecordVideo)
+			: base(name, isRecordVideo)
+		{
+
+		}
+
+		public override bool NeedStartRecording { get; }
+	}
 }

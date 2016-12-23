@@ -25,12 +25,11 @@ namespace Stacker.Models
 	/// </summary>
 	public class AgTimeReservation : AgReservation
 	{
-		public AgTimeReservation(string name, bool isRecordVideo, TimeSpan startTime, TimeSpan endTime, bool isEveryWeek)
+		public AgTimeReservation(string name, bool isRecordVideo, TimeSpan startTime, TimeSpan endTime)
 			: base(name, isRecordVideo)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
-			IsEveryWeek = isEveryWeek;
 		}
 
 		/// <summary>
@@ -42,11 +41,6 @@ namespace Stacker.Models
 		/// 開始時刻を取得または設定します
 		/// </summary>
 		public TimeSpan EndTime { get; set; }
-
-		/// <summary>
-		/// 毎週予約を行うかどうかを示す値を取得または設定します
-		/// </summary>
-		public bool IsEveryWeek { get; set; }
 
 		/// <summary>
 		/// 予約のレコードを開始する必要があるかどうか

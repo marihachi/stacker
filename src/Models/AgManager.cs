@@ -54,24 +54,28 @@ namespace Stacker.Models
 					Debug.WriteLine("AgManager: キーワード予約を終了しました");
 				}
 
-				// 時間予約を開始する必要がある and 時間予約されてない
-				if (needRecordingTimeReservation != null && targetTimeReservation == null)
+				// 時間予約されてない
+				if (targetTimeReservation == null)
 				{
-					// 時間予約開始
-					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}", needRecordingTimeReservation.IsRecordVideo, false);
-					OnTimeReservationStarted(needRecordingTimeReservation);
-					targetTimeReservation = needRecordingTimeReservation;
-					Debug.WriteLine("AgManager: 時間予約を開始しました");
-				}
+					// 時間予約を開始する必要がある
+					if (needRecordingTimeReservation != null)
+					{
+						// 時間予約開始
+						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}", needRecordingTimeReservation.IsRecordVideo, false);
+						OnTimeReservationStarted(needRecordingTimeReservation);
+						targetTimeReservation = needRecordingTimeReservation;
+						Debug.WriteLine("AgManager: 時間予約を開始しました");
+					}
 
-				// キーワード予約を開始する必要がある and キーワード予約されてない and 時間予約されてない
-				if (needRecordingKeywordReservation != null && targetKeywordReservation == null && targetTimeReservation == null)
-				{
-					// キーワード予約開始
-					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingKeywordReservation.Name}", needRecordingKeywordReservation.IsRecordVideo, false); // TODO: 仮
-					OnKeywordReservationStarted(targetKeywordReservation);
-					targetKeywordReservation = needRecordingKeywordReservation;
-					Debug.WriteLine("AgManager: キーワード予約を開始しました");
+					// キーワード予約を開始する必要がある and キーワード予約されてない
+					if (needRecordingKeywordReservation != null && targetKeywordReservation == null)
+					{
+						// キーワード予約開始
+						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingKeywordReservation.Name}", needRecordingKeywordReservation.IsRecordVideo, false); // TODO: 仮
+						OnKeywordReservationStarted(targetKeywordReservation);
+						targetKeywordReservation = needRecordingKeywordReservation;
+						Debug.WriteLine("AgManager: キーワード予約を開始しました");
+					}
 				}
 			};
 

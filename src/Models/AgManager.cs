@@ -19,73 +19,79 @@ namespace Stacker.Models
 		public AgManager()
 		{
 			AgProgram lastCheckProgram = null;
-			AgTimeReservation targetReservation = null;
+			AgTimeReservation targetTimeReservation = null;
+			AgKeywordReservation targetKeywordReservation = null;
+
 			SecTimer = new Timer { Interval = 1000, Enabled = true };
 			SecTimer.Tick += (s, ev) =>
 			{
 				if (lastCheckProgram != NowProgram)
 				{
 					lastCheckProgram = NowProgram;
-
 					OnProgramTransitioned();
 				}
 
-				var nowTimeReservation = ReservationList.Find(i => i.NeedRecording);
+				var needRecordingTimeReservation = TimeReservationList.Find(i => i.NeedRecording);
+				var needRecordingKeywordReservation = KeywordReservationList.Find(i => i.NeedRecording);
 
-				// 予約中じゃない
-				if (targetReservation == null)
+				// 時間予約されている and 時間予約を完了する必要がある
+				if (targetTimeReservation != null && !targetTimeReservation.NeedRecording)
 				{
-					// 時間予約を開始する必要がある
-					if (nowTimeReservation != null)
-					{
-						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{nowTimeReservation.Name}", nowTimeReservation.IsRecordVideo, false);
-						OnReservationStarted(nowTimeReservation);
-						targetReservation = nowTimeReservation;
-
-						Debug.WriteLine("AgManager: 時間予約を開始しました");
-					}
-					// キーワード予約を開始する必要がある
-					else if (false)
-					{
-						// TODO
-						Debug.WriteLine("AgManager: キーワード予約を開始しました");
-					}
+					// 時間予約終了
+					StopRecord(false);
+					OnTimeReservationStoped(targetTimeReservation);
+					targetTimeReservation = null;
+					Debug.WriteLine("AgManager: 時間予約を終了しました");
 				}
-				else
-				{
-					// 時間予約を終了する必要がある
-					if (nowTimeReservation == null || !targetReservation.NeedRecording)
-					{
-						StopRecord(false);
-						OnReservationStoped(targetReservation);
-						targetReservation = null;
 
-						Debug.WriteLine("AgManager: 時間予約を終了しました");
-					}
-					// キーワード予約を開始する必要がある
-					else if (false)
-					{
-						// TODO
-						Debug.WriteLine("AgManager: キーワード予約を終了しました");
-					}
+				// キーワード予約されている and (キーワード予約を完了する必要がある or (時間予約を開始する必要がある and 時間予約されてない))
+				if (targetKeywordReservation != null && (!targetKeywordReservation.NeedRecording || (needRecordingTimeReservation != null && targetTimeReservation == null)))
+				{
+					// キーワード予約終了
+					StopRecord(false);
+					OnKeywordReservationStoped(targetKeywordReservation);
+					targetKeywordReservation = null;
+					Debug.WriteLine("AgManager: キーワード予約を終了しました");
+				}
+
+				// 時間予約を開始する必要がある and 時間予約されてない
+				if (needRecordingTimeReservation != null && targetTimeReservation == null)
+				{
+					// 時間予約開始
+					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}", needRecordingTimeReservation.IsRecordVideo, false);
+					OnTimeReservationStarted(needRecordingTimeReservation);
+					targetTimeReservation = needRecordingTimeReservation;
+					Debug.WriteLine("AgManager: 時間予約を開始しました");
+				}
+
+				// キーワード予約を開始する必要がある and キーワード予約されてない and 時間予約されてない
+				if (needRecordingKeywordReservation != null && targetKeywordReservation == null && targetTimeReservation == null)
+				{
+					// キーワード予約開始
+					StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingKeywordReservation.Name}", needRecordingKeywordReservation.IsRecordVideo, false); // TODO: 仮
+					OnKeywordReservationStarted(targetKeywordReservation);
+					targetKeywordReservation = needRecordingKeywordReservation;
+					Debug.WriteLine("AgManager: キーワード予約を開始しました");
 				}
 			};
 
 			ProgramList = new ValidateableList<AgProgram>(i => i != null);
-			ReservationList = new ValidateableList<AgTimeReservation>(i =>
+			TimeReservationList = new ValidateableList<AgTimeReservation>(i =>
 			{
 				if (i == null)
 					return false;
 
 				return !IsDuplicateReservation(i.Name, i.StartTime, i.EndTime, i);
 			});
+			KeywordReservationList = new ValidateableList<AgKeywordReservation>(i => i != null);
 		}
 
 		public Uri ProgramListUrl { get; set; } = new Uri("http://www.agqr.jp/timetable/streaming.html");
 
 		public ValidateableList<AgProgram> ProgramList { get; private set; }
 
-		public ValidateableList<AgTimeReservation> ReservationList { get; private set; }
+		public ValidateableList<AgTimeReservation> TimeReservationList { get; private set; }
+		public ValidateableList<AgKeywordReservation> KeywordReservationList { get; private set; }
 
 		private Timer SecTimer { get; set; }
 		private Process ReservationConsoleProcess { get; set; }
@@ -107,7 +113,7 @@ namespace Stacker.Models
 		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
 		public bool IsDuplicateNameReservation(string name, AgTimeReservation target)
 		{
-			return (from r in ReservationList where r.Name == name && !ReferenceEquals(r, target) select r).Count() != 0;
+			return (from r in TimeReservationList where r.Name == name && !ReferenceEquals(r, target) select r).Count() != 0;
 		}
 
 		/// <summary>
@@ -116,7 +122,7 @@ namespace Stacker.Models
 		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
 		public bool IsDuplicateTimeReservation(TimeSpan start, TimeSpan end, AgTimeReservation target)
 		{
-			return (from r in ReservationList where r.StartTime < end && r.EndTime > start && !ReferenceEquals(r, target) select r).Count() != 0;
+			return (from r in TimeReservationList where r.StartTime < end && r.EndTime > start && !ReferenceEquals(r, target) select r).Count() != 0;
 		}
 
 		/// <summary>
@@ -203,16 +209,28 @@ namespace Stacker.Models
 			RecordStopped?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
 		}
 
-		public event EventHandler<EventArgs<AgTimeReservation>> ReservationStarted;
-		public void OnReservationStarted(AgTimeReservation reservation)
+		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStarted;
+		public void OnTimeReservationStarted(AgTimeReservation reservation)
 		{
-			ReservationStarted?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+			TimeReservationStarted?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
 		}
 
-		public event EventHandler<EventArgs<AgTimeReservation>> ReservationStoped;
-		public void OnReservationStoped(AgTimeReservation reservation)
+		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStoped;
+		public void OnTimeReservationStoped(AgTimeReservation reservation)
 		{
-			ReservationStoped?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+			TimeReservationStoped?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+		}
+
+		public event EventHandler<EventArgs<AgKeywordReservation>> KeywordReservationStarted;
+		public void OnKeywordReservationStarted(AgKeywordReservation reservation)
+		{
+			KeywordReservationStarted?.Invoke(this, new EventArgs<AgKeywordReservation>(reservation));
+		}
+
+		public event EventHandler<EventArgs<AgKeywordReservation>> KeywordReservationStoped;
+		public void OnKeywordReservationStoped(AgKeywordReservation reservation)
+		{
+			KeywordReservationStoped?.Invoke(this, new EventArgs<AgKeywordReservation>(reservation));
 		}
 
 		public event EventHandler ProgramTransitioned;

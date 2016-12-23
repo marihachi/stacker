@@ -95,7 +95,7 @@ namespace Stacker.Forms
 			}
 
 			agTimeReservationListView.Items.Clear();
-			foreach (var reservation in Ag.ReservationList)
+			foreach (var reservation in Ag.TimeReservationList)
 			{
 				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
 				listViewItem.Tag = reservation;
@@ -158,12 +158,12 @@ namespace Stacker.Forms
 				agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
 			};
 
-			Ag.ReservationStarted += (s, ev) =>
+			Ag.TimeReservationStarted += (s, ev) =>
 			{
 				Status($"時間予約「{ev.Data.Name}」が開始されました");
 			};
 
-			Ag.ReservationStoped += (s, ev) =>
+			Ag.TimeReservationStoped += (s, ev) =>
 			{
 				Status($"時間予約「{ev.Data.Name}」が完了しました");
 			};
@@ -255,7 +255,7 @@ namespace Stacker.Forms
 			{
 				try
 				{
-					Ag.ReservationList.Add(reservation);
+					Ag.TimeReservationList.Add(reservation);
 				}
 				catch (InvalidOperationException ex)
 				{
@@ -306,7 +306,7 @@ namespace Stacker.Forms
 			{
 				try
 				{
-					Ag.ReservationList.Add(dialog.Reservation);
+					Ag.TimeReservationList.Add(dialog.Reservation);
 				}
 				catch (InvalidOperationException ex)
 				{
@@ -345,7 +345,7 @@ namespace Stacker.Forms
 				Ag.StopRecord(false);
 
 			agTimeReservationListView.Items.Remove(listViewItem);
-			Ag.ReservationList.Remove(reservation);
+			Ag.TimeReservationList.Remove(reservation);
 		}
 
 		private void agTimeReservationListView_MouseDoubleClick(object sender, MouseEventArgs e)

@@ -170,6 +170,15 @@ namespace Stacker.Forms
 		}
 
 		//
+		// main menu file
+		//
+
+		private void exitMainMenuItem_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		//
 		// main menu view
 		//
 
@@ -179,10 +188,19 @@ namespace Stacker.Forms
 		}
 
 		//
+		// main menu setting
+		//
+
+		private void settingsInportExportMainMenuItem_Click(object sender, EventArgs e)
+		{
+			// TODO: 設定のインポートとエクスポート ダイアログの表示
+		}
+
+		//
 		// main menu help
 		//
 
-		private void 不具合の報告BToolStripMenuItem_Click(object sender, EventArgs e)
+		private void issuesMainMenuItem_Click(object sender, EventArgs e)
 		{
 			Process.Start("https://github.com/marihachi/stacker/issues");
 		}

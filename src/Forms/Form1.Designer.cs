@@ -29,20 +29,15 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "",
             "キーワード予約は未実装です"}, -1);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
 			this.tabControl2 = new System.Windows.Forms.TabControl();
-			this.tabPage4 = new System.Windows.Forms.TabPage();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.label5 = new System.Windows.Forms.Label();
-			this.agKeyWordReservationListView = new System.Windows.Forms.ListView();
-			this.typeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.keyWordHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.label3 = new System.Windows.Forms.Label();
+			this.timeReservationTabPage = new System.Windows.Forms.TabPage();
 			this.agTimeReservationListView = new System.Windows.Forms.ListView();
 			this.startTimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.endTimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -52,7 +47,7 @@
 			this.agEditTimeReservationListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.agDeleteTimeReservationListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.tabPage9 = new System.Windows.Forms.TabPage();
+			this.programListTabPage = new System.Windows.Forms.TabPage();
 			this.agProgramListView = new System.Windows.Forms.ListView();
 			this.timeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.programNameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -63,9 +58,6 @@
 			this.agTimeReservateProgramListViewMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.agDisplayProgramPageProgramListViewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.tabPage8 = new System.Windows.Forms.TabPage();
-			this.button1 = new System.Windows.Forms.Button();
-			this.label8 = new System.Windows.Forms.Label();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.agStartRecordButton = new System.Windows.Forms.ToolStripButton();
 			this.agRecordStopButton = new System.Windows.Forms.ToolStripButton();
@@ -80,32 +72,44 @@
 			this.label7 = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.録音RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.RealtimeRecordingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.agEnableVideoRealtimeMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateDisplayMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.agUpdateProgramListMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.不具合の報告BToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.versionMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.RealtimeRecordingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.agEnableVideoRealtimeMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.keywordReservationTabPage = new System.Windows.Forms.TabPage();
+			this.agKeywordReservationListView = new System.Windows.Forms.ListView();
+			this.typeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.keyWordHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.statusTabPage = new System.Windows.Forms.TabPage();
+			this.label1 = new System.Windows.Forms.Label();
+			this.agOpenLibraryDirectoryButton = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+			this.agUpdateProgramListButton = new System.Windows.Forms.ToolStripButton();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.toolStripContainer2.ContentPanel.SuspendLayout();
 			this.toolStripContainer2.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer2.SuspendLayout();
 			this.tabControl2.SuspendLayout();
-			this.tabPage4.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
+			this.timeReservationTabPage.SuspendLayout();
 			this.agTimeReservationListViewMenu.SuspendLayout();
-			this.tabPage9.SuspendLayout();
+			this.programListTabPage.SuspendLayout();
 			this.agProgramListViewMenu.SuspendLayout();
-			this.tabPage8.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.tabPage6.SuspendLayout();
 			this.tabPage7.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
+			this.keywordReservationTabPage.SuspendLayout();
+			this.statusTabPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -118,7 +122,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(0, 26);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(799, 413);
+			this.tabControl1.Size = new System.Drawing.Size(744, 413);
 			this.tabControl1.TabIndex = 1;
 			// 
 			// tabPage1
@@ -127,7 +131,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(791, 387);
+			this.tabPage1.Size = new System.Drawing.Size(736, 387);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "超！A＆G＋";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -138,11 +142,11 @@
 			// toolStripContainer2.ContentPanel
 			// 
 			this.toolStripContainer2.ContentPanel.Controls.Add(this.tabControl2);
-			this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(785, 356);
+			this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(730, 356);
 			this.toolStripContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripContainer2.Location = new System.Drawing.Point(3, 3);
 			this.toolStripContainer2.Name = "toolStripContainer2";
-			this.toolStripContainer2.Size = new System.Drawing.Size(785, 381);
+			this.toolStripContainer2.Size = new System.Drawing.Size(730, 381);
 			this.toolStripContainer2.TabIndex = 4;
 			this.toolStripContainer2.Text = "toolStripContainer2";
 			// 
@@ -152,108 +156,42 @@
 			// 
 			// tabControl2
 			// 
-			this.tabControl2.Controls.Add(this.tabPage4);
-			this.tabControl2.Controls.Add(this.tabPage9);
-			this.tabControl2.Controls.Add(this.tabPage8);
+			this.tabControl2.Controls.Add(this.statusTabPage);
+			this.tabControl2.Controls.Add(this.timeReservationTabPage);
+			this.tabControl2.Controls.Add(this.keywordReservationTabPage);
+			this.tabControl2.Controls.Add(this.programListTabPage);
 			this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl2.Location = new System.Drawing.Point(0, 0);
 			this.tabControl2.Name = "tabControl2";
 			this.tabControl2.SelectedIndex = 0;
-			this.tabControl2.Size = new System.Drawing.Size(785, 356);
+			this.tabControl2.Size = new System.Drawing.Size(730, 356);
 			this.tabControl2.TabIndex = 1;
 			// 
-			// tabPage4
+			// timeReservationTabPage
 			// 
-			this.tabPage4.Controls.Add(this.tableLayoutPanel1);
-			this.tabPage4.Location = new System.Drawing.Point(4, 22);
-			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(777, 330);
-			this.tabPage4.TabIndex = 2;
-			this.tabPage4.Text = "管理";
-			this.tabPage4.UseVisualStyleBackColor = true;
-			// 
-			// tableLayoutPanel1
-			// 
-			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.label5, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.agKeyWordReservationListView, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.label3, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.agTimeReservationListView, 0, 1);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(771, 324);
-			this.tableLayoutPanel1.TabIndex = 18;
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(3, 0);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(55, 12);
-			this.label5.TabIndex = 11;
-			this.label5.Text = "時間予約:";
-			// 
-			// agKeyWordReservationListView
-			// 
-			this.agKeyWordReservationListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.agKeyWordReservationListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.typeHeader,
-            this.keyWordHeader});
-			this.agKeyWordReservationListView.FullRowSelect = true;
-			this.agKeyWordReservationListView.GridLines = true;
-			this.agKeyWordReservationListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
-			this.agKeyWordReservationListView.Location = new System.Drawing.Point(388, 15);
-			this.agKeyWordReservationListView.MultiSelect = false;
-			this.agKeyWordReservationListView.Name = "agKeyWordReservationListView";
-			this.agKeyWordReservationListView.Size = new System.Drawing.Size(380, 306);
-			this.agKeyWordReservationListView.TabIndex = 16;
-			this.agKeyWordReservationListView.UseCompatibleStateImageBehavior = false;
-			this.agKeyWordReservationListView.View = System.Windows.Forms.View.Details;
-			// 
-			// typeHeader
-			// 
-			this.typeHeader.Text = "タイプ";
-			// 
-			// keyWordHeader
-			// 
-			this.keyWordHeader.Text = "キーワード";
-			this.keyWordHeader.Width = 300;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(388, 0);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(79, 12);
-			this.label3.TabIndex = 17;
-			this.label3.Text = "キーワード予約:";
+			this.timeReservationTabPage.Controls.Add(this.agTimeReservationListView);
+			this.timeReservationTabPage.Location = new System.Drawing.Point(4, 22);
+			this.timeReservationTabPage.Name = "timeReservationTabPage";
+			this.timeReservationTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.timeReservationTabPage.Size = new System.Drawing.Size(722, 330);
+			this.timeReservationTabPage.TabIndex = 2;
+			this.timeReservationTabPage.Text = "時間予約";
+			this.timeReservationTabPage.UseVisualStyleBackColor = true;
 			// 
 			// agTimeReservationListView
 			// 
-			this.agTimeReservationListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.agTimeReservationListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.startTimeHeader,
             this.endTimeHeader,
             this.nameHeader});
 			this.agTimeReservationListView.ContextMenuStrip = this.agTimeReservationListViewMenu;
+			this.agTimeReservationListView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.agTimeReservationListView.FullRowSelect = true;
 			this.agTimeReservationListView.GridLines = true;
-			this.agTimeReservationListView.Location = new System.Drawing.Point(3, 15);
+			this.agTimeReservationListView.Location = new System.Drawing.Point(3, 3);
 			this.agTimeReservationListView.MultiSelect = false;
 			this.agTimeReservationListView.Name = "agTimeReservationListView";
-			this.agTimeReservationListView.Size = new System.Drawing.Size(379, 306);
+			this.agTimeReservationListView.Size = new System.Drawing.Size(716, 324);
 			this.agTimeReservationListView.TabIndex = 10;
 			this.agTimeReservationListView.UseCompatibleStateImageBehavior = false;
 			this.agTimeReservationListView.View = System.Windows.Forms.View.Details;
@@ -270,7 +208,7 @@
 			// nameHeader
 			// 
 			this.nameHeader.Text = "予約名";
-			this.nameHeader.Width = 300;
+			this.nameHeader.Width = 570;
 			// 
 			// agTimeReservationListViewMenu
 			// 
@@ -310,16 +248,16 @@
 			this.agDeleteTimeReservationListMenuItem.Text = "削除(&D)";
 			this.agDeleteTimeReservationListMenuItem.Click += new System.EventHandler(this.agDeleteTimeReservationListMenuItem_Click);
 			// 
-			// tabPage9
+			// programListTabPage
 			// 
-			this.tabPage9.Controls.Add(this.agProgramListView);
-			this.tabPage9.Location = new System.Drawing.Point(4, 22);
-			this.tabPage9.Name = "tabPage9";
-			this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage9.Size = new System.Drawing.Size(777, 330);
-			this.tabPage9.TabIndex = 4;
-			this.tabPage9.Text = "番組表";
-			this.tabPage9.UseVisualStyleBackColor = true;
+			this.programListTabPage.Controls.Add(this.agProgramListView);
+			this.programListTabPage.Location = new System.Drawing.Point(4, 22);
+			this.programListTabPage.Name = "programListTabPage";
+			this.programListTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.programListTabPage.Size = new System.Drawing.Size(722, 330);
+			this.programListTabPage.TabIndex = 4;
+			this.programListTabPage.Text = "番組表";
+			this.programListTabPage.UseVisualStyleBackColor = true;
 			// 
 			// agProgramListView
 			// 
@@ -336,7 +274,7 @@
 			this.agProgramListView.Location = new System.Drawing.Point(3, 3);
 			this.agProgramListView.MultiSelect = false;
 			this.agProgramListView.Name = "agProgramListView";
-			this.agProgramListView.Size = new System.Drawing.Size(771, 324);
+			this.agProgramListView.Size = new System.Drawing.Size(716, 324);
 			this.agProgramListView.TabIndex = 1;
 			this.agProgramListView.UseCompatibleStateImageBehavior = false;
 			this.agProgramListView.View = System.Windows.Forms.View.Details;
@@ -355,7 +293,7 @@
 			// personalityHeader
 			// 
 			this.personalityHeader.Text = "パーソナリティ";
-			this.personalityHeader.Width = 200;
+			this.personalityHeader.Width = 180;
 			// 
 			// broadcastTypeHeader
 			// 
@@ -390,44 +328,13 @@
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
 			this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
 			// 
-			// 番組ページ表示ToolStripMenuItem
+			// agDisplayProgramPageProgramListViewMenuItem
 			// 
 			this.agDisplayProgramPageProgramListViewMenuItem.Enabled = false;
-			this.agDisplayProgramPageProgramListViewMenuItem.Name = "番組ページ表示ToolStripMenuItem";
+			this.agDisplayProgramPageProgramListViewMenuItem.Name = "agDisplayProgramPageProgramListViewMenuItem";
 			this.agDisplayProgramPageProgramListViewMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.agDisplayProgramPageProgramListViewMenuItem.Text = "番組ページ表示";
 			this.agDisplayProgramPageProgramListViewMenuItem.Click += new System.EventHandler(this.agDisplayProgramPageProgramListViewMenuItem_Click);
-			// 
-			// tabPage8
-			// 
-			this.tabPage8.Controls.Add(this.button1);
-			this.tabPage8.Controls.Add(this.label8);
-			this.tabPage8.Location = new System.Drawing.Point(4, 22);
-			this.tabPage8.Name = "tabPage8";
-			this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage8.Size = new System.Drawing.Size(777, 330);
-			this.tabPage8.TabIndex = 3;
-			this.tabPage8.Text = "ライブラリ";
-			this.tabPage8.UseVisualStyleBackColor = true;
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(6, 58);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(125, 23);
-			this.button1.TabIndex = 17;
-			this.button1.Text = "保存フォルダを開く";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// label8
-			// 
-			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(8, 8);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(61, 12);
-			this.label8.TabIndex = 16;
-			this.label8.Text = "未実装です";
 			// 
 			// toolStrip1
 			// 
@@ -438,11 +345,15 @@
             this.toolStripSeparator1,
             this.agRecordSpecifiedTimeButton,
             this.toolStripSeparator4,
+            this.agUpdateProgramListButton,
+            this.agOpenLibraryDirectoryButton,
+            this.toolStripSeparator6,
             this.agProgramLabel,
-            this.agPersonalityLabel});
+            this.agPersonalityLabel,
+            this.toolStripSeparator7});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(785, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(730, 25);
 			this.toolStrip1.Stretch = true;
 			this.toolStrip1.TabIndex = 10;
 			this.toolStrip1.Text = "toolStrip1";
@@ -546,17 +457,87 @@
             this.helpToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(799, 26);
+			this.menuStrip1.Size = new System.Drawing.Size(744, 26);
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
 			// 録音RToolStripMenuItem
 			// 
 			this.録音RToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RealtimeRecordingMainMenuItem});
+            this.設定ToolStripMenuItem});
 			this.録音RToolStripMenuItem.Name = "録音RToolStripMenuItem";
 			this.録音RToolStripMenuItem.Size = new System.Drawing.Size(62, 22);
 			this.録音RToolStripMenuItem.Text = "録音(&R)";
+			// 
+			// viewToolStripMenuItem
+			// 
+			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateDisplayMainMenuItem});
+			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+			this.viewToolStripMenuItem.Size = new System.Drawing.Size(62, 22);
+			this.viewToolStripMenuItem.Text = "表示(&V)";
+			// 
+			// updateDisplayMainMenuItem
+			// 
+			this.updateDisplayMainMenuItem.Name = "updateDisplayMainMenuItem";
+			this.updateDisplayMainMenuItem.ShortcutKeyDisplayString = "";
+			this.updateDisplayMainMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			this.updateDisplayMainMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.updateDisplayMainMenuItem.Text = "更新(&U)";
+			this.updateDisplayMainMenuItem.Click += new System.EventHandler(this.updateDisplayMenuItem_Click);
+			// 
+			// helpToolStripMenuItem
+			// 
+			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.不具合の報告BToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.versionMainMenuItem});
+			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(75, 22);
+			this.helpToolStripMenuItem.Text = "ヘルプ(&H)";
+			// 
+			// 不具合の報告BToolStripMenuItem
+			// 
+			this.不具合の報告BToolStripMenuItem.Name = "不具合の報告BToolStripMenuItem";
+			this.不具合の報告BToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.不具合の報告BToolStripMenuItem.Text = "不具合の報告(&B)";
+			this.不具合の報告BToolStripMenuItem.Click += new System.EventHandler(this.不具合の報告BToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator5
+			// 
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new System.Drawing.Size(175, 6);
+			// 
+			// versionMainMenuItem
+			// 
+			this.versionMainMenuItem.Name = "versionMainMenuItem";
+			this.versionMainMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.versionMainMenuItem.Text = "バージョン情報(&A)";
+			this.versionMainMenuItem.Click += new System.EventHandler(this.versionMainMenuItem_Click);
+			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 439);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(744, 23);
+			this.statusStrip1.TabIndex = 10;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 18);
+			this.toolStripStatusLabel1.Text = "準備完了";
+			// 
+			// 設定ToolStripMenuItem
+			// 
+			this.設定ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RealtimeRecordingMainMenuItem});
+			this.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
+			this.設定ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.設定ToolStripMenuItem.Text = "設定";
 			// 
 			// RealtimeRecordingMainMenuItem
 			// 
@@ -573,67 +554,100 @@
 			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.agEnableVideoRealtimeMainMenuItem.Text = "動画モード";
 			// 
-			// viewToolStripMenuItem
+			// keywordReservationTabPage
 			// 
-			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.updateDisplayMainMenuItem,
-            this.agUpdateProgramListMainMenuItem});
-			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-			this.viewToolStripMenuItem.Size = new System.Drawing.Size(62, 22);
-			this.viewToolStripMenuItem.Text = "表示(&V)";
+			this.keywordReservationTabPage.Controls.Add(this.agKeywordReservationListView);
+			this.keywordReservationTabPage.Location = new System.Drawing.Point(4, 22);
+			this.keywordReservationTabPage.Name = "keywordReservationTabPage";
+			this.keywordReservationTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.keywordReservationTabPage.Size = new System.Drawing.Size(722, 330);
+			this.keywordReservationTabPage.TabIndex = 5;
+			this.keywordReservationTabPage.Text = "キーワード予約";
+			this.keywordReservationTabPage.UseVisualStyleBackColor = true;
 			// 
-			// updateDisplayMainMenuItem
+			// agKeywordReservationListView
 			// 
-			this.updateDisplayMainMenuItem.Name = "updateDisplayMainMenuItem";
-			this.updateDisplayMainMenuItem.ShortcutKeyDisplayString = "";
-			this.updateDisplayMainMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.updateDisplayMainMenuItem.Size = new System.Drawing.Size(177, 22);
-			this.updateDisplayMainMenuItem.Text = "更新(&U)";
-			this.updateDisplayMainMenuItem.Click += new System.EventHandler(this.updateDisplayMenuItem_Click);
+			this.agKeywordReservationListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.typeHeader,
+            this.keyWordHeader});
+			this.agKeywordReservationListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.agKeywordReservationListView.FullRowSelect = true;
+			this.agKeywordReservationListView.GridLines = true;
+			this.agKeywordReservationListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1});
+			this.agKeywordReservationListView.Location = new System.Drawing.Point(3, 3);
+			this.agKeywordReservationListView.MultiSelect = false;
+			this.agKeywordReservationListView.Name = "agKeywordReservationListView";
+			this.agKeywordReservationListView.Size = new System.Drawing.Size(716, 324);
+			this.agKeywordReservationListView.TabIndex = 17;
+			this.agKeywordReservationListView.UseCompatibleStateImageBehavior = false;
+			this.agKeywordReservationListView.View = System.Windows.Forms.View.Details;
 			// 
-			// agUpdateProgramListMainMenuItem
+			// typeHeader
 			// 
-			this.agUpdateProgramListMainMenuItem.Name = "agUpdateProgramListMainMenuItem";
-			this.agUpdateProgramListMainMenuItem.Size = new System.Drawing.Size(177, 22);
-			this.agUpdateProgramListMainMenuItem.Text = "番組表の再取得(&P)";
-			this.agUpdateProgramListMainMenuItem.Click += new System.EventHandler(this.agUpdateProgramListMenuItem_Click);
+			this.typeHeader.Text = "タイプ";
 			// 
-			// helpToolStripMenuItem
+			// keyWordHeader
 			// 
-			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.versionMainMenuItem});
-			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(75, 22);
-			this.helpToolStripMenuItem.Text = "ヘルプ(&H)";
+			this.keyWordHeader.Text = "キーワード";
+			this.keyWordHeader.Width = 300;
 			// 
-			// versionMainMenuItem
+			// statusTabPage
 			// 
-			this.versionMainMenuItem.Name = "versionMainMenuItem";
-			this.versionMainMenuItem.Size = new System.Drawing.Size(178, 22);
-			this.versionMainMenuItem.Text = "バージョン情報(&A)";
-			this.versionMainMenuItem.Click += new System.EventHandler(this.versionMainMenuItem_Click);
+			this.statusTabPage.Controls.Add(this.label1);
+			this.statusTabPage.Location = new System.Drawing.Point(4, 22);
+			this.statusTabPage.Name = "statusTabPage";
+			this.statusTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.statusTabPage.Size = new System.Drawing.Size(777, 330);
+			this.statusTabPage.TabIndex = 6;
+			this.statusTabPage.Text = "状態";
+			this.statusTabPage.UseVisualStyleBackColor = true;
 			// 
-			// statusStrip1
+			// label1
 			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 439);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(799, 23);
-			this.statusStrip1.TabIndex = 10;
-			this.statusStrip1.Text = "statusStrip1";
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 13);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(268, 12);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "未実装です。レコードタスクの活動状況などを表示します";
 			// 
-			// toolStripStatusLabel1
+			// agOpenLibraryDirectoryButton
 			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 18);
-			this.toolStripStatusLabel1.Text = "準備完了";
+			this.agOpenLibraryDirectoryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.agOpenLibraryDirectoryButton.Image = ((System.Drawing.Image)(resources.GetObject("agOpenLibraryDirectoryButton.Image")));
+			this.agOpenLibraryDirectoryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.agOpenLibraryDirectoryButton.Name = "agOpenLibraryDirectoryButton";
+			this.agOpenLibraryDirectoryButton.Size = new System.Drawing.Size(23, 22);
+			this.agOpenLibraryDirectoryButton.Text = "保存ディレクトリを開く";
+			this.agOpenLibraryDirectoryButton.Click += new System.EventHandler(this.agOpenLibraryDirectoryButton_Click);
+			// 
+			// toolStripSeparator6
+			// 
+			this.toolStripSeparator6.Name = "toolStripSeparator6";
+			this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripSeparator7
+			// 
+			this.toolStripSeparator7.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.toolStripSeparator7.Name = "toolStripSeparator7";
+			this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+			// 
+			// agUpdateProgramListButton
+			// 
+			this.agUpdateProgramListButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.agUpdateProgramListButton.Image = ((System.Drawing.Image)(resources.GetObject("agUpdateProgramListButton.Image")));
+			this.agUpdateProgramListButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.agUpdateProgramListButton.Name = "agUpdateProgramListButton";
+			this.agUpdateProgramListButton.Size = new System.Drawing.Size(23, 22);
+			this.agUpdateProgramListButton.Text = "番組表を再取得する";
+			this.agUpdateProgramListButton.Click += new System.EventHandler(this.agUpdateProgramListButton_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(799, 462);
+			this.ClientSize = new System.Drawing.Size(744, 462);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -650,14 +664,10 @@
 			this.toolStripContainer2.ResumeLayout(false);
 			this.toolStripContainer2.PerformLayout();
 			this.tabControl2.ResumeLayout(false);
-			this.tabPage4.ResumeLayout(false);
-			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
+			this.timeReservationTabPage.ResumeLayout(false);
 			this.agTimeReservationListViewMenu.ResumeLayout(false);
-			this.tabPage9.ResumeLayout(false);
+			this.programListTabPage.ResumeLayout(false);
 			this.agProgramListViewMenu.ResumeLayout(false);
-			this.tabPage8.ResumeLayout(false);
-			this.tabPage8.PerformLayout();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.tabPage6.ResumeLayout(false);
@@ -668,6 +678,9 @@
 			this.menuStrip1.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
+			this.keywordReservationTabPage.ResumeLayout(false);
+			this.statusTabPage.ResumeLayout(false);
+			this.statusTabPage.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -679,11 +692,10 @@
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
 		private System.Windows.Forms.TabControl tabControl2;
-		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.TabPage timeReservationTabPage;
 		private System.Windows.Forms.ToolStripMenuItem versionMainMenuItem;
 		private System.Windows.Forms.TabPage tabPage6;
 		private System.Windows.Forms.TabPage tabPage7;
-		private System.Windows.Forms.TabPage tabPage8;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripContainer toolStripContainer2;
@@ -692,29 +704,20 @@
 		private System.Windows.Forms.ToolStripButton agRecordStopButton;
 		private System.Windows.Forms.ListView agTimeReservationListView;
 		private System.Windows.Forms.ColumnHeader nameHeader;
-		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton agRecordSpecifiedTimeButton;
-		private System.Windows.Forms.TabPage tabPage9;
+		private System.Windows.Forms.TabPage programListTabPage;
 		private System.Windows.Forms.ListView agProgramListView;
 		private System.Windows.Forms.ColumnHeader timeHeader;
 		private System.Windows.Forms.ColumnHeader programNameHeader;
 		private System.Windows.Forms.ColumnHeader personalityHeader;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem updateDisplayMainMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem agUpdateProgramListMainMenuItem;
 		private System.Windows.Forms.ColumnHeader startTimeHeader;
 		private System.Windows.Forms.ColumnHeader endTimeHeader;
 		private System.Windows.Forms.ColumnHeader hasVideoHeader;
-		private System.Windows.Forms.ListView agKeyWordReservationListView;
-		private System.Windows.Forms.ColumnHeader keyWordHeader;
-		private System.Windows.Forms.ColumnHeader typeHeader;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.ContextMenuStrip agProgramListViewMenu;
 		private System.Windows.Forms.ToolStripMenuItem agTimeReservateProgramListViewMenu;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -724,13 +727,26 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem agDeleteTimeReservationListMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 録音RToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem RealtimeRecordingMainMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem agEnableVideoRealtimeMainMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem agAddTimeReservationListMenuItem;
 		private System.Windows.Forms.ColumnHeader broadcastTypeHeader;
 		private System.Windows.Forms.ToolStripLabel agProgramLabel;
 		private System.Windows.Forms.ToolStripLabel agPersonalityLabel;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+		private System.Windows.Forms.ToolStripMenuItem 不具合の報告BToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+		private System.Windows.Forms.ToolStripMenuItem 設定ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem RealtimeRecordingMainMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem agEnableVideoRealtimeMainMenuItem;
+		private System.Windows.Forms.TabPage keywordReservationTabPage;
+		private System.Windows.Forms.ListView agKeywordReservationListView;
+		private System.Windows.Forms.ColumnHeader typeHeader;
+		private System.Windows.Forms.ColumnHeader keyWordHeader;
+		private System.Windows.Forms.TabPage statusTabPage;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ToolStripButton agOpenLibraryDirectoryButton;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+		private System.Windows.Forms.ToolStripButton agUpdateProgramListButton;
 	}
 }
 

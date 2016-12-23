@@ -84,6 +84,7 @@ namespace Stacker.Models
 		/// <summary>
 		/// 他の予約と予約名の重複があるかどうか
 		/// </summary>
+		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
 		public bool IsDuplicateNameReservation(string name, AgTimeReservation target)
 		{
 			return (from r in ReservationList where r.Name == name && !ReferenceEquals(r, target) select r).Count() != 0;
@@ -92,6 +93,7 @@ namespace Stacker.Models
 		/// <summary>
 		/// 他の予約と時間の重複があるかどうか
 		/// </summary>
+		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
 		public bool IsDuplicateTimeReservation(TimeSpan start, TimeSpan end, AgTimeReservation target)
 		{
 			return (from r in ReservationList where r.StartTime < end && r.EndTime > start && !ReferenceEquals(r, target) select r).Count() != 0;
@@ -100,6 +102,7 @@ namespace Stacker.Models
 		/// <summary>
 		/// 他の予約と何らかの重複があるかどうか
 		/// </summary>
+		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
 		public bool IsDuplicateReservation(string name, TimeSpan start, TimeSpan end, AgTimeReservation target)
 		{
 			return IsDuplicateTimeReservation(start, end, target) || IsDuplicateNameReservation(name, target);

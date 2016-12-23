@@ -27,6 +27,7 @@ namespace Stacker.Forms
 			toolStripStatusLabel1.Text = text;
 		}
 
+		/*
 		private async Task DownloadAndExtractFileAsync(string downloadUrl, string filename, string output = null)
 		{
 			Status($"{output ?? filename}をダウンロードしています...");
@@ -45,6 +46,7 @@ namespace Stacker.Forms
 			}
 			Status("準備完了");
 		}
+		*/
 
 		private async Task UpdateProgramsAsync()
 		{
@@ -68,30 +70,21 @@ namespace Stacker.Forms
 			foreach (var program in Ag.ProgramList)
 			{
 				var broadcastType = "";
-				Color backColor;
-				Color foreColor;
+				Color backColor = Color.White;
+				Color foreColor = Color.Black;
 				if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.First)
 				{
 					broadcastType = "初回放送";
 					backColor = Color.FromArgb(255, 200, 200);
-					foreColor = Color.Black;
 				}
 				else if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.Repeat)
 				{
 					broadcastType = "リピート放送";
-					backColor = Color.FromArgb(230, 230, 230);
-					foreColor = Color.Black;
 				}
 				else if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.Live)
 				{
 					broadcastType = "生放送";
 					backColor = Color.FromArgb(164, 255, 187);
-					foreColor = Color.Black;
-				}
-				else
-				{
-					backColor = Color.White;
-					foreColor = Color.Black;
 				}
 
 				var listViewItem = new ListViewItem(new string[] { $"{FormatTime(program.StartTime)} - {FormatTime(program.EndTime)}", program.Title, program.Personality, broadcastType, program.HasVideo ? "有" : "無" });
@@ -178,20 +171,9 @@ namespace Stacker.Forms
 			Status("準備完了");
 		}
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			Process.Start(".\\library\\ag");
-		}
-
 		//
 		// main menu view
 		//
-
-		private async void agUpdateProgramListMenuItem_Click(object sender, EventArgs e)
-		{
-			await UpdateProgramsAsync();
-			UpdateForm();
-		}
 
 		private void updateDisplayMenuItem_Click(object sender, EventArgs e)
 		{
@@ -201,6 +183,11 @@ namespace Stacker.Forms
 		//
 		// main menu help
 		//
+
+		private void 不具合の報告BToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Process.Start("https://github.com/marihachi/stacker/issues");
+		}
 
 		private void versionMainMenuItem_Click(object sender, EventArgs e)
 		{
@@ -231,6 +218,17 @@ namespace Stacker.Forms
 				Task.Run(() => Ag.RecordSpecifiedTime((int)(60 * dialog.Length), $"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked, true));
 		}
 
+		private async void agUpdateProgramListButton_Click(object sender, EventArgs e)
+		{
+			await UpdateProgramsAsync();
+			UpdateForm();
+		}
+
+		private void agOpenLibraryDirectoryButton_Click(object sender, EventArgs e)
+		{
+			Process.Start(".\\library\\ag");
+		}
+
 		//
 		// agProgramListView
 		//
@@ -248,7 +246,7 @@ namespace Stacker.Forms
 		private void agTimeReservateProgramListViewMenuItem_Click(object sender, EventArgs e)
 		{
 			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
-			var reservation = new AgTimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime, true);
+			var reservation = new AgTimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime);
 
 			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
 			dialog.ShowDialog();
@@ -301,7 +299,7 @@ namespace Stacker.Forms
 
 		private void agAddTimeReservationListMenuItem_Click(object sender, EventArgs e)
 		{
-			var dialog = new AgTimeReservationSettingDialog(new AgTimeReservation("無題", false, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(30), true), Ag);
+			var dialog = new AgTimeReservationSettingDialog(new AgTimeReservation("無題", false, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(30)), Ag);
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)

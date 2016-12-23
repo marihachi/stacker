@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
-using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -246,9 +244,9 @@ namespace Stacker.Forms
 		private void agTimeReservateProgramListViewMenuItem_Click(object sender, EventArgs e)
 		{
 			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
-			var reservation = new AgTimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime);
+			var reservation = new AgTimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime, Ag);
 
-			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
+			var dialog = new AgTimeReservationSettingDialog(reservation);
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
@@ -283,23 +281,21 @@ namespace Stacker.Forms
 		}
 
 		//
-		// agTimeReservationListViewMenu
+		// agTimeReservationMenu
 		//
 
-		private void agTimeReservationListViewMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		private void agTimeReservationMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			var isSelected = agTimeReservationListView.SelectedItems.Count != 0;
 
-			agEditTimeReservationListMenuItem.Enabled = isSelected;
-			toolStripSeparator3.Enabled = isSelected;
-			agDeleteTimeReservationListMenuItem.Enabled = isSelected;
-
-			agAddTimeReservationListMenuItem.Enabled = !isSelected;
+			agAddTimeReservationMenuItem.Enabled = !isSelected;
+			agEditTimeReservationMenuItem.Enabled = isSelected;
+			agDeleteTimeReservationMenuItem.Enabled = isSelected;
 		}
 
-		private void agAddTimeReservationListMenuItem_Click(object sender, EventArgs e)
+		private void agAddTimeReservationMenuItem_Click(object sender, EventArgs e)
 		{
-			var dialog = new AgTimeReservationSettingDialog(new AgTimeReservation("無題", false, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(30)), Ag);
+			var dialog = new AgTimeReservationSettingDialog(new AgTimeReservation("無題", false, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(30), Ag));
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
@@ -319,12 +315,12 @@ namespace Stacker.Forms
 			}
 		}
 
-		private void agEditTimeReservationListMenuItem_Click(object sender, EventArgs e)
+		private void agEditTimeReservationMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agTimeReservationListView.SelectedItems[0];
 			var reservation = (AgTimeReservation)listViewItem.Tag;
 
-			var dialog = new AgTimeReservationSettingDialog(reservation, Ag);
+			var dialog = new AgTimeReservationSettingDialog(reservation);
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
@@ -336,7 +332,7 @@ namespace Stacker.Forms
 			}
 		}
 
-		private void agDeleteTimeReservationListMenuItem_Click(object sender, EventArgs e)
+		private void agDeleteTimeReservationMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agTimeReservationListView.SelectedItems[0];
 			var reservation = (AgTimeReservation)listViewItem.Tag;
@@ -348,12 +344,92 @@ namespace Stacker.Forms
 			Ag.TimeReservationList.Remove(reservation);
 		}
 
+		//
+		// agTimeReservationListView
+		//
+
 		private void agTimeReservationListView_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left)
 				return;
 
-			agEditTimeReservationListMenuItem_Click(this, null);
+			agEditTimeReservationMenuItem_Click(this, null);
+		}
+
+		//
+		// agKeywordReservationMenu
+		//
+
+		private void agKeywordReservationMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			var isSelected = agKeywordReservationListView.SelectedItems.Count != 0;
+
+			agAddKeywordReservationMenuItem.Enabled = !isSelected;
+			agEditKeywordReservationMenuItem.Enabled = isSelected;
+			agDeleteKeywordReservationMenuItem.Enabled = isSelected;
+		}
+
+		private void agAddKeywordReservationMenuItem_Click(object sender, EventArgs e)
+		{
+			var dialog = new AgKeywordReservationSettingDialog(new AgKeywordReservation(Models.Enums.AgKeywordReservationConditionType.Inclued, "", Ag));
+			dialog.ShowDialog();
+
+			if (dialog.DialogResult == DialogResult.OK)
+			{
+				try
+				{
+					Ag.KeywordReservationList.Add(dialog.Reservation);
+				}
+				catch (InvalidOperationException ex)
+				{
+					throw new ApplicationException("予約の追加に失敗しました。", ex);
+				}
+
+				var item = new ListViewItem(new string[] { dialog.Reservation.ConditionType.ToString(), dialog.Reservation.Keyword });
+				item.Tag = dialog.Reservation;
+				agKeywordReservationListView.Items.Add(item);
+			}
+		}
+
+		private void agEditKeywordReservationMenuItem_Click(object sender, EventArgs e)
+		{
+			var listViewItem = agKeywordReservationListView.SelectedItems[0];
+			var reservation = (AgKeywordReservation)listViewItem.Tag;
+
+			var dialog = new AgKeywordReservationSettingDialog(reservation);
+			dialog.ShowDialog();
+
+			if (dialog.DialogResult == DialogResult.OK)
+			{
+				var item = new ListViewItem(new string[] { dialog.Reservation.ConditionType.ToString(), dialog.Reservation.Keyword });
+				item.Tag = reservation;
+
+				agKeywordReservationListView.Items[agKeywordReservationListView.Items.IndexOf(listViewItem)] = item;
+			}
+		}
+
+		private void agDeleteKeywordReservationMenuItem_Click(object sender, EventArgs e)
+		{
+			var listViewItem = agKeywordReservationListView.SelectedItems[0];
+			var reservation = (AgKeywordReservation)listViewItem.Tag;
+
+			if (reservation.Manager.NeedKeywordRecording)
+				Ag.StopRecord(false);
+
+			agKeywordReservationListView.Items.Remove(listViewItem);
+			Ag.KeywordReservationList.Remove(reservation);
+		}
+
+		//
+		// agKeywordReservationListView
+		//
+
+		private void agKeywordReservationListView_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left)
+				return;
+
+			agEditKeywordReservationMenuItem_Click(this, null);
 		}
 
 		#endregion eventHandlers

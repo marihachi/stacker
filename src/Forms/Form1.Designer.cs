@@ -66,6 +66,7 @@
 			this.agTimeReservateProgramListViewMenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.agDisplayProgramPageProgramListViewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.agStartRecordButton = new System.Windows.Forms.ToolStripButton();
 			this.agRecordStopButton = new System.Windows.Forms.ToolStripButton();
@@ -83,19 +84,23 @@
 			this.tabPage7 = new System.Windows.Forms.TabPage();
 			this.label7 = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.録音RToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.RealtimeRecordingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.agEnableVideoRealtimeMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.settingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.viewMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateDisplayMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.不具合の報告BToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.helpMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.issuesMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.versionMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			this.時間予約を有効切り替えToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.キーワード予約を有効化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+			this.RealtimeRecordingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.agEnableVideoRealtimeMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fileMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exitMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.settingsInportExportMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.toolStripContainer2.ContentPanel.SuspendLayout();
@@ -438,6 +443,12 @@
 			this.agDisplayProgramPageProgramListViewMenuItem.Text = "番組ページ表示";
 			this.agDisplayProgramPageProgramListViewMenuItem.Click += new System.EventHandler(this.agDisplayProgramPageProgramListViewMenuItem_Click);
 			// 
+			// imageList1
+			// 
+			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageList1.Images.SetKeyName(0, "programList.png");
+			// 
 			// toolStrip1
 			// 
 			this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
@@ -585,89 +596,71 @@
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.録音RToolStripMenuItem,
-            this.viewToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.fileMainMenuItem,
+            this.viewMainMenuItem,
+            this.settingMainMenuItem,
+            this.helpMainMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(744, 26);
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
-			// 録音RToolStripMenuItem
+			// settingMainMenuItem
 			// 
-			this.録音RToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.設定ToolStripMenuItem});
-			this.録音RToolStripMenuItem.Name = "録音RToolStripMenuItem";
-			this.録音RToolStripMenuItem.Size = new System.Drawing.Size(62, 22);
-			this.録音RToolStripMenuItem.Text = "録音(&R)";
+			this.settingMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.時間予約を有効切り替えToolStripMenuItem,
+            this.キーワード予約を有効化ToolStripMenuItem,
+            this.RealtimeRecordingMainMenuItem,
+            this.toolStripSeparator9,
+            this.settingsInportExportMainMenuItem});
+			this.settingMainMenuItem.Name = "settingMainMenuItem";
+			this.settingMainMenuItem.Size = new System.Drawing.Size(62, 22);
+			this.settingMainMenuItem.Text = "設定(&S)";
 			// 
-			// 設定ToolStripMenuItem
+			// viewMainMenuItem
 			// 
-			this.設定ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RealtimeRecordingMainMenuItem});
-			this.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
-			this.設定ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-			this.設定ToolStripMenuItem.Text = "設定";
-			// 
-			// RealtimeRecordingMainMenuItem
-			// 
-			this.RealtimeRecordingMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.agEnableVideoRealtimeMainMenuItem});
-			this.RealtimeRecordingMainMenuItem.Name = "RealtimeRecordingMainMenuItem";
-			this.RealtimeRecordingMainMenuItem.Size = new System.Drawing.Size(172, 22);
-			this.RealtimeRecordingMainMenuItem.Text = "リアルタイム録音";
-			// 
-			// agEnableVideoRealtimeMainMenuItem
-			// 
-			this.agEnableVideoRealtimeMainMenuItem.CheckOnClick = true;
-			this.agEnableVideoRealtimeMainMenuItem.Name = "agEnableVideoRealtimeMainMenuItem";
-			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(136, 22);
-			this.agEnableVideoRealtimeMainMenuItem.Text = "動画モード";
-			// 
-			// viewToolStripMenuItem
-			// 
-			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.viewMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.updateDisplayMainMenuItem});
-			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-			this.viewToolStripMenuItem.Size = new System.Drawing.Size(62, 22);
-			this.viewToolStripMenuItem.Text = "表示(&V)";
+			this.viewMainMenuItem.Name = "viewMainMenuItem";
+			this.viewMainMenuItem.Size = new System.Drawing.Size(62, 22);
+			this.viewMainMenuItem.Text = "表示(&V)";
 			// 
 			// updateDisplayMainMenuItem
 			// 
 			this.updateDisplayMainMenuItem.Name = "updateDisplayMainMenuItem";
 			this.updateDisplayMainMenuItem.ShortcutKeyDisplayString = "";
 			this.updateDisplayMainMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.updateDisplayMainMenuItem.Size = new System.Drawing.Size(141, 22);
+			this.updateDisplayMainMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.updateDisplayMainMenuItem.Text = "更新(&U)";
 			this.updateDisplayMainMenuItem.Click += new System.EventHandler(this.updateDisplayMenuItem_Click);
 			// 
-			// helpToolStripMenuItem
+			// helpMainMenuItem
 			// 
-			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.不具合の報告BToolStripMenuItem,
+			this.helpMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.issuesMainMenuItem,
             this.toolStripSeparator5,
             this.versionMainMenuItem});
-			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(75, 22);
-			this.helpToolStripMenuItem.Text = "ヘルプ(&H)";
+			this.helpMainMenuItem.Name = "helpMainMenuItem";
+			this.helpMainMenuItem.Size = new System.Drawing.Size(75, 22);
+			this.helpMainMenuItem.Text = "ヘルプ(&H)";
 			// 
-			// 不具合の報告BToolStripMenuItem
+			// issuesMainMenuItem
 			// 
-			this.不具合の報告BToolStripMenuItem.Name = "不具合の報告BToolStripMenuItem";
-			this.不具合の報告BToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-			this.不具合の報告BToolStripMenuItem.Text = "不具合の報告(&B)";
-			this.不具合の報告BToolStripMenuItem.Click += new System.EventHandler(this.不具合の報告BToolStripMenuItem_Click);
+			this.issuesMainMenuItem.Name = "issuesMainMenuItem";
+			this.issuesMainMenuItem.Size = new System.Drawing.Size(211, 22);
+			this.issuesMainMenuItem.Text = "ご意見・不具合の報告(&I)";
+			this.issuesMainMenuItem.Click += new System.EventHandler(this.issuesMainMenuItem_Click);
 			// 
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(175, 6);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(208, 6);
 			// 
 			// versionMainMenuItem
 			// 
 			this.versionMainMenuItem.Name = "versionMainMenuItem";
-			this.versionMainMenuItem.Size = new System.Drawing.Size(178, 22);
+			this.versionMainMenuItem.Size = new System.Drawing.Size(211, 22);
 			this.versionMainMenuItem.Text = "バージョン情報(&A)";
 			this.versionMainMenuItem.Click += new System.EventHandler(this.versionMainMenuItem_Click);
 			// 
@@ -687,11 +680,68 @@
 			this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 18);
 			this.toolStripStatusLabel1.Text = "準備完了";
 			// 
-			// imageList1
+			// 時間予約を有効切り替えToolStripMenuItem
 			// 
-			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList1.Images.SetKeyName(0, "programList.png");
+			this.時間予約を有効切り替えToolStripMenuItem.Checked = true;
+			this.時間予約を有効切り替えToolStripMenuItem.CheckOnClick = true;
+			this.時間予約を有効切り替えToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.時間予約を有効切り替えToolStripMenuItem.Enabled = false;
+			this.時間予約を有効切り替えToolStripMenuItem.Name = "時間予約を有効切り替えToolStripMenuItem";
+			this.時間予約を有効切り替えToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.時間予約を有効切り替えToolStripMenuItem.Text = "時間予約を有効化";
+			// 
+			// キーワード予約を有効化ToolStripMenuItem
+			// 
+			this.キーワード予約を有効化ToolStripMenuItem.Checked = true;
+			this.キーワード予約を有効化ToolStripMenuItem.CheckOnClick = true;
+			this.キーワード予約を有効化ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.キーワード予約を有効化ToolStripMenuItem.Enabled = false;
+			this.キーワード予約を有効化ToolStripMenuItem.Name = "キーワード予約を有効化ToolStripMenuItem";
+			this.キーワード予約を有効化ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.キーワード予約を有効化ToolStripMenuItem.Text = "キーワード予約を有効化";
+			// 
+			// toolStripSeparator9
+			// 
+			this.toolStripSeparator9.Name = "toolStripSeparator9";
+			this.toolStripSeparator9.Size = new System.Drawing.Size(265, 6);
+			// 
+			// RealtimeRecordingMainMenuItem
+			// 
+			this.RealtimeRecordingMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.agEnableVideoRealtimeMainMenuItem});
+			this.RealtimeRecordingMainMenuItem.Name = "RealtimeRecordingMainMenuItem";
+			this.RealtimeRecordingMainMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.RealtimeRecordingMainMenuItem.Text = "リアルタイム録音";
+			// 
+			// agEnableVideoRealtimeMainMenuItem
+			// 
+			this.agEnableVideoRealtimeMainMenuItem.CheckOnClick = true;
+			this.agEnableVideoRealtimeMainMenuItem.Name = "agEnableVideoRealtimeMainMenuItem";
+			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.agEnableVideoRealtimeMainMenuItem.Text = "動画モード";
+			// 
+			// fileMainMenuItem
+			// 
+			this.fileMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitMainMenuItem});
+			this.fileMainMenuItem.Name = "fileMainMenuItem";
+			this.fileMainMenuItem.Size = new System.Drawing.Size(85, 22);
+			this.fileMainMenuItem.Text = "ファイル(&F)";
+			// 
+			// exitMainMenuItem
+			// 
+			this.exitMainMenuItem.Name = "exitMainMenuItem";
+			this.exitMainMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exitMainMenuItem.Text = "閉じる(&X)";
+			this.exitMainMenuItem.Click += new System.EventHandler(this.exitMainMenuItem_Click);
+			// 
+			// settingsInportExportMainMenuItem
+			// 
+			this.settingsInportExportMainMenuItem.Enabled = false;
+			this.settingsInportExportMainMenuItem.Name = "settingsInportExportMainMenuItem";
+			this.settingsInportExportMainMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.settingsInportExportMainMenuItem.Text = "設定のインポートとエクスポート...";
+			this.settingsInportExportMainMenuItem.Click += new System.EventHandler(this.settingsInportExportMainMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -704,7 +754,7 @@
 			this.MainMenuStrip = this.menuStrip1;
 			this.MinimumSize = new System.Drawing.Size(300, 340);
 			this.Name = "Form1";
-			this.Text = "{0} - ver.{1}";
+			this.Text = "{0} - ver.{1}(α) info:不具合を見つけた場合は報告してください";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
@@ -741,7 +791,7 @@
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem helpMainMenuItem;
 		private System.Windows.Forms.TabControl tabControl2;
 		private System.Windows.Forms.TabPage timeReservationTabPage;
 		private System.Windows.Forms.ToolStripMenuItem versionMainMenuItem;
@@ -762,7 +812,7 @@
 		private System.Windows.Forms.ColumnHeader timeHeader;
 		private System.Windows.Forms.ColumnHeader programNameHeader;
 		private System.Windows.Forms.ColumnHeader personalityHeader;
-		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem viewMainMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem updateDisplayMainMenuItem;
 		private System.Windows.Forms.ColumnHeader startTimeHeader;
 		private System.Windows.Forms.ColumnHeader endTimeHeader;
@@ -777,17 +827,14 @@
 		private System.Windows.Forms.ToolStripMenuItem agEditTimeReservationMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem agDeleteTimeReservationMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem 録音RToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem settingMainMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem agAddTimeReservationMenuItem;
 		private System.Windows.Forms.ColumnHeader broadcastTypeHeader;
 		private System.Windows.Forms.ToolStripLabel agProgramLabel;
 		private System.Windows.Forms.ToolStripLabel agPersonalityLabel;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-		private System.Windows.Forms.ToolStripMenuItem 不具合の報告BToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem issuesMainMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-		private System.Windows.Forms.ToolStripMenuItem 設定ToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem RealtimeRecordingMainMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem agEnableVideoRealtimeMainMenuItem;
 		private System.Windows.Forms.TabPage keywordReservationTabPage;
 		private System.Windows.Forms.ListView agKeywordReservationListView;
 		private System.Windows.Forms.ColumnHeader typeHeader;
@@ -804,6 +851,14 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
 		private System.Windows.Forms.ToolStripMenuItem agDeleteKeywordReservationMenuItem;
 		private System.Windows.Forms.ImageList imageList1;
+		private System.Windows.Forms.ToolStripMenuItem 時間予約を有効切り替えToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem キーワード予約を有効化ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+		private System.Windows.Forms.ToolStripMenuItem RealtimeRecordingMainMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem agEnableVideoRealtimeMainMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem fileMainMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exitMainMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem settingsInportExportMainMenuItem;
 	}
 }
 

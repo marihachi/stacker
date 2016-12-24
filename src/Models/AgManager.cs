@@ -14,6 +14,9 @@ using System.Xml.Linq;
 
 namespace Stacker.Models
 {
+	/// <summary>
+	/// 超！A＆G＋に関する管理を行います
+	/// </summary>
 	public class AgManager : IDisposable
 	{
 		public AgManager()

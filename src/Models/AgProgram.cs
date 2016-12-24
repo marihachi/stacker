@@ -4,7 +4,7 @@ using System;
 namespace Stacker.Models
 {
 	/// <summary>
-	/// A&Gの番組を表します
+	/// 超！A＆G＋の番組を表します
 	/// </summary>
 	public class AgProgram
 	{

@@ -2,6 +2,9 @@
 
 namespace Stacker.Models.EventArgses
 {
+	/// <summary>
+	/// レコードイベントの引数を表します
+	/// </summary>
 	public class RecordEventArgs : EventArgs
 	{
 		public RecordEventArgs(bool isRealtimeRecord, string filename)

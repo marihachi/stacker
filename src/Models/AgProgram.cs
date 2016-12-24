@@ -50,7 +50,7 @@ namespace Stacker.Models
 		public bool HasVideo { get; set; }
 
 		/// <summary>
-		/// 
+		/// 番組サイトのURL
 		/// </summary>
 		public Uri Url { get; set; }
 

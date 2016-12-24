@@ -18,6 +18,8 @@ namespace Stacker.Models
 			Name = recorderName;
 		}
 
+		#region Events
+
 		public event EventHandler<EventArgs<string>> RecordStarted;
 
 		public void OnRecordStarted() =>
@@ -28,10 +30,18 @@ namespace Stacker.Models
 		public void OnRecordStopped() =>
 			RecordStopped?.Invoke(this, new EventArgs<string>(Filename));
 
+		#endregion Events
+
+		#region Properties and getter methods
+
 		private string Name { get; set; }
 		private Process ConsoleProcess { get; set; }
 		private string Filename { get; set; }
 		private bool IsVideo { get; set; }
+
+		#endregion Properties and getter methods
+
+		#region Action methods
 
 		private void CreateOutputDirectory()
 		{
@@ -66,7 +76,14 @@ namespace Stacker.Models
 			if (ConsoleProcess != null)
 			{
 				ConsoleExecuter.StopConsole(ConsoleProcess);
-				File.Move($"./library/ag/temp_{Name}.{(IsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(Filename, @"[\/:*?""<>|]+", i => " ")}.{(IsVideo ? "mp4" : "mp3")}");
+				try
+				{
+					File.Move($"./library/ag/temp_{Name}.{(IsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(Filename, @"[\/:*?""<>|]+", i => " ")}.{(IsVideo ? "mp4" : "mp3")}");
+				}
+				catch (IOException ex)
+				{
+					throw new ApplicationException("ファイル名のリネームに失敗しました。", ex);
+				}
 				OnRecordStopped();
 				ConsoleProcess = null;
 			}
@@ -77,5 +94,7 @@ namespace Stacker.Models
 			if (ConsoleProcess != null)
 				StopRecord();
 		}
+
+		#endregion Action methods
 	}
 }

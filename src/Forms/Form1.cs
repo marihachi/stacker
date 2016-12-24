@@ -175,6 +175,16 @@ namespace Stacker.Forms
 				agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
 			};
 
+			Ag.KeywordReservationStarted += (s, ev) =>
+			{
+				Status($"キーワード予約「{ev.Data.Title}」が開始されました");
+			};
+
+			Ag.KeywordReservationStoped += (s, ev) =>
+			{
+				Status($"キーワード予約「{ev.Data.Title}」が完了しました");
+			};
+
 			Ag.TimeReservationStarted += (s, ev) =>
 			{
 				Status($"時間予約「{ev.Data.Name}」が開始されました");

@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Models\AgManager.cs" />
     <Compile Include="Models\AgProgram.cs" />
+    <Compile Include="Models\AgRecorder.cs" />
     <Compile Include="Models\AgReservation.cs" />
     <Compile Include="Models\Enums\AgKeywordReservationVideoMode.cs" />
     <Compile Include="Models\Enums\AgKeywordReservationConditionType.cs" />

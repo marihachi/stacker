@@ -84,23 +84,27 @@
 			this.tabPage7 = new System.Windows.Forms.TabPage();
 			this.label7 = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.settingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fileMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exitMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.updateDisplayMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.settingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.時間予約を有効切り替えToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.キーワード予約を有効化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.キーワード予約ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.動画モード自動ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.動画モードありToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.動画モードなしToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.RealtimeRecordingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.agEnableVideoRealtimeMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+			this.settingsInportExportMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.issuesMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.versionMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.時間予約を有効切り替えToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.キーワード予約を有効化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-			this.RealtimeRecordingMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.agEnableVideoRealtimeMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.fileMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exitMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.settingsInportExportMainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.toolStripContainer2.ContentPanel.SuspendLayout();
@@ -606,17 +610,20 @@
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
-			// settingMainMenuItem
+			// fileMainMenuItem
 			// 
-			this.settingMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.時間予約を有効切り替えToolStripMenuItem,
-            this.キーワード予約を有効化ToolStripMenuItem,
-            this.RealtimeRecordingMainMenuItem,
-            this.toolStripSeparator9,
-            this.settingsInportExportMainMenuItem});
-			this.settingMainMenuItem.Name = "settingMainMenuItem";
-			this.settingMainMenuItem.Size = new System.Drawing.Size(62, 22);
-			this.settingMainMenuItem.Text = "設定(&S)";
+			this.fileMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitMainMenuItem});
+			this.fileMainMenuItem.Name = "fileMainMenuItem";
+			this.fileMainMenuItem.Size = new System.Drawing.Size(85, 22);
+			this.fileMainMenuItem.Text = "ファイル(&F)";
+			// 
+			// exitMainMenuItem
+			// 
+			this.exitMainMenuItem.Name = "exitMainMenuItem";
+			this.exitMainMenuItem.Size = new System.Drawing.Size(130, 22);
+			this.exitMainMenuItem.Text = "閉じる(&X)";
+			this.exitMainMenuItem.Click += new System.EventHandler(this.exitMainMenuItem_Click);
 			// 
 			// viewMainMenuItem
 			// 
@@ -631,9 +638,101 @@
 			this.updateDisplayMainMenuItem.Name = "updateDisplayMainMenuItem";
 			this.updateDisplayMainMenuItem.ShortcutKeyDisplayString = "";
 			this.updateDisplayMainMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.updateDisplayMainMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.updateDisplayMainMenuItem.Size = new System.Drawing.Size(141, 22);
 			this.updateDisplayMainMenuItem.Text = "更新(&U)";
 			this.updateDisplayMainMenuItem.Click += new System.EventHandler(this.updateDisplayMenuItem_Click);
+			// 
+			// settingMainMenuItem
+			// 
+			this.settingMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.時間予約を有効切り替えToolStripMenuItem,
+            this.キーワード予約を有効化ToolStripMenuItem,
+            this.キーワード予約ToolStripMenuItem,
+            this.RealtimeRecordingMainMenuItem,
+            this.toolStripSeparator9,
+            this.settingsInportExportMainMenuItem});
+			this.settingMainMenuItem.Name = "settingMainMenuItem";
+			this.settingMainMenuItem.Size = new System.Drawing.Size(62, 22);
+			this.settingMainMenuItem.Text = "設定(&S)";
+			// 
+			// 時間予約を有効切り替えToolStripMenuItem
+			// 
+			this.時間予約を有効切り替えToolStripMenuItem.Checked = true;
+			this.時間予約を有効切り替えToolStripMenuItem.CheckOnClick = true;
+			this.時間予約を有効切り替えToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.時間予約を有効切り替えToolStripMenuItem.Enabled = false;
+			this.時間予約を有効切り替えToolStripMenuItem.Name = "時間予約を有効切り替えToolStripMenuItem";
+			this.時間予約を有効切り替えToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.時間予約を有効切り替えToolStripMenuItem.Text = "時間予約を有効化";
+			// 
+			// キーワード予約を有効化ToolStripMenuItem
+			// 
+			this.キーワード予約を有効化ToolStripMenuItem.Checked = true;
+			this.キーワード予約を有効化ToolStripMenuItem.CheckOnClick = true;
+			this.キーワード予約を有効化ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.キーワード予約を有効化ToolStripMenuItem.Enabled = false;
+			this.キーワード予約を有効化ToolStripMenuItem.Name = "キーワード予約を有効化ToolStripMenuItem";
+			this.キーワード予約を有効化ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.キーワード予約を有効化ToolStripMenuItem.Text = "キーワード予約を有効化";
+			// 
+			// キーワード予約ToolStripMenuItem
+			// 
+			this.キーワード予約ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.動画モード自動ToolStripMenuItem,
+            this.動画モードありToolStripMenuItem,
+            this.動画モードなしToolStripMenuItem});
+			this.キーワード予約ToolStripMenuItem.Name = "キーワード予約ToolStripMenuItem";
+			this.キーワード予約ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.キーワード予約ToolStripMenuItem.Text = "キーワード予約";
+			// 
+			// 動画モード自動ToolStripMenuItem
+			// 
+			this.動画モード自動ToolStripMenuItem.Name = "動画モード自動ToolStripMenuItem";
+			this.動画モード自動ToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.動画モード自動ToolStripMenuItem.Text = "動画モード: 自動";
+			this.動画モード自動ToolStripMenuItem.Click += new System.EventHandler(this.keywordReservationVideoModeMainMenuItem_Click);
+			// 
+			// 動画モードありToolStripMenuItem
+			// 
+			this.動画モードありToolStripMenuItem.Name = "動画モードありToolStripMenuItem";
+			this.動画モードありToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.動画モードありToolStripMenuItem.Text = "動画モード: あり";
+			this.動画モードありToolStripMenuItem.Click += new System.EventHandler(this.keywordReservationVideoModeMainMenuItem_Click);
+			// 
+			// 動画モードなしToolStripMenuItem
+			// 
+			this.動画モードなしToolStripMenuItem.Name = "動画モードなしToolStripMenuItem";
+			this.動画モードなしToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.動画モードなしToolStripMenuItem.Text = "動画モード: なし";
+			this.動画モードなしToolStripMenuItem.Click += new System.EventHandler(this.keywordReservationVideoModeMainMenuItem_Click);
+			// 
+			// RealtimeRecordingMainMenuItem
+			// 
+			this.RealtimeRecordingMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.agEnableVideoRealtimeMainMenuItem});
+			this.RealtimeRecordingMainMenuItem.Name = "RealtimeRecordingMainMenuItem";
+			this.RealtimeRecordingMainMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.RealtimeRecordingMainMenuItem.Text = "リアルタイム録音";
+			// 
+			// agEnableVideoRealtimeMainMenuItem
+			// 
+			this.agEnableVideoRealtimeMainMenuItem.CheckOnClick = true;
+			this.agEnableVideoRealtimeMainMenuItem.Name = "agEnableVideoRealtimeMainMenuItem";
+			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.agEnableVideoRealtimeMainMenuItem.Text = "動画モード";
+			// 
+			// toolStripSeparator9
+			// 
+			this.toolStripSeparator9.Name = "toolStripSeparator9";
+			this.toolStripSeparator9.Size = new System.Drawing.Size(265, 6);
+			// 
+			// settingsInportExportMainMenuItem
+			// 
+			this.settingsInportExportMainMenuItem.Enabled = false;
+			this.settingsInportExportMainMenuItem.Name = "settingsInportExportMainMenuItem";
+			this.settingsInportExportMainMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.settingsInportExportMainMenuItem.Text = "設定のインポートとエクスポート...";
+			this.settingsInportExportMainMenuItem.Click += new System.EventHandler(this.settingsInportExportMainMenuItem_Click);
 			// 
 			// helpMainMenuItem
 			// 
@@ -679,69 +778,6 @@
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
 			this.toolStripStatusLabel1.Size = new System.Drawing.Size(56, 18);
 			this.toolStripStatusLabel1.Text = "準備完了";
-			// 
-			// 時間予約を有効切り替えToolStripMenuItem
-			// 
-			this.時間予約を有効切り替えToolStripMenuItem.Checked = true;
-			this.時間予約を有効切り替えToolStripMenuItem.CheckOnClick = true;
-			this.時間予約を有効切り替えToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.時間予約を有効切り替えToolStripMenuItem.Enabled = false;
-			this.時間予約を有効切り替えToolStripMenuItem.Name = "時間予約を有効切り替えToolStripMenuItem";
-			this.時間予約を有効切り替えToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
-			this.時間予約を有効切り替えToolStripMenuItem.Text = "時間予約を有効化";
-			// 
-			// キーワード予約を有効化ToolStripMenuItem
-			// 
-			this.キーワード予約を有効化ToolStripMenuItem.Checked = true;
-			this.キーワード予約を有効化ToolStripMenuItem.CheckOnClick = true;
-			this.キーワード予約を有効化ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.キーワード予約を有効化ToolStripMenuItem.Enabled = false;
-			this.キーワード予約を有効化ToolStripMenuItem.Name = "キーワード予約を有効化ToolStripMenuItem";
-			this.キーワード予約を有効化ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
-			this.キーワード予約を有効化ToolStripMenuItem.Text = "キーワード予約を有効化";
-			// 
-			// toolStripSeparator9
-			// 
-			this.toolStripSeparator9.Name = "toolStripSeparator9";
-			this.toolStripSeparator9.Size = new System.Drawing.Size(265, 6);
-			// 
-			// RealtimeRecordingMainMenuItem
-			// 
-			this.RealtimeRecordingMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.agEnableVideoRealtimeMainMenuItem});
-			this.RealtimeRecordingMainMenuItem.Name = "RealtimeRecordingMainMenuItem";
-			this.RealtimeRecordingMainMenuItem.Size = new System.Drawing.Size(268, 22);
-			this.RealtimeRecordingMainMenuItem.Text = "リアルタイム録音";
-			// 
-			// agEnableVideoRealtimeMainMenuItem
-			// 
-			this.agEnableVideoRealtimeMainMenuItem.CheckOnClick = true;
-			this.agEnableVideoRealtimeMainMenuItem.Name = "agEnableVideoRealtimeMainMenuItem";
-			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.agEnableVideoRealtimeMainMenuItem.Text = "動画モード";
-			// 
-			// fileMainMenuItem
-			// 
-			this.fileMainMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitMainMenuItem});
-			this.fileMainMenuItem.Name = "fileMainMenuItem";
-			this.fileMainMenuItem.Size = new System.Drawing.Size(85, 22);
-			this.fileMainMenuItem.Text = "ファイル(&F)";
-			// 
-			// exitMainMenuItem
-			// 
-			this.exitMainMenuItem.Name = "exitMainMenuItem";
-			this.exitMainMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.exitMainMenuItem.Text = "閉じる(&X)";
-			this.exitMainMenuItem.Click += new System.EventHandler(this.exitMainMenuItem_Click);
-			// 
-			// settingsInportExportMainMenuItem
-			// 
-			this.settingsInportExportMainMenuItem.Enabled = false;
-			this.settingsInportExportMainMenuItem.Name = "settingsInportExportMainMenuItem";
-			this.settingsInportExportMainMenuItem.Size = new System.Drawing.Size(268, 22);
-			this.settingsInportExportMainMenuItem.Text = "設定のインポートとエクスポート...";
-			this.settingsInportExportMainMenuItem.Click += new System.EventHandler(this.settingsInportExportMainMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -859,6 +895,10 @@
 		private System.Windows.Forms.ToolStripMenuItem fileMainMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem exitMainMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem settingsInportExportMainMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem キーワード予約ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 動画モード自動ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 動画モードありToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 動画モードなしToolStripMenuItem;
 	}
 }
 

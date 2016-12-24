@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -40,7 +39,7 @@ namespace Stacker.Models
 				if (targetTimeReservation != null && !targetTimeReservation.NeedRecording)
 				{
 					// 時間予約終了
-					StopRecord(false);
+					ReservationRecorder.StopRecord();
 					OnTimeReservationStoped(targetTimeReservation);
 					targetTimeReservation = null;
 					Debug.WriteLine("AgManager: 時間予約を終了しました");
@@ -50,7 +49,7 @@ namespace Stacker.Models
 				if (targetKeywordReservationProgram != null && (!NeedKeywordRecording || targetKeywordReservationProgram != NowProgram) || (needRecordingTimeReservation != null && targetTimeReservation == null))
 				{
 					// キーワード予約終了
-					StopRecord(false);
+					ReservationRecorder.StopRecord();
 					OnKeywordReservationStoped(targetKeywordReservationProgram);
 					targetKeywordReservationProgram = null;
 					Debug.WriteLine("AgManager: キーワード予約を終了しました");
@@ -63,7 +62,7 @@ namespace Stacker.Models
 					if (needRecordingTimeReservation != null)
 					{
 						// 時間予約開始
-						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}", needRecordingTimeReservation.IsRecordVideo, false);
+						ReservationRecorder.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}", needRecordingTimeReservation.IsRecordVideo);
 						OnTimeReservationStarted(needRecordingTimeReservation);
 						targetTimeReservation = needRecordingTimeReservation;
 						Debug.WriteLine("AgManager: 時間予約を開始しました");
@@ -73,7 +72,7 @@ namespace Stacker.Models
 					if (NeedKeywordRecording && targetKeywordReservationProgram == null)
 					{
 						// キーワード予約開始
-						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{NowProgram.Title}", NowProgram.HasVideo, false);
+						ReservationRecorder.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{NowProgram.Title}", NowProgram.HasVideo);
 						OnKeywordReservationStarted(targetKeywordReservationProgram);
 						targetKeywordReservationProgram = NowProgram;
 						Debug.WriteLine("AgManager: キーワード予約を開始しました");
@@ -99,16 +98,6 @@ namespace Stacker.Models
 		}
 
 		#region Events
-
-		public event EventHandler<RecordEventArgs> RecordStarted;
-
-		public void OnRecordStarted(bool isRealtimeRecord) =>
-			RecordStarted?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
-
-		public event EventHandler<RecordEventArgs> RecordStopped;
-
-		public void OnRecordStopped(bool isRealtimeRecord) =>
-			RecordStopped?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
 
 		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStarted;
 
@@ -149,13 +138,8 @@ namespace Stacker.Models
 		public ValidateableList<AgTimeReservation> TimeReservationList { get; private set; }
 		public ValidateableList<AgKeywordReservation> KeywordReservationList { get; private set; }
 
-		private Process ReservationConsoleProcess { get; set; }
-		private string ReservationFilename { get; set; }
-		private bool ReservationIsVideo { get; set; }
-
-		private Process RealtimeConsoleProcess { get; set; }
-		private string RealtimeFilename { get; set; }
-		private bool RealtimeIsVideo { get; set; }
+		public AgRecorder RealtimeRecorder { get; set; } = new AgRecorder("realtime");
+		public AgRecorder ReservationRecorder { get; set; } = new AgRecorder("reservation");
 
 		/// <summary>
 		/// 現在キーワード予約を開始する必要があるかどうか
@@ -297,76 +281,11 @@ namespace Stacker.Models
 			ProgramList.AddRange(AnalyzeProgramList());
 		}
 
-		private void CreateOutputDirectory()
-		{
-			var dir = $"./library/ag/";
-			if (!Directory.Exists(dir))
-				Directory.CreateDirectory(dir);
-		}
-
-		public void RecordSpecifiedTime(int specifiedTimeSec, string filename, bool isVideo, bool isRealtimeRecord)
-		{
-			StartRecord(filename, isVideo, isRealtimeRecord);
-			Task.Delay(TimeSpan.FromSeconds(specifiedTimeSec)).Wait();
-			StopRecord(isRealtimeRecord);
-		}
-
-		public void StartRecord(string filename, bool isVideo, bool isRealtimeRecord)
-		{
-			var tempFilename = isRealtimeRecord ? "temp_realtime" : "temp_reservation";
-
-			CreateOutputDirectory();
-
-			var process = ConsoleExecuter.StartOnConsole(
-				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{tempFilename}.{(isVideo ? "mp4" : "mp3")}");
-
-			if (isRealtimeRecord)
-			{
-				RealtimeFilename = filename;
-				RealtimeConsoleProcess = process;
-				RealtimeIsVideo = isVideo;
-			}
-			else
-			{
-				ReservationFilename = filename;
-				ReservationConsoleProcess = process;
-				ReservationIsVideo = isVideo;
-			}
-
-			OnRecordStarted(isRealtimeRecord);
-		}
-
-		public void StopRecord(bool isRealtimeRecord)
-		{
-			if (isRealtimeRecord)
-			{
-				if (RealtimeConsoleProcess != null)
-				{
-					ConsoleExecuter.StopConsole(RealtimeConsoleProcess);
-					File.Move($"./library/ag/temp_realtime.{(RealtimeIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(RealtimeFilename, @"[\/:*?""<>|]+", i => " ")}.{(RealtimeIsVideo ? "mp4" : "mp3")}");
-					OnRecordStopped(true);
-					RealtimeConsoleProcess = null;
-				}
-			}
-			else
-			{
-				if (ReservationConsoleProcess != null)
-				{
-					ConsoleExecuter.StopConsole(ReservationConsoleProcess);
-					File.Move($"./library/ag/temp_reservation.{(ReservationIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(ReservationFilename, @"[\/:*?""<>|]+", i => " ")}.{(ReservationIsVideo ? "mp4" : "mp3")}");
-					OnRecordStopped(false);
-					ReservationConsoleProcess = null;
-				}
-			}
-		}
 
 		public void Dispose()
 		{
-			if (ReservationConsoleProcess != null)
-				StopRecord(false);
-
-			if (RealtimeConsoleProcess != null)
-				StopRecord(true);
+			ReservationRecorder.Dispose();
+			RealtimeRecorder.Dispose();
 		}
 
 		#endregion Action methods

@@ -64,6 +64,8 @@ namespace Stacker.Forms
 		{
 			Status("画面を更新しています...");
 
+			// ag program reservation listView
+
 			agProgramListView.Items.Clear();
 			foreach (var program in Ag.ProgramList)
 			{
@@ -92,6 +94,8 @@ namespace Stacker.Forms
 				agProgramListView.Items.Add(listViewItem);
 			}
 
+			// ag time reservation listView
+
 			agTimeReservationListView.Items.Clear();
 			foreach (var reservation in Ag.TimeReservationList)
 			{
@@ -100,8 +104,23 @@ namespace Stacker.Forms
 				agTimeReservationListView.Items.Add(listViewItem);
 			}
 
+			// ag keyword reservation listview
+
+			agKeywordReservationListView.Items.Clear();
+			foreach (var reservation in Ag.KeywordReservationList)
+			{
+				var listViewItem = new ListViewItem(new string[] { reservation.ConditionType.ToString(), reservation.Keyword });
+				listViewItem.Tag = reservation;
+				agKeywordReservationListView.Items.Add(listViewItem);
+			}
+
+			// toolbar
+
 			agProgramLabel.Text = $"番組: {Ag.NowProgram?.Title ?? "未取得"}";
 			agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
+
+			// main menu
+
 
 
 			Status("準備完了");
@@ -140,14 +159,14 @@ namespace Stacker.Forms
 			await UpdateProgramsAsync();
 			UpdateForm();
 
-			Ag.RecordStarted += (s, ev) =>
+			Ag.RealtimeRecorder.RecordStarted += (s, ev) =>
 			{
-				Status($"「{ev.Filename}」の録音が開始されました");
+				Status($"「{ev.Data}」の録音が開始されました");
 			};
 
-			Ag.RecordStopped += (s, ev) =>
+			Ag.RealtimeRecorder.RecordStopped += (s, ev) =>
 			{
-				Status($"「{ev.Filename}」の録音が完了しました");
+				Status($"「{ev.Data}」の録音が完了しました");
 			};
 
 			Ag.ProgramTransitioned += (s, ev) =>
@@ -191,6 +210,17 @@ namespace Stacker.Forms
 		// main menu setting
 		//
 
+		private void keywordReservationVideoModeMainMenuItem_Click(object sender, EventArgs e)
+		{
+			foreach (var item in new[] { 動画モード自動ToolStripMenuItem, 動画モードありToolStripMenuItem, 動画モードなしToolStripMenuItem })
+			{
+				if (ReferenceEquals(item, sender))
+					item.CheckState = CheckState.Indeterminate;
+				else
+					item.CheckState = CheckState.Unchecked;
+			}
+		}
+
 		private void settingsInportExportMainMenuItem_Click(object sender, EventArgs e)
 		{
 			// TODO: 設定のインポートとエクスポート ダイアログの表示
@@ -217,12 +247,12 @@ namespace Stacker.Forms
 
 		private void agStartRecordButton_Click(object sender, EventArgs e)
 		{
-			Ag.StartRecord($"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked, true);
+			Ag.RealtimeRecorder.StartRecord($"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked);
 		}
 
 		private void agStopRecordButton_Click(object sender, EventArgs e)
 		{
-			Task.Run(() => Ag.StopRecord(true));
+			Task.Run(() => Ag.RealtimeRecorder.StopRecord());
 		}
 
 		private void agRecordSpecifiedTimeButton_Click(object sender, EventArgs e)
@@ -231,7 +261,7 @@ namespace Stacker.Forms
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
-				Task.Run(() => Ag.RecordSpecifiedTime((int)(60 * dialog.Length), $"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked, true));
+				Task.Run(() => Ag.RealtimeRecorder.RecordSpecifiedTime(60 * dialog.Length, $"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked));
 		}
 
 		private async void agUpdateProgramListButton_Click(object sender, EventArgs e)
@@ -356,7 +386,7 @@ namespace Stacker.Forms
 			var reservation = (AgTimeReservation)listViewItem.Tag;
 
 			if (reservation.NeedRecording)
-				Ag.StopRecord(false);
+				Ag.ReservationRecorder.StopRecord();
 
 			agTimeReservationListView.Items.Remove(listViewItem);
 			Ag.TimeReservationList.Remove(reservation);
@@ -432,7 +462,7 @@ namespace Stacker.Forms
 			var reservation = (AgKeywordReservation)listViewItem.Tag;
 
 			if (reservation.Manager.NeedKeywordRecording)
-				Ag.StopRecord(false);
+				Ag.ReservationRecorder.StopRecord();
 
 			agKeywordReservationListView.Items.Remove(listViewItem);
 			Ag.KeywordReservationList.Remove(reservation);

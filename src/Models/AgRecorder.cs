@@ -76,20 +76,22 @@ namespace Stacker.Models
 
 		public void StopRecord()
 		{
-			if (ConsoleProcess != null)
+			if (ConsoleProcess == null)
+				return;
+
+			ConsoleExecuter.StopConsole(ConsoleProcess);
+
+			try
 			{
-				ConsoleExecuter.StopConsole(ConsoleProcess);
-				try
-				{
-					File.Move($"./library/ag/temp_{Name}.{(IsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(Filename, @"[\/:*?""<>|]+", i => " ")}.{(IsVideo ? "mp4" : "mp3")}");
-				}
-				catch (IOException ex)
-				{
-					throw new ApplicationException("ファイル名のリネームに失敗しました。", ex);
-				}
-				OnRecordStopped();
-				ConsoleProcess = null;
+				File.Move($"./library/ag/temp_{Name}.{(IsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(Filename, @"[\/:*?""<>|]+", i => " ")}.{(IsVideo ? "mp4" : "mp3")}");
 			}
+			catch (IOException ex)
+			{
+				throw new ApplicationException("ファイル名のリネームに失敗しました。", ex);
+			}
+
+			OnRecordStopped();
+			ConsoleProcess = null;
 		}
 
 		public void Dispose()

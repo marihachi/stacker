@@ -65,20 +65,22 @@ namespace Stacker.Utilities
 		/// <param name="consoleProcess"></param>
 		public static void StopConsole(Process consoleProcess)
 		{
-			if (AttachConsole((uint)consoleProcess.Id))
+			if (!AttachConsole((uint)consoleProcess.Id))
+				return;
+
+			SetConsoleCtrlHandler(null, true);
+
+			try
 			{
-				SetConsoleCtrlHandler(null, true);
-				try
-				{
-					if (!GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0))
-						return;
-					consoleProcess.WaitForExit();
-				}
-				finally
-				{
-					FreeConsole();
-					SetConsoleCtrlHandler(null, false);
-				}
+				if (!GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0))
+					return;
+
+				consoleProcess.WaitForExit();
+			}
+			finally
+			{
+				FreeConsole();
+				SetConsoleCtrlHandler(null, false);
 			}
 		}
 

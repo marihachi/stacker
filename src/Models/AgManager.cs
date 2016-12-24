@@ -20,7 +20,7 @@ namespace Stacker.Models
 		{
 			AgProgram lastCheckProgram = null;
 			AgTimeReservation targetTimeReservation = null;
-			AgProgram targetProgramKeywordReservation = null;
+			AgProgram targetKeywordReservationProgram = null;
 
 			SecTimer = new Timer { Interval = 1000, Enabled = true };
 			SecTimer.Tick += (s, ev) =>
@@ -44,12 +44,12 @@ namespace Stacker.Models
 				}
 
 				// キーワード予約されている and (キーワード予約を完了する必要がある or 番組が遷移されている or (時間予約を開始する必要がある and 時間予約されてない))
-				if (targetProgramKeywordReservation != null && (!NeedKeywordRecording || targetProgramKeywordReservation != NowProgram) || (needRecordingTimeReservation != null && targetTimeReservation == null))
+				if (targetKeywordReservationProgram != null && (!NeedKeywordRecording || targetKeywordReservationProgram != NowProgram) || (needRecordingTimeReservation != null && targetTimeReservation == null))
 				{
 					// キーワード予約終了
 					StopRecord(false);
-					OnKeywordReservationStoped(targetProgramKeywordReservation);
-					targetProgramKeywordReservation = null;
+					OnKeywordReservationStoped(targetKeywordReservationProgram);
+					targetKeywordReservationProgram = null;
 					Debug.WriteLine("AgManager: キーワード予約を終了しました");
 				}
 
@@ -67,12 +67,12 @@ namespace Stacker.Models
 					}
 
 					// キーワード予約を開始する必要がある and キーワード予約されてない
-					if (NeedKeywordRecording && targetProgramKeywordReservation == null)
+					if (NeedKeywordRecording && targetKeywordReservationProgram == null)
 					{
 						// キーワード予約開始
 						StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{NowProgram.Title}", NowProgram.HasVideo, false);
-						OnKeywordReservationStarted(targetProgramKeywordReservation);
-						targetProgramKeywordReservation = NowProgram;
+						OnKeywordReservationStarted(targetKeywordReservationProgram);
+						targetKeywordReservationProgram = NowProgram;
 						Debug.WriteLine("AgManager: キーワード予約を開始しました");
 					}
 				}
@@ -95,26 +95,64 @@ namespace Stacker.Models
 			});
 		}
 
+		#region Events
+
+		public event EventHandler<RecordEventArgs> RecordStarted;
+
+		public void OnRecordStarted(bool isRealtimeRecord) =>
+			RecordStarted?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
+
+		public event EventHandler<RecordEventArgs> RecordStopped;
+
+		public void OnRecordStopped(bool isRealtimeRecord) =>
+			RecordStopped?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
+
+		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStarted;
+
+		public void OnTimeReservationStarted(AgTimeReservation reservation) =>
+			TimeReservationStarted?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+
+		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStoped;
+
+		public void OnTimeReservationStoped(AgTimeReservation reservation) =>
+			TimeReservationStoped?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+
+		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStarted;
+
+		public void OnKeywordReservationStarted(AgProgram program) =>
+			KeywordReservationStarted?.Invoke(this, new EventArgs<AgProgram>(program));
+
+		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStoped;
+
+		public void OnKeywordReservationStoped(AgProgram program) =>
+			KeywordReservationStoped?.Invoke(this, new EventArgs<AgProgram>(program));
+
+		public event EventHandler ProgramTransitioned;
+
+		public void OnProgramTransitioned() =>
+			ProgramTransitioned?.Invoke(this, new EventArgs());
+
+		#endregion Events
+
+		#region Properties and getter methods
+
 		public Uri ProgramListUrl { get; set; } = new Uri("http://www.agqr.jp/timetable/streaming.html");
 
 		public ValidateableList<AgProgram> ProgramList { get; private set; }
+		public AgProgram NowProgram => ProgramList.Find(p => p.IsOnAir);
+
+		private Timer SecTimer { get; set; }
 
 		public ValidateableList<AgTimeReservation> TimeReservationList { get; private set; }
 		public ValidateableList<AgKeywordReservation> KeywordReservationList { get; private set; }
 
-		private Timer SecTimer { get; set; }
 		private Process ReservationConsoleProcess { get; set; }
-		private Process RealtimeConsoleProcess { get; set; }
-		private string RealtimeFilename { get; set; }
 		private string ReservationFilename { get; set; }
 		private bool ReservationIsVideo { get; set; }
+
+		private Process RealtimeConsoleProcess { get; set; }
+		private string RealtimeFilename { get; set; }
 		private bool RealtimeIsVideo { get; set; }
-
-		public bool IsRealtimeRecording => RealtimeConsoleProcess != null;
-
-		public bool IsReservationRecording => ReservationConsoleProcess != null;
-
-		public AgProgram NowProgram => ProgramList.Find(p => p.IsOnAir);
 
 		/// <summary>
 		/// 現在キーワード予約を開始する必要があるかどうか
@@ -141,133 +179,22 @@ namespace Stacker.Models
 		/// 他の予約と予約名の重複があるかどうか
 		/// </summary>
 		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
-		public bool IsDuplicateNameReservation(string name, AgTimeReservation target)
-		{
-			return (from r in TimeReservationList where r.Name == name && !ReferenceEquals(r, target) select r).Count() != 0;
-		}
+		public bool IsDuplicateNameReservation(string name, AgTimeReservation target) =>
+			(from r in TimeReservationList where r.Name == name && !ReferenceEquals(r, target) select r).Count() != 0;
 
 		/// <summary>
 		/// 他の予約と時間の重複があるかどうか
 		/// </summary>
 		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
-		public bool IsDuplicateTimeReservation(TimeSpan start, TimeSpan end, AgTimeReservation target)
-		{
-			return (from r in TimeReservationList where r.StartTime < end && r.EndTime > start && !ReferenceEquals(r, target) select r).Count() != 0;
-		}
+		public bool IsDuplicateTimeReservation(TimeSpan start, TimeSpan end, AgTimeReservation target) =>
+			(from r in TimeReservationList where r.StartTime < end && r.EndTime > start && !ReferenceEquals(r, target) select r).Count() != 0;
 
 		/// <summary>
 		/// 他の予約と何らかの重複があるかどうか
 		/// </summary>
 		/// <param name="target">対象となるインスタンスの参照。この参照と一致した場合の重複を無視できます</param>
-		public bool IsDuplicateReservation(string name, TimeSpan start, TimeSpan end, AgTimeReservation target)
-		{
-			return IsDuplicateTimeReservation(start, end, target) || IsDuplicateNameReservation(name, target);
-		}
-
-		private void CreateOutputDirectory()
-		{
-			var dir = $"./library/ag/";
-			if (!Directory.Exists(dir))
-				Directory.CreateDirectory(dir);
-		}
-
-		public void RecordSpecifiedTime(int specifiedTimeSec, string filename, bool isVideo, bool isRealtimeRecord)
-		{
-			StartRecord(filename, isVideo, isRealtimeRecord);
-			Task.Delay(TimeSpan.FromSeconds(specifiedTimeSec)).Wait();
-			StopRecord(isRealtimeRecord);
-		}
-
-		public void StartRecord(string filename, bool isVideo, bool isRealtimeRecord)
-		{
-			var tempFilename = isRealtimeRecord ? "temp_realtime" : "temp_reservation";
-
-			CreateOutputDirectory();
-
-			var process = ConsoleExecuter.StartOnConsole(
-				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{tempFilename}.{(isVideo ? "mp4" : "mp3")}");
-
-			if (isRealtimeRecord)
-			{
-				RealtimeFilename = filename;
-				RealtimeConsoleProcess = process;
-				RealtimeIsVideo = isVideo;
-			}
-			else
-			{
-				ReservationFilename = filename;
-				ReservationConsoleProcess = process;
-				ReservationIsVideo = isVideo;
-			}
-
-			OnRecordStarted(isRealtimeRecord);
-		}
-
-		public void StopRecord(bool isRealtimeRecord)
-		{
-			if (isRealtimeRecord)
-			{
-				if (RealtimeConsoleProcess != null)
-				{
-					ConsoleExecuter.StopConsole(RealtimeConsoleProcess);
-					File.Move($"./library/ag/temp_realtime.{(RealtimeIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(RealtimeFilename, @"[\/:*?""<>|]+", i => " ")}.{(RealtimeIsVideo ? "mp4" : "mp3")}");
-					OnRecordStopped(true);
-					RealtimeConsoleProcess = null;
-				}
-			}
-			else
-			{
-				if (ReservationConsoleProcess != null)
-				{
-					ConsoleExecuter.StopConsole(ReservationConsoleProcess);
-					File.Move($"./library/ag/temp_reservation.{(ReservationIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(ReservationFilename, @"[\/:*?""<>|]+", i => " ")}.{(ReservationIsVideo ? "mp4" : "mp3")}");
-					OnRecordStopped(false);
-					ReservationConsoleProcess = null;
-				}
-			}
-		}
-
-		public event EventHandler<RecordEventArgs> RecordStarted;
-		public void OnRecordStarted(bool isRealtimeRecord)
-		{
-			RecordStarted?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
-		}
-
-		public event EventHandler<RecordEventArgs> RecordStopped;
-		public void OnRecordStopped(bool isRealtimeRecord)
-		{
-			RecordStopped?.Invoke(this, new RecordEventArgs(isRealtimeRecord, isRealtimeRecord ? RealtimeFilename : ReservationFilename));
-		}
-
-		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStarted;
-		public void OnTimeReservationStarted(AgTimeReservation reservation)
-		{
-			TimeReservationStarted?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
-		}
-
-		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStoped;
-		public void OnTimeReservationStoped(AgTimeReservation reservation)
-		{
-			TimeReservationStoped?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
-		}
-
-		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStarted;
-		public void OnKeywordReservationStarted(AgProgram program)
-		{
-			KeywordReservationStarted?.Invoke(this, new EventArgs<AgProgram>(program));
-		}
-
-		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStoped;
-		public void OnKeywordReservationStoped(AgProgram program)
-		{
-			KeywordReservationStoped?.Invoke(this, new EventArgs<AgProgram>(program));
-		}
-
-		public event EventHandler ProgramTransitioned;
-		public void OnProgramTransitioned()
-		{
-			ProgramTransitioned?.Invoke(this, new EventArgs());
-		}
+		public bool IsDuplicateReservation(string name, TimeSpan start, TimeSpan end, AgTimeReservation target) =>
+			IsDuplicateTimeReservation(start, end, target) || IsDuplicateNameReservation(name, target);
 
 		private IList<AgProgram> AnalyzeProgramList()
 		{
@@ -354,6 +281,10 @@ namespace Stacker.Models
 			return res;
 		}
 
+		#endregion Properties and getter methods
+
+		#region Action methods
+
 		/// <summary>
 		/// 番組表情報を再取得します
 		/// </summary>
@@ -361,6 +292,69 @@ namespace Stacker.Models
 		{
 			ProgramList.Clear();
 			ProgramList.AddRange(AnalyzeProgramList());
+		}
+
+		private void CreateOutputDirectory()
+		{
+			var dir = $"./library/ag/";
+			if (!Directory.Exists(dir))
+				Directory.CreateDirectory(dir);
+		}
+
+		public void RecordSpecifiedTime(int specifiedTimeSec, string filename, bool isVideo, bool isRealtimeRecord)
+		{
+			StartRecord(filename, isVideo, isRealtimeRecord);
+			Task.Delay(TimeSpan.FromSeconds(specifiedTimeSec)).Wait();
+			StopRecord(isRealtimeRecord);
+		}
+
+		public void StartRecord(string filename, bool isVideo, bool isRealtimeRecord)
+		{
+			var tempFilename = isRealtimeRecord ? "temp_realtime" : "temp_reservation";
+
+			CreateOutputDirectory();
+
+			var process = ConsoleExecuter.StartOnConsole(
+				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/{tempFilename}.{(isVideo ? "mp4" : "mp3")}");
+
+			if (isRealtimeRecord)
+			{
+				RealtimeFilename = filename;
+				RealtimeConsoleProcess = process;
+				RealtimeIsVideo = isVideo;
+			}
+			else
+			{
+				ReservationFilename = filename;
+				ReservationConsoleProcess = process;
+				ReservationIsVideo = isVideo;
+			}
+
+			OnRecordStarted(isRealtimeRecord);
+		}
+
+		public void StopRecord(bool isRealtimeRecord)
+		{
+			if (isRealtimeRecord)
+			{
+				if (RealtimeConsoleProcess != null)
+				{
+					ConsoleExecuter.StopConsole(RealtimeConsoleProcess);
+					File.Move($"./library/ag/temp_realtime.{(RealtimeIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(RealtimeFilename, @"[\/:*?""<>|]+", i => " ")}.{(RealtimeIsVideo ? "mp4" : "mp3")}");
+					OnRecordStopped(true);
+					RealtimeConsoleProcess = null;
+				}
+			}
+			else
+			{
+				if (ReservationConsoleProcess != null)
+				{
+					ConsoleExecuter.StopConsole(ReservationConsoleProcess);
+					File.Move($"./library/ag/temp_reservation.{(ReservationIsVideo ? "mp4" : "mp3")}", $"./library/ag/{Regex.Replace(ReservationFilename, @"[\/:*?""<>|]+", i => " ")}.{(ReservationIsVideo ? "mp4" : "mp3")}");
+					OnRecordStopped(false);
+					ReservationConsoleProcess = null;
+				}
+			}
 		}
 
 		public void Dispose()
@@ -371,5 +365,7 @@ namespace Stacker.Models
 			if (RealtimeConsoleProcess != null)
 				StopRecord(true);
 		}
+
+		#endregion Action methods
 	}
 }

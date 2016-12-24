@@ -139,7 +139,7 @@ namespace Stacker.Models
 			{
 				var isInclude =
 					(from i in KeywordReservationList
-					 where i.ConditionType == AgKeywordReservationConditionType.Inclued && (Regex.IsMatch(Manager.NowProgram.Title, i.Keyword) || Regex.IsMatch(Manager.NowProgram.Personality, i.Keyword))
+					 where i.ConditionType == AgKeywordReservationConditionType.Include && (Regex.IsMatch(Manager.NowProgram.Title, i.Keyword) || Regex.IsMatch(Manager.NowProgram.Personality, i.Keyword))
 					 select i).Count() != 0;
 
 				var isExclude =

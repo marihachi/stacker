@@ -681,6 +681,7 @@
             this.動画モード自動ToolStripMenuItem,
             this.動画モードありToolStripMenuItem,
             this.動画モードなしToolStripMenuItem});
+			this.キーワード予約ToolStripMenuItem.Enabled = false;
 			this.キーワード予約ToolStripMenuItem.Name = "キーワード予約ToolStripMenuItem";
 			this.キーワード予約ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
 			this.キーワード予約ToolStripMenuItem.Text = "キーワード予約";
@@ -718,7 +719,7 @@
 			// 
 			this.agEnableVideoRealtimeMainMenuItem.CheckOnClick = true;
 			this.agEnableVideoRealtimeMainMenuItem.Name = "agEnableVideoRealtimeMainMenuItem";
-			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.agEnableVideoRealtimeMainMenuItem.Text = "動画モード";
 			// 
 			// toolStripSeparator9

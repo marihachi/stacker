@@ -429,7 +429,7 @@ namespace Stacker.Forms
 
 		private void agAddKeywordReservationMenuItem_Click(object sender, EventArgs e)
 		{
-			var dialog = new AgKeywordReservationSettingDialog(new AgKeywordReservation(Models.Enums.AgKeywordReservationConditionType.Inclued, "", Ag));
+			var dialog = new AgKeywordReservationSettingDialog(new AgKeywordReservation(Models.Enums.AgKeywordReservationConditionType.Include, "", Ag));
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)

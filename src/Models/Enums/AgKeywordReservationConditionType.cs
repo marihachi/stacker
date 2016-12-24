@@ -8,7 +8,7 @@
 		/// <summary>
 		/// 含める
 		/// </summary>
-		Inclued,
+		Include,
 
 		/// <summary>
 		/// 除外する

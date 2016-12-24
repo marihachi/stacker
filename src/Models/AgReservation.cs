@@ -1,4 +1,5 @@
-﻿using Stacker.Models.Enums;
+﻿using Codeplex.Data;
+using Stacker.Models.Enums;
 using System;
 
 namespace Stacker.Models
@@ -11,6 +12,8 @@ namespace Stacker.Models
 		}
 
 		public AgManager Manager { get; set; }
+
+		public abstract object Serialize();
 	}
 
 	/// <summary>
@@ -25,6 +28,17 @@ namespace Stacker.Models
 			IsRecordVideo = isRecordVideo;
 			StartTime = startTime;
 			EndTime = endTime;
+		}
+
+		public AgTimeReservation(string jsonString, AgManager manager)
+			: base(manager)
+		{
+			var j = DynamicJson.Parse(jsonString);
+
+			Name = (string)j.name;
+			IsRecordVideo = (bool)j.is_record_video;
+			StartTime = TimeSpan.FromMinutes((int)j.start_time);
+			EndTime = TimeSpan.FromMinutes((int)j.end_time);
 		}
 
 		/// <summary>
@@ -61,6 +75,22 @@ namespace Stacker.Models
 					return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime;
 			}
 		}
+
+		/// <summary>
+		/// Jsonにシリアライズします
+		/// </summary>
+		/// <returns></returns>
+		public override object Serialize()
+		{
+			var data = new {
+				name = Name,
+				is_record_video = IsRecordVideo,
+				start_time = StartTime.TotalMinutes,
+				end_time = EndTime.TotalMinutes
+			};
+
+			return data;
+		}
 	}
 
 	/// <summary>
@@ -75,6 +105,15 @@ namespace Stacker.Models
 			Keyword = keyword;
 		}
 
+		public AgKeywordReservation(string jsonString, AgManager manager)
+			: base(manager)
+		{
+			var j = DynamicJson.Parse(jsonString);
+
+			ConditionType = (AgKeywordReservationConditionType)j.condition_type;
+			Keyword = (string)j.keyword;
+		}
+
 		/// <summary>
 		/// 条件の種類
 		/// </summary>
@@ -84,5 +123,20 @@ namespace Stacker.Models
 		/// キーワード
 		/// </summary>
 		public string Keyword { get; set; }
+
+		/// <summary>
+		/// Jsonにシリアライズします
+		/// </summary>
+		/// <returns></returns>
+		public override object Serialize()
+		{
+			var data = new
+			{
+				condition_type = (int)ConditionType,
+				keyword = Keyword
+			};
+
+			return data;
+		}
 	}
 }

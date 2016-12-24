@@ -1,4 +1,5 @@
-﻿using Stacker.Models.Enums;
+﻿using Codeplex.Data;
+using Stacker.Models.Enums;
 using Stacker.Utilities;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,8 @@ namespace Stacker.Models
 			ProgramList = new ValidateableList<AgProgram>(i => i != null);
 
 			Reserver = new AgReserver(this);
+
+			Load();
 		}
 
 		#region Events
@@ -158,10 +161,49 @@ namespace Stacker.Models
 			ProgramList.AddRange(AnalyzeProgramList());
 		}
 
+		public void Load()
+		{
+			string src;
+
+			if (!File.Exists("ag.dat"))
+				return;
+
+			using (var sr = new StreamReader("ag.dat"))
+				src = sr.ReadToEnd();
+
+			if (string.IsNullOrEmpty(src))
+				return;
+
+			var j = DynamicJson.Parse(src);
+
+			foreach(var timeReservation in j.time_reservations)
+			{
+				Reserver?.TimeReservationList.Add(new AgTimeReservation(timeReservation.ToString(), this));
+			}
+
+			foreach (var keywordReservation in j.keyword_reservations)
+			{
+				Reserver?.KeywordReservationList.Add(new AgKeywordReservation(keywordReservation.ToString(), this));
+			}
+		}
+
+		public void Save()
+		{
+			dynamic j = new DynamicJson();
+
+			j.time_reservations = from r in Reserver.TimeReservationList select r.Serialize();
+			j.keyword_reservations = from r in Reserver.KeywordReservationList select r.Serialize();
+
+			using (var sw = new StreamWriter("ag.dat"))
+				sw.Write(j.ToString());
+		}
+
 		public void Dispose()
 		{
 			ReservationRecorder.Dispose();
 			RealtimeRecorder.Dispose();
+
+			Save();
 		}
 
 		#endregion Action methods

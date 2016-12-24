@@ -36,7 +36,10 @@ namespace Stacker
 			{
 				Error(ex);
 			}
-			f.Ag?.Dispose();
+			finally
+			{
+				f.Ag?.Dispose();
+			}
 		}
 
 		static void Error(Exception ex)

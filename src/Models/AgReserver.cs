@@ -33,17 +33,15 @@ namespace Stacker.Models
 					Manager.ReservationRecorder.StopRecord();
 					OnTimeReservationStoped(targetTimeReservation);
 					targetTimeReservation = null;
-					Debug.WriteLine("AgManager: 時間予約を終了しました");
 				}
 
 				// キーワード予約されている and (キーワード予約を完了する必要がある or 番組が遷移されている or (時間予約を開始する必要がある and 時間予約されてない))
-				if (targetKeywordReservationProgram != null && (!NeedKeywordRecording || targetKeywordReservationProgram != Manager.NowProgram) || (needRecordingTimeReservation != null && targetTimeReservation == null))
+				if (targetKeywordReservationProgram != null && (!NeedKeywordRecording || targetKeywordReservationProgram != Manager.NowProgram || (needRecordingTimeReservation != null && targetTimeReservation == null)))
 				{
 					// キーワード予約終了
 					Manager.ReservationRecorder.StopRecord();
 					OnKeywordReservationStoped(targetKeywordReservationProgram);
 					targetKeywordReservationProgram = null;
-					Debug.WriteLine("AgManager: キーワード予約を終了しました");
 				}
 
 				// 時間予約されてない
@@ -56,7 +54,6 @@ namespace Stacker.Models
 						Manager.ReservationRecorder.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}", needRecordingTimeReservation.IsRecordVideo);
 						OnTimeReservationStarted(needRecordingTimeReservation);
 						targetTimeReservation = needRecordingTimeReservation;
-						Debug.WriteLine("AgManager: 時間予約を開始しました");
 					}
 
 					// キーワード予約を開始する必要がある and キーワード予約されてない
@@ -66,7 +63,6 @@ namespace Stacker.Models
 						Manager.ReservationRecorder.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{Manager.NowProgram.Title}", Manager.NowProgram.HasVideo);
 						OnKeywordReservationStarted(targetKeywordReservationProgram);
 						targetKeywordReservationProgram = Manager.NowProgram;
-						Debug.WriteLine("AgManager: キーワード予約を開始しました");
 					}
 				}
 			};
@@ -78,6 +74,7 @@ namespace Stacker.Models
 
 				return !IsDuplicateReservation(i.Name, i.StartTime, i.EndTime, i);
 			});
+
 			KeywordReservationList = new ValidateableList<AgKeywordReservation>(i =>
 			{
 				if (i == null || i.Keyword == "")
@@ -91,23 +88,35 @@ namespace Stacker.Models
 
 		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStarted;
 
-		public void OnTimeReservationStarted(AgTimeReservation reservation) =>
+		public void OnTimeReservationStarted(AgTimeReservation reservation)
+		{
+			Debug.WriteLine("AgReserver: 時間予約を開始しました");
 			TimeReservationStarted?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+		}
 
 		public event EventHandler<EventArgs<AgTimeReservation>> TimeReservationStoped;
 
-		public void OnTimeReservationStoped(AgTimeReservation reservation) =>
+		public void OnTimeReservationStoped(AgTimeReservation reservation)
+		{
+			Debug.WriteLine("AgReserver: 時間予約を終了しました");
 			TimeReservationStoped?.Invoke(this, new EventArgs<AgTimeReservation>(reservation));
+		}
 
 		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStarted;
 
-		public void OnKeywordReservationStarted(AgProgram program) =>
+		public void OnKeywordReservationStarted(AgProgram program)
+		{
+			Debug.WriteLine("AgReserver: キーワード予約を開始しました");
 			KeywordReservationStarted?.Invoke(this, new EventArgs<AgProgram>(program));
+		}
 
 		public event EventHandler<EventArgs<AgProgram>> KeywordReservationStoped;
 
-		public void OnKeywordReservationStoped(AgProgram program) =>
+		public void OnKeywordReservationStoped(AgProgram program)
+		{
+			Debug.WriteLine("AgReserver: キーワード予約を終了しました");
 			KeywordReservationStoped?.Invoke(this, new EventArgs<AgProgram>(program));
+		}
 
 		#endregion Events
 
@@ -118,6 +127,7 @@ namespace Stacker.Models
 		private Timer SecTimer { get; set; }
 
 		public ValidateableList<AgTimeReservation> TimeReservationList { get; private set; }
+
 		public ValidateableList<AgKeywordReservation> KeywordReservationList { get; private set; }
 
 		/// <summary>

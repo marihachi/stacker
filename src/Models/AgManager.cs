@@ -51,9 +51,11 @@ namespace Stacker.Models
 		public Uri ProgramListUrl { get; set; } = new Uri("http://www.agqr.jp/timetable/streaming.html");
 
 		public ValidateableList<AgProgram> ProgramList { get; private set; }
+
 		public AgProgram NowProgram => ProgramList.Find(p => p.IsOnAir);
 
 		public AgRecorder RealtimeRecorder { get; set; } = new AgRecorder("realtime");
+
 		public AgRecorder ReservationRecorder { get; set; } = new AgRecorder("reservation");
 
 		public AgReserver Reserver { get; set; }

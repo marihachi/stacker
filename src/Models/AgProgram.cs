@@ -71,27 +71,5 @@ namespace Stacker.Models
 					return nowTimeSpan >= StartTime && nowTimeSpan <= EndTime;
 			}
 		}
-
-		public override bool Equals(object obj)
-		{
-			if (obj == null || GetType() != obj.GetType())
-				return false;
-
-			var c = (AgProgram)obj;
-			return
-				Title == c.Title &&
-				StartTime == c.StartTime &&
-				EndTime == c.EndTime &&
-				Personality == c.Personality;
-		}
-
-		public override int GetHashCode()
-		{
-			return
-				Title.GetHashCode() ^
-				StartTime.GetHashCode() ^
-				EndTime.GetHashCode() ^
-				Personality.GetHashCode();
-		}
 	}
 }

@@ -35,8 +35,11 @@ namespace Stacker.Models
 		#region Properties and getter methods
 
 		private string Name { get; set; }
+
 		private Process ConsoleProcess { get; set; }
+
 		private string Filename { get; set; }
+
 		private bool IsVideo { get; set; }
 
 		#endregion Properties and getter methods

@@ -36,13 +36,13 @@ namespace Stacker.Forms
 				return;
 			}
 
-			if (Reservation.Manager.IsDuplicateTimeReservation(startTime, endTime, Reservation))
+			if (Reservation.Manager.Reserver.IsDuplicateTimeReservation(startTime, endTime, Reservation))
 			{
 				MessageBox.Show("他の予約と時間が重複しています。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 
-			if (Reservation.Manager.IsDuplicateNameReservation(textBox1.Text, Reservation))
+			if (Reservation.Manager.Reserver.IsDuplicateNameReservation(textBox1.Text, Reservation))
 			{
 				MessageBox.Show("他の予約と予約名が重複しています。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;

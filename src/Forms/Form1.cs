@@ -97,7 +97,7 @@ namespace Stacker.Forms
 			// ag time reservation listView
 
 			agTimeReservationListView.Items.Clear();
-			foreach (var reservation in Ag.TimeReservationList)
+			foreach (var reservation in Ag.Reserver.TimeReservationList)
 			{
 				var listViewItem = new ListViewItem(new string[] { FormatTime(reservation.StartTime), FormatTime(reservation.EndTime), reservation.Name });
 				listViewItem.Tag = reservation;
@@ -107,7 +107,7 @@ namespace Stacker.Forms
 			// ag keyword reservation listview
 
 			agKeywordReservationListView.Items.Clear();
-			foreach (var reservation in Ag.KeywordReservationList)
+			foreach (var reservation in Ag.Reserver.KeywordReservationList)
 			{
 				var listViewItem = new ListViewItem(new string[] { reservation.ConditionType.ToString(), reservation.Keyword });
 				listViewItem.Tag = reservation;
@@ -175,22 +175,22 @@ namespace Stacker.Forms
 				agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
 			};
 
-			Ag.KeywordReservationStarted += (s, ev) =>
+			Ag.Reserver.KeywordReservationStarted += (s, ev) =>
 			{
 				Status($"キーワード予約「{ev.Data.Title}」が開始されました");
 			};
 
-			Ag.KeywordReservationStoped += (s, ev) =>
+			Ag.Reserver.KeywordReservationStoped += (s, ev) =>
 			{
 				Status($"キーワード予約「{ev.Data.Title}」が完了しました");
 			};
 
-			Ag.TimeReservationStarted += (s, ev) =>
+			Ag.Reserver.TimeReservationStarted += (s, ev) =>
 			{
 				Status($"時間予約「{ev.Data.Name}」が開始されました");
 			};
 
-			Ag.TimeReservationStoped += (s, ev) =>
+			Ag.Reserver.TimeReservationStoped += (s, ev) =>
 			{
 				Status($"時間予約「{ev.Data.Name}」が完了しました");
 			};
@@ -311,7 +311,7 @@ namespace Stacker.Forms
 			{
 				try
 				{
-					Ag.TimeReservationList.Add(reservation);
+					Ag.Reserver.TimeReservationList.Add(reservation);
 				}
 				catch (InvalidOperationException ex)
 				{
@@ -360,7 +360,7 @@ namespace Stacker.Forms
 			{
 				try
 				{
-					Ag.TimeReservationList.Add(dialog.Reservation);
+					Ag.Reserver.TimeReservationList.Add(dialog.Reservation);
 				}
 				catch (InvalidOperationException ex)
 				{
@@ -399,7 +399,7 @@ namespace Stacker.Forms
 				Ag.ReservationRecorder.StopRecord();
 
 			agTimeReservationListView.Items.Remove(listViewItem);
-			Ag.TimeReservationList.Remove(reservation);
+			Ag.Reserver.TimeReservationList.Remove(reservation);
 		}
 
 		//
@@ -436,7 +436,7 @@ namespace Stacker.Forms
 			{
 				try
 				{
-					Ag.KeywordReservationList.Add(dialog.Reservation);
+					Ag.Reserver.KeywordReservationList.Add(dialog.Reservation);
 				}
 				catch (InvalidOperationException ex)
 				{
@@ -471,11 +471,11 @@ namespace Stacker.Forms
 			var listViewItem = agKeywordReservationListView.SelectedItems[0];
 			var reservation = (AgKeywordReservation)listViewItem.Tag;
 
-			if (reservation.Manager.NeedKeywordRecording)
+			if (reservation.Manager.Reserver.NeedKeywordRecording)
 				Ag.ReservationRecorder.StopRecord();
 
 			agKeywordReservationListView.Items.Remove(listViewItem);
-			Ag.KeywordReservationList.Remove(reservation);
+			Ag.Reserver.KeywordReservationList.Remove(reservation);
 		}
 
 		//

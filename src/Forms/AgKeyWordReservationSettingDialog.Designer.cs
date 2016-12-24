@@ -97,6 +97,7 @@
 			this.MinimizeBox = false;
 			this.Name = "AgKeywordReservationSettingDialog";
 			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "キーワード予約の設定";
 			this.Load += new System.EventHandler(this.AgKeywordReservationSettingDialog_Load);
 			this.ResumeLayout(false);

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -50,7 +51,16 @@ namespace Stacker.Forms
 		{
 			Status("超！A＆G＋ の番組表を更新しています...");
 
-			await Task.Run(() => Ag.UpdateProgramList());
+			try
+			{
+				var cts = new CancellationTokenSource();
+				cts.CancelAfter(TimeSpan.FromSeconds(5));
+				await Task.Run(() => Ag.UpdateProgramList(), cts.Token);
+			}
+			catch (TaskCanceledException)
+			{
+				Status("番組表の更新に失敗しました");
+			}
 
 			Status("準備完了");
 		}

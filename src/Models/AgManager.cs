@@ -24,11 +24,11 @@ namespace Stacker.Models
 			SecTimer = new Timer { Interval = 1000, Enabled = true };
 			SecTimer.Tick += (s, ev) =>
 			{
-				if (lastCheckProgram != NowProgram)
-				{
-					lastCheckProgram = NowProgram;
-					OnProgramTransitioned();
-				}
+				if (lastCheckProgram == NowProgram)
+					return;
+
+				lastCheckProgram = NowProgram;
+				OnProgramTransitioned();
 			};
 
 			ProgramList = new ValidateableList<AgProgram>(i => i != null);

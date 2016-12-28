@@ -89,7 +89,6 @@
     <Compile Include="Models\Enums\AgKeywordReservationVideoMode.cs" />
     <Compile Include="Models\Enums\AgKeywordReservationConditionType.cs" />
     <Compile Include="Models\Enums\AgProgramBroadcastType.cs" />
-    <Compile Include="Models\EventArgses\RecordEventArgs.cs" />
     <Compile Include="Models\EventArgses\EventArgsT.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

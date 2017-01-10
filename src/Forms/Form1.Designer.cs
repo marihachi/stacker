@@ -719,7 +719,7 @@
 			// 
 			this.agEnableVideoRealtimeMainMenuItem.CheckOnClick = true;
 			this.agEnableVideoRealtimeMainMenuItem.Name = "agEnableVideoRealtimeMainMenuItem";
-			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.agEnableVideoRealtimeMainMenuItem.Size = new System.Drawing.Size(136, 22);
 			this.agEnableVideoRealtimeMainMenuItem.Text = "動画モード";
 			// 
 			// toolStripSeparator9
@@ -791,7 +791,7 @@
 			this.MainMenuStrip = this.menuStrip1;
 			this.MinimumSize = new System.Drawing.Size(300, 340);
 			this.Name = "Form1";
-			this.Text = "{0} - ver.{1}(α) info:不具合を見つけた場合は報告してください";
+			this.Text = "{0} | info:不具合を見つけた場合は報告してください";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);

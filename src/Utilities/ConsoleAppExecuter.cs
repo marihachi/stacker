@@ -53,7 +53,7 @@ namespace Stacker.Utilities
 			var p = new Process();
 			p.StartInfo.FileName = "cmd.exe";
 			p.StartInfo.Arguments = $"/C {command}";
-			p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+			p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
 			p.Start();
 
 			return p;

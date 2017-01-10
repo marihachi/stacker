@@ -145,8 +145,9 @@ namespace Stacker.Forms
 		private async void Form1_Load(object sender, EventArgs e)
 		{
 			Status("初期化しています...");
-			var asmInfo = Assembly.GetExecutingAssembly().GetName();
-			Text = string.Format(Text, asmInfo.Name, asmInfo.Version.ToString(3));
+
+			var title = Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyTitleAttribute)) as AssemblyTitleAttribute;
+			Text = string.Format(Text, title.Title);
 
 			if (!File.Exists("rtmpdump.exe"))
 			{
@@ -258,7 +259,7 @@ namespace Stacker.Forms
 		private void versionMainMenuItem_Click(object sender, EventArgs e)
 		{
 			var asmInfo = Assembly.GetExecutingAssembly().GetName();
-			MessageBox.Show($"ver.{asmInfo.Version.ToString(3)}", $"{asmInfo.Name}のバージョン情報");
+			MessageBox.Show($"ver.{asmInfo.Version.ToString(4)}", $"{asmInfo.Name}のバージョン情報");
 		}
 
 		//

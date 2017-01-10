@@ -1,10 +1,15 @@
-﻿using Stacker.Models.EventArgses;
+﻿using Codeplex.Data;
+using Newtonsoft.Json;
+using Stacker.Models.EventArgses;
 using Stacker.Utilities;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace Stacker.Models
 {
@@ -64,8 +69,31 @@ namespace Stacker.Models
 		{
 			CreateOutputDirectory();
 
+			var doc = new XmlDocument();
+			doc.LoadXml(new HttpClient().GetAsync("http://www.uniqueradio.jp/agplayerf/getfmsListHD.php").Result.Content.ReadAsStringAsync().Result);
+			var jStr = JsonConvert.SerializeXmlNode(doc);
+			var j = DynamicJson.Parse(jStr);
+
+			string server = null;
+			string app = null;
+			string playpath = null;
+
+			foreach (var serverinfo in j.ag.serverlist.serverinfo)
+			{
+				if (string.IsNullOrEmpty(serverinfo.cryptography))
+				{
+					server = serverinfo.server;
+					app = serverinfo.app;
+					playpath = serverinfo.stream;
+					break;
+				}
+			}
+
+			if (server == null)
+				throw new ApplicationException("A&Gのストリーミングサーバー情報の取得に失敗しました。");
+
 			var process = ConsoleExecuter.StartOnConsole(
-				$"rtmpdump -v -r \"rtmpe://fms1.uniqueradio.jp/\" -a ?rtmp://fms-base2.mitene.ad.jp/agqr/ -y aandg22 | ffmpeg -y -i pipe:0 ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
+				$"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
 
 			Filename = filename;
 			ConsoleProcess = process;

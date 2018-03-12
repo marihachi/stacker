@@ -9,16 +9,15 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
 
-namespace Stacker.Models
+namespace Stacker.Models.Ag
 {
 	/// <summary>
 	/// 超！A＆G＋の配信をレコードする機能を提供します
 	/// </summary>
-	public class AgRecorder : IDisposable
+	public class Recorder : IDisposable
 	{
-		public AgRecorder(string recorderName)
+		public Recorder(string recorderName)
 		{
 			Name = recorderName;
 		}
@@ -92,8 +91,11 @@ namespace Stacker.Models
 			if (server == null)
 				throw new ApplicationException("A&Gのストリーミングサーバー情報の取得に失敗しました。");
 
+			// Console.WriteLine($"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 --acodec copy ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
+			var bitrate = "32k";
+			
 			var process = ConsoleExecuter.StartOnConsole(
-				$"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
+				$"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 -ab {bitrate} ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
 
 			Filename = filename;
 			ConsoleProcess = process;

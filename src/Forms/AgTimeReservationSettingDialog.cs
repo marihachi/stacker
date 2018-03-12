@@ -1,19 +1,18 @@
-﻿using Stacker.Models;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Stacker.Forms
 {
 	public partial class AgTimeReservationSettingDialog : Form
 	{
-		public AgTimeReservationSettingDialog(AgTimeReservation reservation)
+		public AgTimeReservationSettingDialog(Models.Ag.TimeReservation reservation)
 		{
 			InitializeComponent();
 
 			Reservation = reservation;
 		}
 
-		public AgTimeReservation Reservation { get; set; }
+		public Models.Ag.TimeReservation Reservation { get; set; }
 
 		private void AgTimeReservationSettingDialog_Load(object sender, EventArgs e)
 		{

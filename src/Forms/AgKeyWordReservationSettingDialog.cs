@@ -1,6 +1,4 @@
-﻿using Stacker.Models;
-using Stacker.Models.Enums;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -8,14 +6,14 @@ namespace Stacker.Forms
 {
 	public partial class AgKeywordReservationSettingDialog : Form
 	{
-		public AgKeywordReservationSettingDialog(AgKeywordReservation reservation)
+		public AgKeywordReservationSettingDialog(Models.Ag.KeywordReservation reservation)
 		{
 			InitializeComponent();
 
 			Reservation = reservation;
 		}
 
-		public AgKeywordReservation Reservation { get; set; }
+		public Models.Ag.KeywordReservation Reservation { get; set; }
 
 		private void AgKeywordReservationSettingDialog_Load(object sender, EventArgs e)
 		{
@@ -32,7 +30,7 @@ namespace Stacker.Forms
 			}
 
 			Reservation.Keyword = textBox1.Text;
-			Reservation.ConditionType = (AgKeywordReservationConditionType)comboBox1.SelectedIndex;
+			Reservation.ConditionType = (Models.Ag.Enums.KeywordReservationConditionType)comboBox1.SelectedIndex;
 
 			DialogResult = DialogResult.OK;
 			Close();

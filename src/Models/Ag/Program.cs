@@ -1,14 +1,13 @@
-﻿using Stacker.Models.Enums;
-using System;
+﻿using System;
 
-namespace Stacker.Models
+namespace Stacker.Models.Ag
 {
 	/// <summary>
 	/// 超！A＆G＋の番組を表します
 	/// </summary>
-	public class AgProgram
+	public class Program
 	{
-		public AgProgram(string title, TimeSpan startTime, TimeSpan endTime, string personality, AgProgramBroadcastType broadcastType, bool hasVideo, Uri url = null)
+		public Program(string title, TimeSpan startTime, TimeSpan endTime, string personality, Enums.ProgramBroadcastType broadcastType, bool hasVideo, Uri url = null)
 		{
 			Title = title;
 			StartTime = startTime;
@@ -42,7 +41,7 @@ namespace Stacker.Models
 		/// <summary>
 		/// 放送の種類を取得します
 		/// </summary>
-		public AgProgramBroadcastType BroadcastType { get; set; }
+		public Enums.ProgramBroadcastType BroadcastType { get; set; }
 
 		/// <summary>
 		/// 動画として配信されるかどうかを示す値を取得します

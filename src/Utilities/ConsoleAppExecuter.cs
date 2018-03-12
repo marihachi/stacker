@@ -42,7 +42,7 @@ namespace Stacker.Utilities
 		}
 
 		/// <summary>
-		/// コンソール上でプロセスを起動し、そのコンソールのプロセスidを返します
+		/// コンソール上でプロセスを起動し、そのコンソールのプロセスを返します
 		/// </summary>
 		/// <param name="filename"></param>
 		/// <param name="arguments"></param>

@@ -1,17 +1,16 @@
 ﻿using Codeplex.Data;
-using Stacker.Models.Enums;
 using System;
 
-namespace Stacker.Models
+namespace Stacker.Models.Ag
 {
-	public abstract class AgReservation
+	public abstract class Reservation
 	{
-		public AgReservation(AgManager manager)
+		public Reservation(Manager manager)
 		{
 			Manager = manager;
 		}
 
-		public AgManager Manager { get; set; }
+		public Manager Manager { get; set; }
 
 		public abstract object Serialize();
 	}
@@ -19,9 +18,9 @@ namespace Stacker.Models
 	/// <summary>
 	/// A&Gの時間ベース予約情報を表します
 	/// </summary>
-	public class AgTimeReservation : AgReservation
+	public class TimeReservation : Reservation
 	{
-		public AgTimeReservation(string name, bool isRecordVideo, TimeSpan startTime, TimeSpan endTime, AgManager manager)
+		public TimeReservation(string name, bool isRecordVideo, TimeSpan startTime, TimeSpan endTime, Manager manager)
 			: base(manager)
 		{
 			Name = name;
@@ -30,7 +29,7 @@ namespace Stacker.Models
 			EndTime = endTime;
 		}
 
-		public AgTimeReservation(string jsonString, AgManager manager)
+		public TimeReservation(string jsonString, Manager manager)
 			: base(manager)
 		{
 			var j = DynamicJson.Parse(jsonString);
@@ -96,28 +95,28 @@ namespace Stacker.Models
 	/// <summary>
 	/// A&Gのキーワードベース予約情報を表します
 	/// </summary>
-	public class AgKeywordReservation : AgReservation
+	public class KeywordReservation : Reservation
 	{
-		public AgKeywordReservation(AgKeywordReservationConditionType conditionType, string keyword, AgManager manager)
+		public KeywordReservation(Enums.KeywordReservationConditionType conditionType, string keyword, Manager manager)
 			: base(manager)
 		{
 			ConditionType = conditionType;
 			Keyword = keyword;
 		}
 
-		public AgKeywordReservation(string jsonString, AgManager manager)
+		public KeywordReservation(string jsonString, Manager manager)
 			: base(manager)
 		{
 			var j = DynamicJson.Parse(jsonString);
 
-			ConditionType = (AgKeywordReservationConditionType)j.condition_type;
+			ConditionType = (Enums.KeywordReservationConditionType)j.condition_type;
 			Keyword = (string)j.keyword;
 		}
 
 		/// <summary>
 		/// 条件の種類
 		/// </summary>
-		public AgKeywordReservationConditionType ConditionType { get; set; }
+		public Enums.KeywordReservationConditionType ConditionType { get; set; }
 
 		/// <summary>
 		/// キーワード

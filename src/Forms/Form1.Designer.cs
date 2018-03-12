@@ -229,6 +229,7 @@
 			this.agTimeReservationListView.TabIndex = 10;
 			this.agTimeReservationListView.UseCompatibleStateImageBehavior = false;
 			this.agTimeReservationListView.View = System.Windows.Forms.View.Details;
+			this.agTimeReservationListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.agTimeReservationListView_ColumnClick);
 			this.agTimeReservationListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.agTimeReservationListView_MouseDoubleClick);
 			// 
 			// startTimeHeader
@@ -309,6 +310,7 @@
 			this.agKeywordReservationListView.TabIndex = 17;
 			this.agKeywordReservationListView.UseCompatibleStateImageBehavior = false;
 			this.agKeywordReservationListView.View = System.Windows.Forms.View.Details;
+			this.agKeywordReservationListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.agKeywordReservationListView_ColumnClick);
 			this.agKeywordReservationListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.agKeywordReservationListView_MouseDoubleClick);
 			// 
 			// typeHeader

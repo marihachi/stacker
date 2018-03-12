@@ -1,5 +1,4 @@
 ﻿using Codeplex.Data;
-using Stacker.Models.Enums;
 using Stacker.Utilities;
 using System;
 using System.Collections.Generic;
@@ -10,30 +9,29 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace Stacker.Models
+namespace Stacker.Models.Ag
 {
 	/// <summary>
 	/// 超！A＆G＋に関する管理の機能を提供します
 	/// </summary>
-	public class AgManager : IDisposable
+	public class Manager : IDisposable
 	{
-		public AgManager()
+		public Manager()
 		{
-			AgProgram lastCheckProgram = null;
+			Program lastCheckedProgram = null;
 
 			SecTimer = new Timer { Interval = 1000, Enabled = true };
 			SecTimer.Tick += (s, ev) =>
 			{
-				if (lastCheckProgram == NowProgram)
-					return;
-
-				lastCheckProgram = NowProgram;
-				OnProgramTransitioned();
+				if (lastCheckedProgram != NowProgram) {
+					lastCheckedProgram = NowProgram;
+					OnProgramTransitioned();
+				}
 			};
 
-			ProgramList = new ValidateableList<AgProgram>(i => i != null);
+			ProgramList = new ValidateableList<Program>(i => i != null);
 
-			Reserver = new AgReserver(this);
+			Reserver = new Reserver(this);
 
 			Load();
 		}
@@ -53,17 +51,17 @@ namespace Stacker.Models
 
 		public Uri ProgramListUrl { get; set; } = new Uri("http://www.agqr.jp/timetable/streaming.html");
 
-		public ValidateableList<AgProgram> ProgramList { get; private set; }
+		public ValidateableList<Program> ProgramList { get; private set; }
 
-		public AgProgram NowProgram => ProgramList.Find(p => p.IsOnAir);
+		public Program NowProgram => ProgramList.Find(p => p.IsOnAir);
 
-		public AgRecorder RealtimeRecorder { get; set; } = new AgRecorder("realtime");
+		public Recorder RealtimeRecorder { get; set; } = new Recorder("realtime");
 
-		public AgRecorder ReservationRecorder { get; set; } = new AgRecorder("reservation");
+		public Recorder ReservationRecorder { get; set; } = new Recorder("reservation");
 
-		public AgReserver Reserver { get; set; }
+		public Reserver Reserver { get; set; }
 
-		private IList<AgProgram> AnalyzeProgramList()
+		private IList<Program> AnalyzeProgramList()
 		{
 			var weekTimeSum = new List<TimeSpan>(Enumerable.Repeat(TimeSpan.FromHours(6), 7));
 
@@ -72,9 +70,9 @@ namespace Stacker.Models
 			var trs = programListXhtml.Descendants("tbody").First().Elements("tr");
 
 			// 曜日毎の番組リスト
-			var programsWeek = new List<List<AgProgram>>();
+			var programsWeek = new List<List<Program>>();
 			foreach (var i in Enumerable.Range(0, 7))
-				programsWeek.Add(new List<AgProgram>());
+				programsWeek.Add(new List<Program>());
 
 			foreach (var tr in (from tr in trs where tr.HasElements select tr))
 			{
@@ -95,29 +93,29 @@ namespace Stacker.Models
 						.Element("span")?.Elements("img")?.Attributes("src").ToList().Exists(att => att.Value == "http://cdn-agqr.joqr.jp/schedule/img/icon_m.gif") ?? false;
 
 					var broadcastTypeStr = td.Attribute("class").Value;
-					AgProgramBroadcastType broadcastType;
+					Enums.ProgramBroadcastType broadcastType;
 					switch (broadcastTypeStr)
 					{
 						case "bg-f":
-							broadcastType = AgProgramBroadcastType.First;
+							broadcastType = Enums.ProgramBroadcastType.First;
 							break;
 						case "bg-l":
-							broadcastType = AgProgramBroadcastType.Live;
+							broadcastType = Enums.ProgramBroadcastType.Live;
 							break;
 						case "bg-repeat":
-							broadcastType = AgProgramBroadcastType.Repeat;
+							broadcastType = Enums.ProgramBroadcastType.Repeat;
 							break;
 						default:
-							broadcastType = AgProgramBroadcastType.First;
+							broadcastType = Enums.ProgramBroadcastType.First;
 							break;
 					}
 
-					programsWeek[weekIndex].Add(new AgProgram(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, time + lengthMin, personality, broadcastType, hasVideo, url != null ? new Uri(url) : null));
+					programsWeek[weekIndex].Add(new Program(Regex.Match(title, "([^\n]*)$").Groups[1].Value, time, time + lengthMin, personality, broadcastType, hasVideo, url != null ? new Uri(url) : null));
 				}
 			}
 
 			// 曜日毎の番組リストを日数に換算して統合
-			var res = new List<AgProgram>();
+			var res = new List<Program>();
 			foreach (var programs in programsWeek)
 			{
 				var weekDayIndex = programsWeek.IndexOf(programs);
@@ -178,12 +176,12 @@ namespace Stacker.Models
 
 			foreach(var timeReservation in j.time_reservations)
 			{
-				Reserver?.TimeReservationList.Add(new AgTimeReservation(timeReservation.ToString(), this));
+				Reserver?.TimeReservationList.Add(new TimeReservation(timeReservation.ToString(), this));
 			}
 
 			foreach (var keywordReservation in j.keyword_reservations)
 			{
-				Reserver?.KeywordReservationList.Add(new AgKeywordReservation(keywordReservation.ToString(), this));
+				Reserver?.KeywordReservationList.Add(new KeywordReservation(keywordReservation.ToString(), this));
 			}
 		}
 

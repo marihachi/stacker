@@ -57,11 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\agRecordSpecifiedTimeSettingDialog.cs">
+    <Compile Include="Forms\AgRecordSpecifiedTimeSettingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\agRecordSpecifiedTimeSettingDialog.Designer.cs">
-      <DependentUpon>agRecordSpecifiedTimeSettingDialog.cs</DependentUpon>
+    <Compile Include="Forms\AgRecordSpecifiedTimeSettingDialog.Designer.cs">
+      <DependentUpon>AgRecordSpecifiedTimeSettingDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ErrorDialog.cs">
       <SubType>Form</SubType>
@@ -81,20 +81,21 @@
     <Compile Include="Forms\AgTimeReservationSettingDialog.Designer.cs">
       <DependentUpon>AgTimeReservationSettingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\AgManager.cs" />
-    <Compile Include="Models\AgProgram.cs" />
-    <Compile Include="Models\AgRecorder.cs" />
-    <Compile Include="Models\AgReservation.cs" />
-    <Compile Include="Models\AgReserver.cs" />
-    <Compile Include="Models\Enums\AgKeywordReservationVideoMode.cs" />
-    <Compile Include="Models\Enums\AgKeywordReservationConditionType.cs" />
-    <Compile Include="Models\Enums\AgProgramBroadcastType.cs" />
+    <Compile Include="Models\Ag\Manager.cs" />
+    <Compile Include="Models\Ag\Program.cs" />
+    <Compile Include="Models\Ag\Recorder.cs" />
+    <Compile Include="Models\Ag\Reservation.cs" />
+    <Compile Include="Models\Ag\Reserver.cs" />
+    <Compile Include="Models\Ag\Enums\KeywordReservationVideoMode.cs" />
+    <Compile Include="Models\Ag\Enums\KeywordReservationConditionType.cs" />
+    <Compile Include="Models\Ag\Enums\ProgramBroadcastType.cs" />
     <Compile Include="Models\EventArgses\EventArgsT.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\ListViewItemComparer.cs" />
     <Compile Include="Utilities\ValidateableList.cs" />
     <Compile Include="Utilities\ConsoleAppExecuter.cs" />
     <Compile Include="DynamicJson.cs" />
@@ -107,8 +108,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HtmlUtility.cs" />
-    <EmbeddedResource Include="Forms\agRecordSpecifiedTimeSettingDialog.resx">
-      <DependentUpon>agRecordSpecifiedTimeSettingDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AgRecordSpecifiedTimeSettingDialog.resx">
+      <DependentUpon>AgRecordSpecifiedTimeSettingDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ErrorDialog.resx">
       <DependentUpon>ErrorDialog.cs</DependentUpon>

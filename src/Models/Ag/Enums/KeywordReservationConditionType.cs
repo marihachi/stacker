@@ -1,9 +1,9 @@
-﻿namespace Stacker.Models.Enums
+﻿namespace Stacker.Models.Ag.Enums
 {
 	/// <summary>
 	/// キーワード予約の条件タイプを表します
 	/// </summary>
-	public enum AgKeywordReservationConditionType
+	public enum KeywordReservationConditionType
 	{
 		/// <summary>
 		/// 含める

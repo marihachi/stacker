@@ -1,9 +1,9 @@
-﻿namespace Stacker.Models.Enums
+﻿namespace Stacker.Models.Ag.Enums
 {
 	/// <summary>
 	/// 放送の種類を表します
 	/// </summary>
-	public enum AgProgramBroadcastType
+	public enum ProgramBroadcastType
 	{
 		/// <summary>
 		/// 生放送

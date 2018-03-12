@@ -1,6 +1,6 @@
 ﻿namespace Stacker.Forms
 {
-	partial class agRecordSpecifiedTimeSettingDialog
+	partial class AgRecordSpecifiedTimeSettingDialog
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -112,7 +112,7 @@
 			this.Name = "agRecordSpecifiedTimeSettingDialog";
 			this.ShowInTaskbar = false;
 			this.Text = "録音の長さの設定";
-			this.Load += new System.EventHandler(this.agRecordSpecifiedTimeSettingDialog_Load);
+			this.Load += new System.EventHandler(this.AgRecordSpecifiedTimeSettingDialog_Load);
 			((System.ComponentModel.ISupportInitialize)(this.agLengthUpDown)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();

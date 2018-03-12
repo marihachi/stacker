@@ -3,16 +3,16 @@ using System.Windows.Forms;
 
 namespace Stacker.Forms
 {
-	public partial class agRecordSpecifiedTimeSettingDialog : Form
+	public partial class AgRecordSpecifiedTimeSettingDialog : Form
 	{
-		public agRecordSpecifiedTimeSettingDialog()
+		public AgRecordSpecifiedTimeSettingDialog()
 		{
 			InitializeComponent();
 		}
 
 		public int Length { get; set; }
 
-		private void agRecordSpecifiedTimeSettingDialog_Load(object sender, EventArgs e)
+		private void AgRecordSpecifiedTimeSettingDialog_Load(object sender, EventArgs e)
 		{
 
 		}

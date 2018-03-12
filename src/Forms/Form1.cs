@@ -1,4 +1,4 @@
-﻿using Stacker.Models;
+﻿using Stacker.Utilities;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,7 +19,7 @@ namespace Stacker.Forms
 		}
 
 		public CultureInfo Culture { get; set; } = new CultureInfo("ja-JP");
-		public AgManager Ag { get; set; }
+		public Models.Ag.Manager Ag { get; set; }
 
 		private void Status(string text)
 		{
@@ -82,16 +82,16 @@ namespace Stacker.Forms
 				var broadcastType = "";
 				Color backColor = Color.White;
 				Color foreColor = Color.Black;
-				if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.First)
+				if (program.BroadcastType == Models.Ag.Enums.ProgramBroadcastType.First)
 				{
 					broadcastType = "初回放送";
 					backColor = Color.FromArgb(255, 200, 200);
 				}
-				else if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.Repeat)
+				else if (program.BroadcastType == Models.Ag.Enums.ProgramBroadcastType.Repeat)
 				{
 					broadcastType = "リピート放送";
 				}
-				else if (program.BroadcastType == Models.Enums.AgProgramBroadcastType.Live)
+				else if (program.BroadcastType == Models.Ag.Enums.ProgramBroadcastType.Live)
 				{
 					broadcastType = "生放送";
 					backColor = Color.FromArgb(164, 255, 187);
@@ -126,8 +126,8 @@ namespace Stacker.Forms
 
 			// toolbar
 
-			agProgramLabel.Text = $"番組: {Ag.NowProgram?.Title ?? "未取得"}";
-			agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
+			//agProgramLabel.Text = $"番組: {Ag.NowProgram?.Title ?? "未取得"}";
+			//agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
 
 			// main menu
 
@@ -165,10 +165,27 @@ namespace Stacker.Forms
 				return;
 			}
 
-			Ag = new AgManager();
+			Ag = new Models.Ag.Manager();
 
 			await UpdateProgramsAsync();
 			UpdateForm();
+
+			var comp = new ListViewItemComparer();
+			comp.ColumnModes = new ListViewItemComparer.ComparerMode[]
+			{
+					ListViewItemComparer.ComparerMode.String,
+					ListViewItemComparer.ComparerMode.String,
+					ListViewItemComparer.ComparerMode.String
+			};
+			agTimeReservationListView.ListViewItemSorter = comp;
+
+			var comp2 = new ListViewItemComparer();
+			comp2.ColumnModes = new ListViewItemComparer.ComparerMode[]
+			{
+					ListViewItemComparer.ComparerMode.String,
+					ListViewItemComparer.ComparerMode.String
+			};
+			agKeywordReservationListView.ListViewItemSorter = comp2;
 
 			Ag.RealtimeRecorder.RecordStarted += (s, ev) =>
 			{
@@ -182,8 +199,8 @@ namespace Stacker.Forms
 
 			Ag.ProgramTransitioned += (s, ev) =>
 			{
-				agProgramLabel.Text = $"番組: {Ag.NowProgram?.Title ?? "未取得"}";
-				agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality ?? "未取得"}";
+				agProgramLabel.Text = $"番組: {Ag.NowProgram?.Title?.Trim() ?? "未取得"}";
+				agPersonalityLabel.Text = $"パーソナリティ: {Ag.NowProgram?.Personality?.Trim() ?? "未取得"}";
 			};
 
 			Ag.Reserver.KeywordReservationStarted += (s, ev) =>
@@ -278,7 +295,7 @@ namespace Stacker.Forms
 
 		private void agRecordSpecifiedTimeButton_Click(object sender, EventArgs e)
 		{
-			var dialog = new agRecordSpecifiedTimeSettingDialog();
+			var dialog = new AgRecordSpecifiedTimeSettingDialog();
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
@@ -305,15 +322,15 @@ namespace Stacker.Forms
 			if (e.Cancel = agProgramListView.SelectedItems.Count == 0)
 				return;
 
-			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+			var program = (Models.Ag.Program)agProgramListView.SelectedItems[0].Tag;
 
 			agDisplayProgramPageProgramListViewMenuItem.Enabled = program.Url != null;
 		}
 
 		private void agTimeReservateProgramListViewMenuItem_Click(object sender, EventArgs e)
 		{
-			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
-			var reservation = new AgTimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime, Ag);
+			var program = (Models.Ag.Program)agProgramListView.SelectedItems[0].Tag;
+			var reservation = new Models.Ag.TimeReservation(program.Title, program.HasVideo, program.StartTime, program.EndTime, Ag);
 
 			var dialog = new AgTimeReservationSettingDialog(reservation);
 			dialog.ShowDialog();
@@ -336,7 +353,7 @@ namespace Stacker.Forms
 
 		private void agDisplayProgramPageProgramListViewMenuItem_Click(object sender, EventArgs e)
 		{
-			var program = (AgProgram)agProgramListView.SelectedItems[0].Tag;
+			var program = (Models.Ag.Program)agProgramListView.SelectedItems[0].Tag;
 
 			Process.Start(program.Url.ToString());
 		}
@@ -364,7 +381,7 @@ namespace Stacker.Forms
 
 		private void agAddTimeReservationMenuItem_Click(object sender, EventArgs e)
 		{
-			var dialog = new AgTimeReservationSettingDialog(new AgTimeReservation("無題", false, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(30), Ag));
+			var dialog = new AgTimeReservationSettingDialog(new Models.Ag.TimeReservation("無題", false, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(30), Ag));
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
@@ -381,13 +398,14 @@ namespace Stacker.Forms
 				var item = new ListViewItem(new string[] { FormatTime(dialog.Reservation.StartTime), FormatTime(dialog.Reservation.EndTime), dialog.Reservation.Name });
 				item.Tag = dialog.Reservation;
 				agTimeReservationListView.Items.Add(item);
+				agTimeReservationListView.Sort();
 			}
 		}
 
 		private void agEditTimeReservationMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agTimeReservationListView.SelectedItems[0];
-			var reservation = (AgTimeReservation)listViewItem.Tag;
+			var reservation = (Models.Ag.TimeReservation)listViewItem.Tag;
 
 			var dialog = new AgTimeReservationSettingDialog(reservation);
 			dialog.ShowDialog();
@@ -404,7 +422,7 @@ namespace Stacker.Forms
 		private void agDeleteTimeReservationMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agTimeReservationListView.SelectedItems[0];
-			var reservation = (AgTimeReservation)listViewItem.Tag;
+			var reservation = (Models.Ag.TimeReservation)listViewItem.Tag;
 
 			if (reservation.NeedRecording)
 				Ag.ReservationRecorder.StopRecord();
@@ -440,7 +458,7 @@ namespace Stacker.Forms
 
 		private void agAddKeywordReservationMenuItem_Click(object sender, EventArgs e)
 		{
-			var dialog = new AgKeywordReservationSettingDialog(new AgKeywordReservation(Models.Enums.AgKeywordReservationConditionType.Include, "", Ag));
+			var dialog = new AgKeywordReservationSettingDialog(new Models.Ag.KeywordReservation(Models.Ag.Enums.KeywordReservationConditionType.Include, "", Ag));
 			dialog.ShowDialog();
 
 			if (dialog.DialogResult == DialogResult.OK)
@@ -457,13 +475,14 @@ namespace Stacker.Forms
 				var item = new ListViewItem(new string[] { dialog.Reservation.ConditionType.ToString(), dialog.Reservation.Keyword });
 				item.Tag = dialog.Reservation;
 				agKeywordReservationListView.Items.Add(item);
+				agKeywordReservationListView.Sort();
 			}
 		}
 
 		private void agEditKeywordReservationMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agKeywordReservationListView.SelectedItems[0];
-			var reservation = (AgKeywordReservation)listViewItem.Tag;
+			var reservation = (Models.Ag.KeywordReservation)listViewItem.Tag;
 
 			var dialog = new AgKeywordReservationSettingDialog(reservation);
 			dialog.ShowDialog();
@@ -480,7 +499,7 @@ namespace Stacker.Forms
 		private void agDeleteKeywordReservationMenuItem_Click(object sender, EventArgs e)
 		{
 			var listViewItem = agKeywordReservationListView.SelectedItems[0];
-			var reservation = (AgKeywordReservation)listViewItem.Tag;
+			var reservation = (Models.Ag.KeywordReservation)listViewItem.Tag;
 
 			if (reservation.Manager.Reserver.NeedKeywordRecording)
 				Ag.ReservationRecorder.StopRecord();
@@ -502,5 +521,21 @@ namespace Stacker.Forms
 		}
 
 		#endregion eventHandlers
+
+		private void agTimeReservationListView_ColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			//クリックされた列を設定
+			(agTimeReservationListView.ListViewItemSorter as ListViewItemComparer).Column = e.Column;
+			//並び替える
+			agTimeReservationListView.Sort();
+		}
+
+		private void agKeywordReservationListView_ColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			//クリックされた列を設定
+			(agKeywordReservationListView.ListViewItemSorter as ListViewItemComparer).Column = e.Column;
+			//並び替える
+			agKeywordReservationListView.Sort();
+		}
 	}
 }

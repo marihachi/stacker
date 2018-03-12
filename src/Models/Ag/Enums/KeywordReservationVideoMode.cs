@@ -1,9 +1,9 @@
-﻿namespace Stacker.Models.Enums
+﻿namespace Stacker.Models.Ag.Enums
 {
 	/// <summary>
 	/// キーワード予約の動画モードを表します
 	/// </summary>
-	public enum AgKeywordReservationVideoMode
+	public enum KeywordReservationVideoMode
 	{
 		/// <summary>
 		/// 自動

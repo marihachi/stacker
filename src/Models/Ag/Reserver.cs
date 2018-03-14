@@ -50,7 +50,10 @@ namespace Stacker.Models.Ag
 					if (needRecordingTimeReservation != null)
 					{
 						// 時間予約開始
-						Manager.ReservationRecorder.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}", needRecordingTimeReservation.IsRecordVideo);
+						Manager.ReservationRecorder.StartRecord(
+							$"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{needRecordingTimeReservation.Name}",
+							needRecordingTimeReservation.IsRecordVideo,
+							128000);
 						OnTimeReservationStarted(needRecordingTimeReservation);
 						targetTimeReservation = needRecordingTimeReservation;
 					}
@@ -59,7 +62,10 @@ namespace Stacker.Models.Ag
 					if (NeedKeywordRecording && targetKeywordReservationProgram == null)
 					{
 						// キーワード予約開始
-						Manager.ReservationRecorder.StartRecord($"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{Manager.NowProgram.Title}", Manager.NowProgram.HasVideo);
+						Manager.ReservationRecorder.StartRecord(
+							$"{DateTime.Now.Year:0000}{DateTime.Now.Month:00}{DateTime.Now.Day:00}_{Manager.NowProgram.Title}",
+							Manager.NowProgram.HasVideo,
+							128000);
 						targetKeywordReservationProgram = Manager.NowProgram;
 						OnKeywordReservationStarted(targetKeywordReservationProgram);
 					}

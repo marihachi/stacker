@@ -59,12 +59,12 @@ namespace Stacker.Models.Ag
 
 		public void RecordSpecifiedTime(int specifiedTimeSec, string filename, bool isVideo)
 		{
-			StartRecord(filename, isVideo);
+			StartRecord(filename, isVideo, 128000);
 			Task.Delay(TimeSpan.FromSeconds(specifiedTimeSec)).Wait();
 			StopRecord();
 		}
 
-		public void StartRecord(string filename, bool isVideo)
+		public void StartRecord(string filename, bool isVideo, int audioBitrate)
 		{
 			CreateOutputDirectory();
 
@@ -91,11 +91,9 @@ namespace Stacker.Models.Ag
 			if (server == null)
 				throw new ApplicationException("A&Gのストリーミングサーバー情報の取得に失敗しました。");
 
-			// Console.WriteLine($"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 --acodec copy ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
-			var bitrate = "32k";
-			
+			// Console.WriteLine($"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 -ab {bitrate} --acodec copy ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
 			var process = ConsoleExecuter.StartOnConsole(
-				$"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 -ab {bitrate} ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
+				$"rtmpdump -v -r \"{server}\" --app \"{app}\" --playpath {playpath} | ffmpeg -y -i pipe:0 -ab {audioBitrate} ./library/ag/temp_{Name}.{(isVideo ? "mp4" : "mp3")}");
 
 			Filename = filename;
 			ConsoleProcess = process;

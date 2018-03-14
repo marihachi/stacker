@@ -285,7 +285,7 @@ namespace Stacker.Forms
 
 		private void agStartRecordButton_Click(object sender, EventArgs e)
 		{
-			Ag.RealtimeRecorder.StartRecord($"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked);
+			Ag.RealtimeRecorder.StartRecord($"realtime_{DateTime.Now.ToFileTime()}", agEnableVideoRealtimeMainMenuItem.Checked, 128000);
 		}
 
 		private void agStopRecordButton_Click(object sender, EventArgs e)
@@ -443,6 +443,14 @@ namespace Stacker.Forms
 			agEditTimeReservationMenuItem_Click(this, null);
 		}
 
+		private void agTimeReservationListView_ColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			//クリックされた列を設定
+			(agTimeReservationListView.ListViewItemSorter as ListViewItemComparer).Column = e.Column;
+			//並び替える
+			agTimeReservationListView.Sort();
+		}
+
 		//
 		// agKeywordReservationMenu
 		//
@@ -520,16 +528,6 @@ namespace Stacker.Forms
 			agEditKeywordReservationMenuItem_Click(this, null);
 		}
 
-		#endregion eventHandlers
-
-		private void agTimeReservationListView_ColumnClick(object sender, ColumnClickEventArgs e)
-		{
-			//クリックされた列を設定
-			(agTimeReservationListView.ListViewItemSorter as ListViewItemComparer).Column = e.Column;
-			//並び替える
-			agTimeReservationListView.Sort();
-		}
-
 		private void agKeywordReservationListView_ColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			//クリックされた列を設定
@@ -537,5 +535,7 @@ namespace Stacker.Forms
 			//並び替える
 			agKeywordReservationListView.Sort();
 		}
+
+		#endregion eventHandlers
 	}
 }
